@@ -25,10 +25,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             if (auth()->user()->role_id === 1) {
-                // jika user superadmin
+                // jika user admin
                 return redirect()->intended('/admin');
             } else {
-                // jika user pegawai
+                // jika user al
                 return redirect()->intended('/al');
             }
         }
