@@ -34,7 +34,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>Dashboard</h1>
+                            <h1>Selamat Datang , Admin {{ Auth::user()->name }}</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -51,6 +51,11 @@
 
                 <!-- Default box -->
                 <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Senin, 6 Januari 2025</h3>
+
+
+                    </div>
 
                     <div class="card-body">
 

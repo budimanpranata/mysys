@@ -14,7 +14,7 @@ Route::group(['middleware' => 'guest'], function() {
 });
 
 // untuk Admin
-Route::group(['middleware' => ['auth', 'role:1,2']], function() {
+Route::group(['middleware' => ['auth', 'role:1,2,3']], function() {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/redirect', [RedirectController::class, 'check']);
 });
