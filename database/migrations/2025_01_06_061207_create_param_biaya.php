@@ -9,10 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('param_biaya', function (Blueprint $table) {
-            $table->id();
+            $table->integer('pla');
+            $table->integer('margin');
+            $table->integer('jw');
+            $table->integer('tab');
+            $table->primary('pla');
+            $table->index('margin');
+            $table->index('jw');
             $table->timestamps();
         });
     }

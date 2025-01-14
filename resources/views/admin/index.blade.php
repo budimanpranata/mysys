@@ -66,7 +66,7 @@
                                     <!-- small box -->
                                     <div class="small-box bg-info">
                                         <div class="inner">
-                                            <h3>1.200</h3>
+                                            <h3>{{ $pembiayaan->noa }}</h3>
 
                                             <p>NoA</p>
                                         </div>
@@ -82,7 +82,7 @@
                                     <!-- small box -->
                                     <div class="small-box bg-success">
                                         <div class="inner">
-                                            <h3>1.2 M<sup style="font-size: 20px"></sup></h3>
+                                            <h3>{{ $pembiayaan->os }}<sup style="font-size: 20px"></sup></h3>
 
                                             <p>Outstanding</p>
                                         </div>
