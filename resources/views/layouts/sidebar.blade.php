@@ -9,6 +9,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
+        
 
 
         <!-- SidebarSearch Form -->
@@ -23,7 +24,7 @@
 
                         @foreach ($menus as $menu)
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ $menu->url }}" class="nav-link">
 
                             <i class="{{ $menu->icon }}"></i> {{ $menu->name }}
                         </a>
@@ -35,14 +36,21 @@
                                             <i class="{{ $child->icon }}"></i> {{ $child->name }}
                                         </a>
 
-
                                     </li>
                                 @endforeach
                             </ul>
-                        @endif
+                            @endif
+                        </li>
                     </li>
+                    @endforeach
+                    <li class="nav-item">
+                        <form action="/logout" method="post">
+                        @csrf
+                        <button type="submit">
+                             Keluar
+                            </button>
+                        </form>
                     </li>
-        @endforeach
     @elseif(Auth::user()->role_id == 2)
         <li class="nav-item">
             <a href="#" class="nav-link">
