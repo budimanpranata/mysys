@@ -5,6 +5,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
+use Illuminate\Support\Facades\Auth;
+
+// Route::get('/logout', function () {
+//     Auth::logout();
+//     return redirect('logout');
+// });
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function() {
@@ -14,9 +20,9 @@ Route::group(['middleware' => 'guest'], function() {
 });
 
 // untuk Admin
-Route::group(['middleware' => ['auth', 'role:1,2,3']], function() {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('/redirect', [RedirectController::class, 'check']);
+Route::group(['middleware' => ['auth', 'role:1,2']], function() {
+    Route::POST('/logout', [AuthController::class, 'logout']);
+    Route::POST('/redirect', [RedirectController::class, 'check']);
 });
 
 

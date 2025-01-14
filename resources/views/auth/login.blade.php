@@ -1,8 +1,13 @@
 @extends('layouts.main')
 
 @section('contents')
-    <div class="d-flex justify-content-center align-items-center vh-100">
-        <div class="card" style="width: 25rem;">
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card" style="width: 25rem;">
+            <div class="login-logo text-center">
+                <a href="/login">
+                    <img src="{{ asset('/assets/img/logo-ni.png') }}" width="150px" alt="">
+                </a>
+              </div>
             <div class="card-header text-center">
                 Login
             </div>
@@ -13,6 +18,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+
 
             <div class="card-body">
                 <form method="post" action="/">
