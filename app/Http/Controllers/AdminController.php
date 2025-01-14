@@ -13,7 +13,7 @@ class AdminController extends Controller
     {
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
         $pembiayaan = DB::table('pembiayaan')
-        ->selectRaw('SUM(os - saldo_margin) as os, COUNT(cif) as noa')
+        ->selectRaw('SUM(os - saldo_margin) as os, COUNT(cif) as noa,, SUM(Plafond) as Plafond')
         ->first();
         //dd($pembiayaan);
 
