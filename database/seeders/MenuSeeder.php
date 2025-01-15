@@ -13,70 +13,88 @@ class MenuSeeder extends Seeder
      */
     public function run(): void
     {
+        Menu::create([
+            'name' => 'Dahsboard',
+            'icon' => 'nav-icon fas fa-tachometer-alt',
+            'parent_id' => null,
+            'url' => '/admin', // Contoh URL
+            'left'  => 'null',
+            'order' => 0,
+        ]);
+        
         $masterData = Menu::create([
             'name' => 'Master Data Anggota',
-            'icon' => 'nav-icon fas fa-edit', //
+            'icon' => 'nav-icon fas fa-users-cog', //
             'parent_id' => null,
             'url' => null,
+            'left'  => 'right fas fa-angle-left',
             'order' => 1,
         ]);
 
         // Submenu
         Menu::create([
             'name' => 'Input Data Anggota',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
             'url' => '/anggota-baru', // Contoh URL
+            'left'  => 'null',
             'order' => 1,
         ]);
 
         Menu::create([
             'name' => 'Input Data Pembiayaan',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
             'url' => '/dashboard-v2',
+            'left'  => 'null',
             'order' => 2,
         ]);
 
         Menu::create([
             'name' => 'Input Data Kelompok',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
             'url' => '/dashboard-v3',
+            'left'  => 'null',
             'order' => 3,
         ]);
 
         $CetakData = Menu::create([
             'name' => 'Cetak Dokumen',
-            'icon' => 'nav-icon fas fa-edit', //
+            'icon' => 'nav-icon fas fa-print', //
             'parent_id' => null,
             'url' => null,
+            'left'  => 'right fas fa-angle-left',
             'order' => 4,
         ]);
 
         // Submenu
         Menu::create([
             'name' => 'Cetak Wakalah',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/anggota-baru', // Contoh URL
+            'left'  => 'null',
             'order' => 4,
         ]);
 
         Menu::create([
             'name' => 'Cetak Murabahah',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/dashboard-v2',
+            'left'  => 'null',
             'order' => 5,
         ]);
 
         Menu::create([
             'name' => 'Cetak Musyarokah',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/dashboard-v3',
+            'left'  => 'null',
             'order' => 6,
         ]);
+
     }
 }
