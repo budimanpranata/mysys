@@ -46,7 +46,7 @@
                     <li class="nav-item">
                         <form action="/logout" method="post">
                         @csrf
-                        <button type="submit">
+                        <button type="submit" class="nav-link btn-danger text-white">
                              Keluar
                             </button>
                         </form>

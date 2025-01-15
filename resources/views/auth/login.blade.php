@@ -8,8 +8,8 @@
                     <img src="{{ asset('/assets/img/logo-ni.png') }}" width="150px" alt="">
                 </a>
               </div>
-            <div class="card-header text-center">
-                Login
+            <div class="text-center">
+                <h3>System Nur Insani</h3>
             </div>
 
             @if (session()->has('error'))
@@ -44,7 +44,9 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-block btn-success">Login</button>
+                      </div>
                 </form>
             </div>
         </div>
