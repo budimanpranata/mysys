@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('code_kel', 16);
             $table->string('no_anggota', 16);
             $table->string('cif', 10);
-            $table->string('Cust_Short_name', 40);
-            $table->string('Deal_type', 3);
+            $table->string('nama', 40);
+            $table->string('deal_type', 3);
             $table->string('suffix', 2);
             $table->double('bagi_hasil');
-            $table->integer('Tenor');
-            $table->bigInteger('Plafond');
+            $table->integer('tenor');
+            $table->bigInteger('plafond');
             $table->bigInteger('os');
             $table->bigInteger('saldo_margin');
             $table->bigInteger('angsuran');
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->date('last_payment');
             $table->string('hari', 10);
             $table->string('cao', 10);
-            $table->string('USERID', 8)->nullable();
+            $table->string('userid', 8)->nullable();
             $table->string('status', 20);
             $table->string('status_usia', 20);
             $table->string('status_app', 30);
