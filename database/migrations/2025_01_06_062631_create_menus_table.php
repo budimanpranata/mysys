@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('icon')->nullable(); // Ikon menu
             $table->unsignedBigInteger('parent_id')->nullable(); // Menu induk
             $table->string('url')->nullable(); // URL menu/submenu
+            $table->string('left')->nullable();
             $table->integer('order')->default(0); // Urutan menu
             $table->timestamps();
         });

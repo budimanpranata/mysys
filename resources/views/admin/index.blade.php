@@ -52,9 +52,7 @@
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Senin, 6 Januari 2025</h3>
-
-
+                        <h3 class="card-title">{{ Auth::user()->param_tanggal    }}</h3>
                     </div>
 
                     <div class="card-body">
