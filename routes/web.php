@@ -7,11 +7,6 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
 use Illuminate\Support\Facades\Auth;
 
-// Route::get('/logout', function () {
-//     Auth::logout();
-//     return redirect('logout');
-// });
-
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function() {
     Route::get('/', [AuthController::class, 'login'])->name('login');
