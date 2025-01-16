@@ -21,7 +21,7 @@ class MenuSeeder extends Seeder
             'left'  => 'null',
             'order' => 0,
         ]);
-        
+
         $masterData = Menu::create([
             'name' => 'Master Data Anggota',
             'icon' => 'nav-icon fas fa-users-cog', //
@@ -96,5 +96,59 @@ class MenuSeeder extends Seeder
             'order' => 6,
         ]);
 
+
+        $Realisasi = Menu::create([
+            'name' => 'Realisasi',
+            'icon' => 'nav-icon fas fa-edit', //
+            'parent_id' => null,
+            'url' => null,
+            'left'  => 'right fas fa-angle-left',
+            'order' => 7,
+        ]);
+
+        // Submenu
+        Menu::create([
+            'name' => 'Realiasi Wakalah',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $Realisasi->id,
+            'url' => '/realisasi_wakalah',
+            'left'  => 'null',
+            'order' => 8,
+        ]);
+
+        Menu::create([
+            'name' => 'Murabahah',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $Realisasi->id,
+            'url' => '/dashboard-v2',
+            'left'  => 'null',
+            'order' => 9,
+        ]);
+
+        Menu::create([
+            'name' => 'Pembatalan Wakalah',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $Realisasi->id,
+            'url' => '/dashboard-v3',
+            'left'  => 'null',
+            'order' => 10,
+        ]);
+
+        Menu::create([
+            'name' => 'Tagihan Kelompok',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $Realisasi->id,
+            'url' => '/dashboard-v3',
+            'left'  => 'null',
+            'order' => 11,
+        ]);
+        Menu::create([
+            'name' => 'Hapus Buku',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $Realisasi->id,
+            'url' => '/dashboard-v3',
+            'left'  => 'null',
+            'order' => 12,
+        ]);
     }
 }

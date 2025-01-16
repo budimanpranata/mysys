@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\RealisasiWakalahController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function() {
@@ -14,16 +14,17 @@ Route::group(['middleware' => 'guest'], function() {
 
 });
 
-// untuk Admin
+// untuk Admin AL login
 Route::group(['middleware' => ['auth', 'role:1,2']], function() {
-    Route::POST('/logout', [AuthController::class, 'logout']);
-    Route::POST('/redirect', [RedirectController::class, 'check']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/redirect', [RedirectController::class, 'check']);
 });
 
 
-// untuk AL
+// untuk Admin
 Route::group(['middleware' => ['auth', 'role:1']], function() {
     Route::get('/admin', [AdminController::class, 'index']);
+    Route::get('/realisasi_wakalah', [RealisasiWakalahController::class, 'index']);
 });
 
 // untuk Al

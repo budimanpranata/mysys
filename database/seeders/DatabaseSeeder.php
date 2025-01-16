@@ -25,7 +25,15 @@ class DatabaseSeeder extends Seeder
             'role_name' => 'al',
         ]);
 
-        User::factory(5)->create();
+
+
+        $this->call([
+            UsersTableSeeder::class,
+            MenuSeeder::class,
+            ParamTgl::class,
+            TabelParamBiaya::class,
+        ]);
+
 
     }
 }
