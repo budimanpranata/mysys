@@ -18,7 +18,7 @@ class MenuSeeder extends Seeder
             'icon' => 'nav-icon fas fa-tachometer-alt',
             'parent_id' => null,
             'url' => '/admin', // Contoh URL
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 0,
         ]);
 
@@ -27,7 +27,7 @@ class MenuSeeder extends Seeder
             'icon' => 'nav-icon fas fa-users-cog', //
             'parent_id' => null,
             'url' => null,
-            'left'  => 'right fas fa-angle-left',
+            'left' => 'right fas fa-angle-left',
             'order' => 1,
         ]);
 
@@ -37,7 +37,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
             'url' => '/anggota-baru', // Contoh URL
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 1,
         ]);
 
@@ -46,7 +46,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
             'url' => '/dashboard-v2',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 2,
         ]);
 
@@ -55,7 +55,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
             'url' => '/dashboard-v3',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 3,
         ]);
 
@@ -64,7 +64,7 @@ class MenuSeeder extends Seeder
             'icon' => 'nav-icon fas fa-print', //
             'parent_id' => null,
             'url' => null,
-            'left'  => 'right fas fa-angle-left',
+            'left' => 'right fas fa-angle-left',
             'order' => 4,
         ]);
 
@@ -74,7 +74,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/anggota-baru', // Contoh URL
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 4,
         ]);
 
@@ -83,7 +83,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/dashboard-v2',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 5,
         ]);
 
@@ -91,8 +91,8 @@ class MenuSeeder extends Seeder
             'name' => 'Cetak Musyarokah',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
-            'url' => '/dashboard-v3',
-            'left'  => 'null',
+            'url' => '/admin/cetak/musyarokah',
+            'left' => 'null',
             'order' => 6,
         ]);
 
@@ -102,7 +102,7 @@ class MenuSeeder extends Seeder
             'icon' => 'nav-icon fas fa-edit', //
             'parent_id' => null,
             'url' => null,
-            'left'  => 'right fas fa-angle-left',
+            'left' => 'right fas fa-angle-left',
             'order' => 7,
         ]);
 
@@ -112,7 +112,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
             'url' => '/realisasi_wakalah',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 8,
         ]);
 
@@ -121,7 +121,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v2',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 9,
         ]);
 
@@ -130,7 +130,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 10,
         ]);
 
@@ -139,7 +139,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 11,
         ]);
         Menu::create([
@@ -147,7 +147,7 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
-            'left'  => 'null',
+            'left' => 'null',
             'order' => 12,
         ]);
     }
