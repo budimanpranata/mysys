@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Menu;
-use App\Models\Pembiayaan;
 use Illuminate\Support\Facades\DB;
 
-class AdminController extends Controller
+class RealisasiWakalahController extends Controller
 {
     public function index()
     {
@@ -18,6 +17,7 @@ class AdminController extends Controller
         //dd($pembiayaan);
         $title = 'Dashboard';
 
-        return view('admin.index',compact('menus','pembiayaan','title'));
+        return view('admin.realisasi_wakalah.index',compact('menus','pembiayaan','title'));
+
     }
 }
