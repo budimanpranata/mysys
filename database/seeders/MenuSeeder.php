@@ -91,7 +91,7 @@ class MenuSeeder extends Seeder
             'name' => 'Cetak Musyarokah',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
-            'url' => '/admin/cetak/musyarokah',
+            'url' => '/cetak/musyarokah',
             'left' => 'null',
             'order' => 6,
         ]);
@@ -117,10 +117,10 @@ class MenuSeeder extends Seeder
         ]);
 
         Menu::create([
-            'name' => 'Murabahah',
+            'name' => 'Realisasi Murabahah',
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
-            'url' => '/dashboard-v2',
+            'url' => '/realisasi/murabahah',
             'left' => 'null',
             'order' => 9,
         ]);
