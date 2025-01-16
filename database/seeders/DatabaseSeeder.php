@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             ParamTgl::class,
             TabelParamBiaya::class,
             tabelAo::class,
+            kelompok::class,
         ]);
 
 
