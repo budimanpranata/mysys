@@ -17,9 +17,6 @@ return new class extends Migration
             $table->integer('margin');
             $table->integer('jw');
             $table->integer('tab');
-            $table->primary('pla');
-            $table->index('margin');
-            $table->index('jw');
             $table->timestamps();
         });
     }

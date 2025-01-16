@@ -88,7 +88,7 @@ class TabelParamBiaya extends Seeder
             'pla' => 6000000,
             'margin' => 24,
             'jw' => 35,
-            'tab'
+            'tab'=> 5429,
         ]);
     }
 }
