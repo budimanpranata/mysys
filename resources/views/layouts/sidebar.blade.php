@@ -1,20 +1,13 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/admin" class="brand-link">
-        <img src="../../dist/img/AdminLTELogo.png" alt="" class="brand-image img-circle elevation-3"
+        <img src="#" alt="" class="brand-image img-circle elevation-3"
             style="opacity: .8">
         <span class="brand-text font-weight-light">MySys</span>
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user (optional) -->
-
-
-
-        <!-- SidebarSearch Form -->
-
-
         <!-- Sidebar Menu -->
         @if (Auth::check() && Auth::user()->role_id == 1)
             <nav class="mt-2">
