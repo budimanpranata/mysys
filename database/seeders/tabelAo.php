@@ -15,7 +15,7 @@ class tabelAo extends Seeder
 
     public function run(): void
     {
-        DB::table('aos')->insert([
+        DB::table('ao')->insert([
             [
                 'cao' => '00101',
                 'nama_ao' => 'IRVAN NOVANSKA',

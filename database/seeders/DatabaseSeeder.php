@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             ParamTgl::class,
             TabelParamBiaya::class,
+            tabelAo::class,
         ]);
 
 
