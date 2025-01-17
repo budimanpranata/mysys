@@ -1,0 +1,121 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class AnggotaSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        DB::table('anggota')->insert([
+            [
+                'no' => '00308612001',
+                'kode_kel' => '003-0220',
+                'norek' => '0010542IF01',
+                'tgl_join' => '2024-08-26 11:08:48',
+                'cif' => '0542IF',
+                'nama' => 'KAYLA PUTRI',
+                'unit' => '001',
+                'deal_type' => '3',
+                'alamat' => 'JL. SUKAMAJU',
+                'desa' => 'TUGU SELATAN',
+                'kecamatan' => 'CISARUA',
+                'kota' => 'KAB. BOGOR',
+                'rtrw' => '001/008',
+                'no_hp' => '086578786655',
+                'hp_pasangan' => '086578786688',
+                'kelamin' => 'P',
+                'tgl_lahir' => '1995-08-26',
+                'ktp' => '3201264604840001',
+                'kewarganegaraan' => 'Indonesia',
+                'status_menikah' => 'Menikah',
+                'agama' => 'Islam',
+                'ibu_kandung' => 'IMAS',
+                'npwp' => '0',
+                'source_income' => '',
+                'pendidikan' => 'SMA',
+                'tempat_lahir' => 'Bogor',
+                'id_expired' => '0',
+                'waris' => 'AGUS',
+                'cao' => '00303',
+                'userid' => '001',
+                'status' => 'ANGGOTA',
+                'pekerjaan_pasangan' => 'Buruh Harian Lepas',
+            ],
+            [
+                'no' => '00308612002',
+                'kode_kel' => '003-0220',
+                'norek' => '2001000H8805',
+                'tgl_join' => '2024-08-26 11:08:48',
+                'cif' => '000H88',
+                'nama' => 'ULFA SANTIKA PRAJA',
+                'unit' => '001',
+                'deal_type' => '3',
+                'alamat' => 'JL. SUKAMAJU',
+                'desa' => 'TUGU SELATAN',
+                'kecamatan' => 'CISARUA',
+                'kota' => 'KAB. BOGOR',
+                'rtrw' => '001/008',
+                'no_hp' => '086578786655',
+                'hp_pasangan' => '086578786688',
+                'kelamin' => 'P',
+                'tgl_lahir' => '1996-08-24',
+                'ktp' => '3201264604043001',
+                'kewarganegaraan' => 'Indonesia',
+                'status_menikah' => 'Menikah',
+                'agama' => 'Islam',
+                'ibu_kandung' => 'MASNI',
+                'npwp' => '0',
+                'source_income' => '',
+                'pendidikan' => 'SMA',
+                'tempat_lahir' => 'Bogor',
+                'id_expired' => '0',
+                'waris' => 'RASTA',
+                'cao' => '00303',
+                'userid' => '001',
+                'status' => 'ANGGOTA',
+                'pekerjaan_pasangan' => 'Buruh Harian Lepas',
+            ],
+            [
+                'no' => '00308612003',
+                'kode_kel' => '003-0220',
+                'norek' => '2001000H8805',
+                'tgl_join' => '2024-08-26 11:08:48',
+                'cif' => '000H88',
+                'nama' => 'IMAS',
+                'unit' => '001',
+                'deal_type' => '3',
+                'alamat' => 'JL. SUKAMAJU',
+                'desa' => 'TUGU SELATAN',
+                'kecamatan' => 'CISARUA',
+                'kota' => 'KAB. BOGOR',
+                'rtrw' => '001/008',
+                'no_hp' => '086578786655',
+                'hp_pasangan' => '086578786688',
+                'kelamin' => 'P',
+                'tgl_lahir' => '1996-08-24',
+                'ktp' => '3201264604043001',
+                'kewarganegaraan' => 'Indonesia',
+                'status_menikah' => 'Menikah',
+                'agama' => 'Islam',
+                'ibu_kandung' => 'MASTU',
+                'npwp' => '0',
+                'source_income' => '',
+                'pendidikan' => 'SMA',
+                'tempat_lahir' => 'Bogor',
+                'id_expired' => '0',
+                'waris' => 'ANGGI',
+                'cao' => '00303',
+                'userid' => '001',
+                'status' => 'ANGGOTA',
+                'pekerjaan_pasangan' => 'Buruh Harian Lepas',
+            ]
+        ]);
+    }
+}
