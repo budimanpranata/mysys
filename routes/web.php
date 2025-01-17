@@ -7,6 +7,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\RealisasiWakalahController;
 use App\Http\Controllers\RealisasiMurabahahController;
+use App\Http\Controllers\CetakMusyarakahController;
+use App\Http\Controllers\PDFController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -26,7 +28,8 @@ Route::group(['middleware' => ['auth', 'role:1,2']], function () {
 Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/admin', [AdminController::class, 'index']);
     Route::get('/realisasi_wakalah', [RealisasiWakalahController::class, 'index']);
-    Route::get('/cetak/musyarokah', [CetakMusyarokahController::class, 'index']);
+    Route::get('/cetak/musyarakah', [CetakMusyarakahController::class, 'index'])->name('cetak_musyarakah');
+    Route::post('/cetak/musyarakah/result', [CetakMusyarakahController::class, 'hasil'])->name('form_musyarakah');
     Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
 
 });
@@ -36,3 +39,6 @@ Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al', [AlController::class, 'index']);
 
 });
+
+// DOMpdf
+Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generate');
