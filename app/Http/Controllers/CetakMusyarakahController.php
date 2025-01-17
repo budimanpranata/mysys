@@ -22,22 +22,24 @@ class CetakMusyarakahController extends Controller
         $title = 'Cetak Musyarakah';
 
         $request->validate([
-            'tanggal_cetak' => 'required|date_format:d-m-Y',
+            'tanggal_cetak' => 'required|date_format:Y-m-d',
         ]);
 
-        // Convert date to yyyy-mm-dd format
-        $tanggalCetak = \Carbon\Carbon::createFromFormat('d-m-Y', $request->tanggal_cetak)->format('Y-m-d');
+        $tanggalCetak = \Carbon\Carbon::createFromFormat('Y-m-d', $request->tanggal_cetak)->format('Y-m-d');
 
+        // Ngambil dr database
         $results = DB::table('temp_akad_mus')
             ->where('tgl_akad', $tanggalCetak)
             ->get();
 
-        // Error handling
+        // Kalo error
         if ($results->isEmpty()) {
-            return redirect()->back()->with('error', 'Tidak ada data yang ditemukan untuk tanggal tersebut.');
+            alert()->error('Oops!', 'Tidak ada data yang ditemukan untuk tanggal tersebut.');
+            return redirect()->back();
         }
 
-        // Kalo success
+        // Kalo sukses
+        alert()->success('Berhasil!', 'Data berhasil ditemukan.');
         return view('admin.cetak_musyarakah.result', ['results' => $results, 'menus' => $menus, 'title' => $title]);
     }
 }

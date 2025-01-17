@@ -25,24 +25,18 @@
     </div>
 
     <div class="card-body">
-      <form action="{{ route('form_musyarakah') }}" method="POST">
+      <form action="{{ route('form_musyarakah') }}" method="POST" id="musyarakahForm">
         @csrf
         <div class="mb-3">
           <label for="tanggalCetak" class="form-label">Tanggal Cetak</label>
-          <input type="text" name="tanggal_cetak" class="form-control @error('tanggal_cetak') is-invalid @enderror"
-            id="tanggalCetak" placeholder="dd-mm-yyyy" required>
+          <input type="date" name="tanggal_cetak" class="form-control @error('tanggal_cetak') is-invalid @enderror"
+            id="tanggalCetak" required>
           @error('tanggal_cetak')
           <div class="invalid-feedback">
             {{ $message }}
           </div>
           @enderror
         </div>
-
-        @if(session('error'))
-        <div class="alert alert-danger">
-          {{ session('error') }}
-        </div>
-        @endif
 
         <button type="submit" class="btn btn-primary">Cari</button>
       </form>
@@ -51,5 +45,6 @@
 </div>
 <!-- /.container-fluid -->
 
-<!-- /.card-footer-->
+<!-- Include SweetAlert Notification -->
+@include('sweetalert::alert')
 @endsection

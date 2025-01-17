@@ -19,32 +19,41 @@
       text-transform: uppercase;
     }
 
+    p {
+      text-align: justify;
+    }
+
+    .text-align-center {
+      text-align: center;
+    }
+
     .section-title {
       font-weight: bold;
       margin-top: 20px;
     }
 
     .signature {
-      display: flex;
-      justify-content: space-between;
       margin-top: 50px;
+      width: 100%;
     }
 
-    .signature div {
+    .signature table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .signature td {
       text-align: center;
-    }
-
-    .indent {
-      text-indent: 50px;
+      vertical-align: middle;
     }
   </style>
 </head>
 
 <body>
   <h1>PEMBIAYAAN AKAD MUSYARAKAH</h1>
-  <p>No: ...............................................................</p>
+  <p class="text-align-center">No: ...............................................................</p>
 
-  <p class="indent">Dengan memohon petunjuk dan ridha Allah, pada hari ini .... tanggal .... bulan ......,
+  <p>Dengan memohon petunjuk dan ridha Allah, pada hari ini .... tanggal .... bulan ......,
     tahun............, yang bertanda tangan di bawah ini :</p>
 
   <p>
@@ -61,12 +70,13 @@
     NIK 1......................, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.
   </p>
 
-  <p class="indent">PIHAK PERTAMA dan PIHAK KEDUA selanjutnya bersama-sama disebut 'Para Pihak', sepakat untuk membuat
+  <p>PIHAK PERTAMA dan PIHAK KEDUA selanjutnya bersama-sama disebut 'Para Pihak', sepakat untuk membuat
     dan menandatangani pembiayaan Musyarakah, selanjutnya disebut 'Akad' dengan syarat dan ketentuan sebagai berikut:
   </p>
 
   <h2>PASAL 1<br>KETENTUAN POKOK AKAD</h2>
-  <ul>
+  <p>Ketentuan-ketentuan pokok Akad ini meliputi sebagai berikut :</p>
+  <ol>
     <li>Jenis Usaha: .................................</li>
     <li>Modal Pihak Pertama: .................................</li>
     <li>Prosentase Margin Pihak Pertama: .................................</li>
@@ -75,7 +85,7 @@
     <li>Hari Pembayaran Angsuran: .................................</li>
     <li>Jangka Waktu Pembiayaan: .................................</li>
     <li>Tanggal Jatuh Tempo Pembiayaan: .................................</li>
-  </ul>
+  </ol>
 
   <h2>PASAL 2<br>JENIS USAHA</h2>
   <p>Usaha sebagaimana dimaksud Pasal 1 huruf a adalah aktivitas yang tidak bertentangan dengan prinsip-prinsip syariah.
@@ -84,44 +94,56 @@
   <h2>PASAL 3<br>MODAL PIHAK PERTAMA</h2>
   <p>Pelaksanaan prinsip Musyarakah yang berlangsung antara PIHAK PERTAMA dengan PIHAK KEDUA, dilaksanakan sebagai
     berikut:</p>
-  <ul>
+  <ol>
     <li>PIHAK KEDUA meminta kepada PIHAK PERTAMA untuk menyediakan modal.</li>
     <li>PIHAK PERTAMA memberikan modal kepada PIHAK KEDUA sesuai dengan pertimbangan dari pembiayaan terakhir dan omset
       terkecilnya.</li>
-  </ul>
+  </ol>
 
   <h2>PASAL 4<br>SYARAT PEMBERIAN MODAL</h2>
-  <ul>
+  <ol>
     <li>PIHAK KEDUA telah menyerahkan semua persyaratan yang diminta kepada PIHAK PERTAMA.</li>
     <li>PIHAK PERTAMA dan PIHAK KEDUA telah menandatangani perjanjian ini.</li>
-  </ul>
+  </ol>
+  <p>Selanjutnya PIHAK KEDUA dengan ini mengakui dengan sebenarnya dan secara sah menerima modal tersebut dan menyatakan
+    diri secara sah bahwa PIHAK PERTAMA adalah partner dalam bidang usahanya. </p>
 
   <h2>PASAL 5<br>KUASA</h2>
   <p>PIHAK PERTAMA memberikan kuasa kepada PIHAK KEDUA untuk melakukan usaha sesuai dengan apa yang diinginkan. Dalam
     hal ini, PIHAK KEDUA sebagai wakil dalam usaha bagi PIHAK PERTAMA.</p>
 
   <h2>PASAL 6<br>SURAT PERNYATAAN SUKA RELA</h2>
-  <ul>
+  <p>PIHAK KEDUA menyatakan dengan sukarela dan kesadaran sendiri untuk :</p>
+  <ol>
     <li>Akan membayar angsuran tepat waktu sesuai tempat dan waktu yang telah disepakati.</li>
     <li>Tidak menggunakan pembiayaan ini untuk kepentingan pihak lain.</li>
     <li>Tidak melibatkan pihak luar untuk tidak membayar angsuran.</li>
-  </ul>
+  </ol>
 
   <h2>PASAL 7<br>PERHITUNGAN PADA AKHIR PELUNASAN</h2>
-  <p>Penghitungan ulang margin dilakukan pada akhir pelunasan. Selisih margin akan disesuaikan sesuai ketentuan.</p>
+  <p>Pada akhir pelunasan akan diadakan penghitungan ulang, apabila ada margin yang lebih diambil oleh PIHAK PERTAMA
+    setelah diprediksi pada awal akad, maka akan dikembalikan kepada PIHAK KEDUA. Namun jika margin yang diambil oleh
+    PIHAK PERTAMA kurang, maka kekurangan itu akan diberikan secara suka rela kepada PIHAK KEDUA. </p>
 
   <h2>PASAL 8<br>PASAL TAMBAHAN</h2>
-  <p>Hal-hal lain yang belum diatur akan disepakati lebih lanjut dalam dokumen terpisah.</p>
+  <p>Hal-hal lain yang belum cukup diatur dalam perjanjian ini, akan diatur berdasarkan kesepakatan PARA PIHAK ke dalam
+    surat/akta yang merupakan satu kesatuan dengan perjanjian ini. Demikian Perjanjian ini dibuat dan ditandatangani di
+    desa ................... pada hari .................... tanggal ..... bulan ................., tahun .............
+  </p>
 
   <div class="signature">
-    <div>
-      <p>PIHAK PERTAMA</p>
-      <p>(.................................)<br>Marketing Manager</p>
-    </div>
-    <div>
-      <p>PIHAK KEDUA</p>
-      <p>(.................................)<br>Ketua Kelompok</p>
-    </div>
+    <table style="width: 100%; margin-top: 50px; text-align: center;">
+      <tr>
+        <td>
+          <p class="text-align-center">PIHAK PERTAMA</p>
+          <p class="text-align-center">(.................................)<br>Marketing Manager</p>
+        </td>
+        <td>
+          <p class="text-align-center">PIHAK KEDUA</p>
+          <p class="text-align-center">(.................................)<br>Ketua Kelompok</p>
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 
