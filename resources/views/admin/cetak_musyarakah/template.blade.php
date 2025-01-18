@@ -51,10 +51,10 @@
 
 <body>
   <h1>PEMBIAYAAN AKAD MUSYARAKAH</h1>
-  <p class="text-align-center">No: ...............................................................</p>
+  <p class="text-align-center"><strong>No: {{ $result->no_anggota }}</strong></p>
 
-  <p>Dengan memohon petunjuk dan ridha Allah, pada hari ini .... tanggal .... bulan ......,
-    tahun............, yang bertanda tangan di bawah ini :</p>
+  <p>Dengan memohon petunjuk dan ridha Allah, pada hari ini {{ $result->hari }} tanggal {{ $result->tanggal }} bulan {{
+    $result->bulan }}, tahun {{ $result->tahun }}, yang bertanda tangan di bawah ini :</p>
 
   <p>
     Nama ........................, jabatan <strong>Marketing Manager (MM)</strong> dalam hal ini bertindak untuk dan
@@ -66,8 +66,8 @@
   </p>
 
   <p>
-    Nyonya ..................... bertempat tinggal di DK ........................................ Pemegang KTP dengan
-    NIK 1......................, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.
+    Nyonya {{ $result->nama }} bertempat tinggal di {{ $result->desa }}, {{ $result->kecamatan }} Pemegang KTP dengan
+    NIK {{ $result->ktp }}, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.
   </p>
 
   <p>PIHAK PERTAMA dan PIHAK KEDUA selanjutnya bersama-sama disebut 'Para Pihak', sepakat untuk membuat
@@ -128,7 +128,8 @@
   <h2>PASAL 8<br>PASAL TAMBAHAN</h2>
   <p>Hal-hal lain yang belum cukup diatur dalam perjanjian ini, akan diatur berdasarkan kesepakatan PARA PIHAK ke dalam
     surat/akta yang merupakan satu kesatuan dengan perjanjian ini. Demikian Perjanjian ini dibuat dan ditandatangani di
-    desa ................... pada hari .................... tanggal ..... bulan ................., tahun .............
+    desa {{ $result->desa }} pada hari {{ $result->hari }} tanggal {{ $result->tanggal }} bulan {{
+    $result->bulan }}, tahun {{ $result->tahun }}
   </p>
 
   <div class="signature">

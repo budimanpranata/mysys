@@ -25,7 +25,30 @@ class PDFController extends Controller
 
         // Fetch records berdasarkan state
         $dates = explode(',', $request->id);
-        $results = DB::table('temp_akad_mus')->whereIn('tgl_akad', $dates)->orderBy('code_kel')->get();
+        $results = DB::table('temp_akad_mus')
+            ->whereIn('tgl_akad', $dates)
+            ->orderBy('code_kel')
+            ->get();
+
+        foreach ($results as $result) {
+            $tglAkad = \Carbon\Carbon::parse($result->tgl_akad);
+            $result->tanggal = $tglAkad->day;
+            $result->bulan = $tglAkad->translatedFormat('F'); // (e.g., October)
+            $result->tahun = $tglAkad->year;
+
+            // Query anggota make cif
+            $anggota = DB::table('anggota')->where('cif', $result->cif)->first();
+
+            if ($anggota) {
+                $result->ktp = $anggota->ktp;
+                $result->desa = $anggota->desa;
+                $result->kecamatan = $anggota->kecamatan;
+            } else {
+                $result->ktp = null;
+                $result->desa = null;
+                $result->kecamatan = null;
+            }
+        }
 
         if ($results->isEmpty()) {
             abort(404, 'No records found for the specified dates.');
@@ -39,4 +62,5 @@ class PDFController extends Controller
 
         return $pdf->stream("{$feature}_combined.pdf");
     }
+
 }
