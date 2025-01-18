@@ -25,29 +25,29 @@ class PDFController extends Controller
 
         // Fetch records berdasarkan state
         $dates = explode(',', $request->id);
+
+        // Query menggunakan join
         $results = DB::table('temp_akad_mus')
-            ->whereIn('tgl_akad', $dates)
-            ->orderBy('code_kel')
+            ->leftJoin('anggota', 'temp_akad_mus.cif', '=', 'anggota.cif')
+            ->whereIn('temp_akad_mus.tgl_akad', $dates)
+            ->orderBy('temp_akad_mus.code_kel')
+            ->select(
+                'temp_akad_mus.*',
+                'anggota.ktp as ktp',
+                'anggota.desa as desa',
+                'anggota.kecamatan as kecamatan'
+            )
             ->get();
 
         foreach ($results as $result) {
             $tglAkad = \Carbon\Carbon::parse($result->tgl_akad);
             $result->tanggal = $tglAkad->day;
-            $result->bulan = $tglAkad->translatedFormat('F'); // (e.g., October)
+            $result->bulan = $tglAkad->translatedFormat('F'); // e.g., October
             $result->tahun = $tglAkad->year;
 
-            // Query anggota make cif
-            $anggota = DB::table('anggota')->where('cif', $result->cif)->first();
-
-            if ($anggota) {
-                $result->ktp = $anggota->ktp;
-                $result->desa = $anggota->desa;
-                $result->kecamatan = $anggota->kecamatan;
-            } else {
-                $result->ktp = null;
-                $result->desa = null;
-                $result->kecamatan = null;
-            }
+            $result->ktp = $result->ktp ?? null;
+            $result->desa = $result->desa ?? null;
+            $result->kecamatan = $result->kecamatan ?? null;
         }
 
         if ($results->isEmpty()) {
