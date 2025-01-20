@@ -34,6 +34,9 @@ class DatabaseSeeder extends Seeder
             TabelParamBiaya::class,
             tabelAo::class,
             kelompok::class,
+            AnggotaSeeder::class,
+            tempAkadMus::class,
+            MmSeeder::class,
         ]);
 
 
