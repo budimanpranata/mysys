@@ -53,6 +53,7 @@ return new class extends Migration
             $table->index('code_kel');
             $table->index('unit');
             $table->index('cao');
+            $table->timestamps();
         });
 
     }

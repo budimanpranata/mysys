@@ -62,6 +62,8 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('assets/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
+    <!-- Sweet Alert -->
+    @include('sweetalert::alert')
 
 </body>
 

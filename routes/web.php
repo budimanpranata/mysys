@@ -26,7 +26,8 @@ Route::group(['middleware' => ['auth', 'role:1,2']], function () {
 Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/admin', [AdminController::class, 'index']);
     Route::get('/realisasi_wakalah', [RealisasiWakalahController::class, 'index']);
-    Route::get('/cetak/musyarokah', [CetakMusyarokahController::class, 'index']);
+    Route::POST('/proses_realisasi_wakalah', [RealisasiWakalahController::class, 'realisasiWakalah']);
+    Route::get('realisasi_wakalah/getData', [RealisasiWakalahController::class, 'getData']);
     Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
 
 });
