@@ -20,7 +20,7 @@ class kelompok extends Seeder
                 'code_unit' => '001',
                 'nama_kel' => 'RB ADR KP MUNCANG',
                 'alamat' => 'KP. LEGOK MUNCANG',
-                'cao' => '00303',
+                'cao' => '00303', // join ke table anggota untuk ambil nama nya saja.
                 'cif' => '0',
             ],
         ]);

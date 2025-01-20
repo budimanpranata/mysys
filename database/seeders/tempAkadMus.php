@@ -49,6 +49,7 @@ class tempAkadMus extends Seeder
                 'status_app' => 'BATAL',
                 'gol' => '1',
                 'deal_produk' => NULL,
+                'persen_margin' => 0.0075, // 0,75% dalam desimal
 
             ],
             [
@@ -87,6 +88,7 @@ class tempAkadMus extends Seeder
                 'status_app' => 'BATAL',
                 'gol' => '1',
                 'deal_produk' => NULL,
+                'persen_margin' => 0.0075, // 0,75% dalam desimal
 
             ],
 
@@ -116,7 +118,7 @@ class tempAkadMus extends Seeder
                 'tgl_akad' => '2020-10-07',
                 'tgl_murab' => '2020-10-07 00:00:00',
                 'next_schedule' => '2024-01-01 00:00:00',
-                'maturity_date' => '2021-03-31 00:00:00',
+                'maturity_date' => '2021-03-31 00:00:00', // tgl jatuh tempo
                 'last_payment' => '2024-01-01',
                 'hari' => 'Rabu',
                 'cao' => '00303',
@@ -126,6 +128,8 @@ class tempAkadMus extends Seeder
                 'status_app' => 'BATAL',
                 'gol' => '1',
                 'deal_produk' => NULL,
+                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                
 
             ]
 
