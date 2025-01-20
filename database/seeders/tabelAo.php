@@ -65,7 +65,7 @@ class tabelAo extends Seeder
                 'nik_ao' => '230100302',
             ],
             [
-                'cao' => '00304',
+                'cao' => '00303',
                 'nama_ao' => 'INDRA PRASETYO',
                 'no_tlp' => '',
                 'kode_unit' => '001',
