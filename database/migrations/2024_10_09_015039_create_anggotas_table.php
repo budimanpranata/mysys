@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('anggota', function (Blueprint $table) {
             $table->String('no')->primary();
-            $table->String('kode_kel',4);
+            $table->String('kode_kel',9);
             $table->String('norek',20);
             $table->date('tgl_join');
             $table->String('cif',8);
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->String('deal_type');
             $table->String('alamat');
             $table->String('desa');
-            $table->String('kecamanta');
+            $table->String('kecamatan');
             $table->String('kota');
             $table->String('rtrw');
             $table->String('no_hp');

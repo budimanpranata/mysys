@@ -91,7 +91,7 @@ class MenuSeeder extends Seeder
             'name' => 'Cetak Musyarokah',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
-            'url' => '/cetak/musyarokah',
+            'url' => '/cetak/musyarakah',
             'left' => 'null',
             'order' => 6,
         ]);

@@ -16,7 +16,7 @@ class tempAkadMus extends Seeder
             [
                 'buss_date' => '2020-09-29 14:09:58',
                 'code_kel' => '003-0220',
-                'no_anggota' => '00308612001',
+                'no_anggota' => '00108612001',
                 'cif' => '086120',
                 'nama' => 'IMAS',
                 'deal_type' => '3',
@@ -54,7 +54,7 @@ class tempAkadMus extends Seeder
             [
                 'buss_date' => '2020-09-29 14:09:58',
                 'code_kel' => '003-0220',
-                'no_anggota' => '00308612101',
+                'no_anggota' => '00108612101',
                 'cif' => '086121',
                 'nama' => 'YULI',
                 'deal_type' => '3',
@@ -93,7 +93,7 @@ class tempAkadMus extends Seeder
             [
                 'buss_date' => '2020-09-29 14:09:58',
                 'code_kel' => '003-0220',
-                'no_anggota' => '00308612201',
+                'no_anggota' => '00108612201',
                 'cif' => '086122',
                 'nama' => 'IDA NURLELA',
                 'deal_type' => '3',
