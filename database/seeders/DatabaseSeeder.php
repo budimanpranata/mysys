@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             AnggotaSeeder::class,
             tempAkadMus::class,
             MmSeeder::class,
+            tempAkadMus::class,
         ]);
 
 

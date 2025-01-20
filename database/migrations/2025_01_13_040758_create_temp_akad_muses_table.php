@@ -54,6 +54,7 @@ return new class extends Migration
             $table->index('unit');
             $table->index('cao');
             $table->double('persen_margin', 8, 4); // Total 8 digit, 4 angka desimal
+            $table->timestamps();
         });
 
     }
