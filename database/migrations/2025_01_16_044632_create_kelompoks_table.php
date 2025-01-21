@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('alamat', 80);
             $table->string('cao', 8);
             $table->string('cif', 6);
-            $table->index('code_unit');
+            $table->string('no_tlp', 16);
             $table->index('cao');
             $table->timestamps();
         });

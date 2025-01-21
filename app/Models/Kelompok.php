@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Kelompok extends Model
 {
     use HasFactory;
+
+    protected $table = 'kelompok';
+    protected $guarded = [];
+    protected $primaryKey = 'code_kel';
 }

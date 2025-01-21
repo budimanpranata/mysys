@@ -54,7 +54,7 @@ class MenuSeeder extends Seeder
             'name' => 'Input Data Kelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
-            'url' => '/dashboard-v3',
+            'url' => '/kelompok',
             'left' => 'null',
             'order' => 3,
         ]);
