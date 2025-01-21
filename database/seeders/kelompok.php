@@ -22,6 +22,7 @@ class kelompok extends Seeder
                 'alamat' => 'KP. LEGOK MUNCANG',
                 'cao' => '00303', // join ke table anggota untuk ambil nama nya saja.
                 'cif' => '0',
+                'no_tlp' => '0',
             ],
         ]);
     }
