@@ -9,7 +9,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 40px;
+      margin: 20px;
       line-height: 1.6;
     }
 
@@ -27,13 +27,8 @@
       text-align: center;
     }
 
-    .section-title {
-      font-weight: bold;
-      margin-top: 20px;
-    }
-
     .signature {
-      margin-top: 50px;
+      margin-top: 30px;
       width: 100%;
     }
 
@@ -53,11 +48,12 @@
   <h1>PEMBIAYAAN AKAD MUSYARAKAH</h1>
   <p class="text-align-center"><strong>No: {{ $result->no_anggota }}</strong></p>
 
-  <p>Dengan memohon petunjuk dan ridha Allah, pada hari ini {{ $result->hari }} tanggal {{ $result->tanggal }} bulan {{
+  <p>Dengan memohon petunjuk dan ridha Allah, pada hari ini {{ $result->namaHari }} tanggal {{ $result->tanggal }} bulan
+    {{
     $result->bulan }}, tahun {{ $result->tahun }}, yang bertanda tangan di bawah ini :</p>
 
   <p>
-    Nama ........................, jabatan <strong>Marketing Manager (MM)</strong> dalam hal ini bertindak untuk dan
+    Nama {{ $result->namaMM }}, jabatan <strong>Marketing Manager (MM)</strong> dalam hal ini bertindak untuk dan
     atas nama <strong>Koperasi Simpan Pinjam dan Pembiayaan Syariah (KSPPS) Nur Insani</strong>, yang berkedudukan di
     kota Tangerang Selatan berdasarkan Akta Pendirian No 02 tanggal 7 bulan Mei tahun 2011 melalui notaries Neilly
     Iralita Iswari, SH, MSi, MKn dan telah memperoleh persetujuan Kementerian Koperasi dan Usaha Kecil dan Menengah No.
@@ -66,7 +62,8 @@
   </p>
 
   <p>
-    Nyonya {{ $result->nama }} bertempat tinggal di {{ $result->desa }}, {{ $result->kecamatan }} Pemegang KTP dengan
+    Nyonya {{ $result->anggotaNama }} bertempat tinggal di {{ $result->desa }}, {{ $result->kecamatan }} Pemegang KTP
+    dengan
     NIK {{ $result->ktp }}, selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.
   </p>
 
@@ -77,14 +74,15 @@
   <h2>PASAL 1<br>KETENTUAN POKOK AKAD</h2>
   <p>Ketentuan-ketentuan pokok Akad ini meliputi sebagai berikut :</p>
   <ol>
-    <li>Jenis Usaha: .................................</li>
-    <li>Modal Pihak Pertama: .................................</li>
-    <li>Prosentase Margin Pihak Pertama: .................................</li>
-    <li>Prosentase Margin Pihak Kedua: .................................</li>
-    <li>Jumlah Angsuran Mingguan: .................................</li>
-    <li>Hari Pembayaran Angsuran: .................................</li>
-    <li>Jangka Waktu Pembiayaan: .................................</li>
-    <li>Tanggal Jatuh Tempo Pembiayaan: .................................</li>
+    <li>Jenis Usaha: {{ $result->nama_usaha }}</li>
+    <li>Modal Pihak Pertama: {{ $result->totalPinjaman }} ({{ $result->totalPinjamanText }})</li>
+    <li>Prosentase Margin Pihak Pertama: {{ $result->persentaseMarginNI }}</li>
+    <li>Prosentase Margin Pihak Kedua: {{ $result->persentaseMargin }}</li>
+    <li>Jumlah Angsuran Mingguan: {{ $result->nominalAngsuran }} ({{ $result->nominalAngsuranText }})</li>
+    <li>Hari Pembayaran Angsuran: Setiap hari {{ $result->hari }}</li>
+    <li>Jangka Waktu Pembiayaan: {{ $result->tenor }} Minggu</li>
+    <li>Tanggal Jatuh Tempo Pembiayaan: Tanggal {{ $result->maturityTanggal }} {{ $result->maturityBulan }} {{
+      $result->maturityTahun }}</li>
   </ol>
 
   <h2>PASAL 2<br>JENIS USAHA</h2>
@@ -116,8 +114,10 @@
   <p>PIHAK KEDUA menyatakan dengan sukarela dan kesadaran sendiri untuk :</p>
   <ol>
     <li>Akan membayar angsuran tepat waktu sesuai tempat dan waktu yang telah disepakati.</li>
-    <li>Tidak menggunakan pembiayaan ini untuk kepentingan pihak lain.</li>
-    <li>Tidak melibatkan pihak luar untuk tidak membayar angsuran.</li>
+    <li>Tidak menggunakan pembiayaan ini untuk kepentingan pihak lain. Apabila di kemudian hari terbukti digunakan oleh
+      pihak lain, akan tetap bertanggung jawab membayar angsuran tepat waktu</li>
+    <li>Tidak melibatkan pihak luar (LSM, Ormas atau sejenisnya) untuk tidak membayar angsuran. Apabila hal diatas tidak
+      dipenuhi, maka PIHAK KEDUA bersedia diiaporkan kepada pihak berwajib sesuai undang-undang yang berlaku.</li>
   </ol>
 
   <h2>PASAL 7<br>PERHITUNGAN PADA AKHIR PELUNASAN</h2>
@@ -128,7 +128,7 @@
   <h2>PASAL 8<br>PASAL TAMBAHAN</h2>
   <p>Hal-hal lain yang belum cukup diatur dalam perjanjian ini, akan diatur berdasarkan kesepakatan PARA PIHAK ke dalam
     surat/akta yang merupakan satu kesatuan dengan perjanjian ini. Demikian Perjanjian ini dibuat dan ditandatangani di
-    desa {{ $result->desa }} pada hari {{ $result->hari }} tanggal {{ $result->tanggal }} bulan {{
+    desa {{ $result->desa }} pada hari {{ $result->namaHari }} tanggal {{ $result->tanggal }} bulan {{
     $result->bulan }}, tahun {{ $result->tahun }}
   </p>
 
@@ -137,11 +137,11 @@
       <tr>
         <td>
           <p class="text-align-center">PIHAK PERTAMA</p>
-          <p class="text-align-center">(.................................)<br>Marketing Manager</p>
+          <p class="text-align-center">(.................................)<br>{{ $result->namaMM }}</p>
         </td>
         <td>
           <p class="text-align-center">PIHAK KEDUA</p>
-          <p class="text-align-center">(.................................)<br>Ketua Kelompok</p>
+          <p class="text-align-center">(.................................)<br>{{ $result->anggotaNama }}</p>
         </td>
       </tr>
     </table>

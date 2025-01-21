@@ -49,7 +49,7 @@ class tempAkadMus extends Seeder
                 'status_app' => 'BATAL',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                'persen_margin' => 0.075,
 
             ],
             [
@@ -88,7 +88,7 @@ class tempAkadMus extends Seeder
                 'status_app' => 'BATAL',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                'persen_margin' => 0.075,
 
             ],
 
@@ -128,8 +128,8 @@ class tempAkadMus extends Seeder
                 'status_app' => 'BATAL',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
-                
+                'persen_margin' => 0.075,
+
 
             ]
 
