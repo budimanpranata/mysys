@@ -8,6 +8,7 @@ use App\Http\Controllers\AlController;
 use App\Http\Controllers\RealisasiWakalahController;
 use App\Http\Controllers\RealisasiMurabahahController;
 use App\Http\Controllers\CetakMusyarakahController;
+use App\Http\Controllers\CetakLaRisywahController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PDFController;
 
@@ -34,7 +35,8 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/cetak/musyarakah', [CetakMusyarakahController::class, 'index'])->name('cetak_musyarakah');
     Route::post('/cetak/musyarakah/result', [CetakMusyarakahController::class, 'hasil'])->name('form_musyarakah');
     Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
-
+    Route::get('/cetak/larisywah', [CetakLaRisywahController::class, 'index'])->name('cetak_larisywah');
+    Route::post('/cetak/larisywah/result', [CetakLaRisywahController::class, 'hasil'])->name('form_larisywah');
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
@@ -47,4 +49,5 @@ Route::group(['middleware' => ['auth', 'role:2']], function () {
 });
 
 // DOMpdf
-Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generate');
+Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
+Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
