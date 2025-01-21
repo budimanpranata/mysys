@@ -24,28 +24,26 @@ class PDFController extends Controller
             abort(404, 'Template not found');
         }
 
-        // Fetch records berdasarkan state
-        $dates = explode(',', $request->id);
+        $tanggalCetak = \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
 
         // Query menggunakan join
         $results = DB::table('temp_akad_mus')
             ->leftJoin('anggota', 'temp_akad_mus.cif', '=', 'anggota.cif')
             ->leftJoin('ao', 'anggota.cao', '=', 'ao.cao') // Join the ao table to get atasan
             ->leftJoin('mm', 'ao.atasan', '=', 'mm.nik') // Join the mm table to get details using atasan
-            ->whereIn('temp_akad_mus.tgl_akad', $dates)
+            ->where('temp_akad_mus.tgl_akad', $tanggalCetak)
             ->orderBy('temp_akad_mus.code_kel')
             ->select(
                 'temp_akad_mus.*',
                 'anggota.ktp as ktp',
                 'anggota.desa as desa',
                 'anggota.kecamatan as kecamatan',
-                'anggota.nama as anggota_nama', // Alias the nama field from anggota table
-                'ao.atasan as atasan',          // Select atasan from ao table
-                'mm.nama as mm_nama',           // Alias the nama field from mm table
+                'anggota.nama as anggota_nama',
+                'ao.atasan as atasan',
+                'mm.nama as mm_nama',
                 'mm.*'
             )
             ->get();
-
 
         foreach ($results as $result) {
             // tgl_akad related variables
@@ -101,7 +99,55 @@ class PDFController extends Controller
         // Generate PDF
         $pdf = PDF::loadView($viewPath, $data);
 
-        return $pdf->stream("{$feature}_combined.pdf");
+        return $pdf->stream("{$feature}_{$tanggalCetak}_combined.pdf");
+    }
+
+    public function generateLaRisywahPdf(Request $request, $feature, $kelompok, $date)
+    {
+        $viewPath = "admin.{$feature}.template";
+
+        if (!view()->exists($viewPath)) {
+            abort(404, 'Template not found');
+        }
+
+        $tanggalCetak = \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
+
+        $results = DB::table('temp_akad_mus')
+            ->leftJoin('kelompok', 'temp_akad_mus.code_kel', '=', 'kelompok.code_kel')
+            ->where('temp_akad_mus.tgl_akad', $tanggalCetak)
+            ->where('temp_akad_mus.code_kel', $kelompok)
+            ->where('temp_akad_mus.status_app', 'MUSYARAKAH')
+            ->select(
+                'temp_akad_mus.*',
+                'kelompok.nama_kel as kelompok_name'
+            )
+            ->get();
+
+        foreach ($results as $result) {
+            $result->formattedPlafond = 'Rp. ' . number_format($result->plafond, 0, ',', '.'); // e.g., Rp.2,000,000
+        }
+
+        // Handle empty results
+        if ($results->isEmpty()) {
+            abort(404, 'No records found for the specified date and kelompok.');
+        }
+
+        $namaKel = $results->first()->kelompok_name;
+
+        $totalPlafond = $results->sum('plafond'); // total biaya plafond
+        // Format totalPlafond value
+        $formattedTotalPlafond = 'Rp. ' . number_format($totalPlafond, 0, ',', '.');
+
+        // Prepare data utk PDF view
+        $data = [
+            'results' => $results,
+            'totalPlafond' => $formattedTotalPlafond,
+            'namaKelompok' => $namaKel
+        ];
+
+        $pdf = PDF::loadView($viewPath, $data);
+
+        return $pdf->stream("{$feature}_{$kelompok}_{$tanggalCetak}.pdf");
     }
 
     private function convertToRupiahText($number)
