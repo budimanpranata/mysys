@@ -20,7 +20,7 @@ class MmSeeder extends Seeder
                 'alamat' => '-',
                 'tgl_lahir' => '2024-12-16 09:01:28',
                 'jabatan' => 'Marketing Manager',
-                'No_tlp' => '-',
+                'no_tlp' => '-',
                 'tmt' => '2024-12-16 09:01:28',
                 'unit' => '001',
                 'foto' => NULL,
