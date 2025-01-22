@@ -12,7 +12,7 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('branch', function (Blueprint $table) {
             $table->string('kode_branch', 4)->primary();
             $table->string('unit', 50);
             $table->string('code_area', 4);
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('branch');
     }
 };

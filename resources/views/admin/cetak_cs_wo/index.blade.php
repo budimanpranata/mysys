@@ -10,7 +10,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Cetak Cs</li>
+                    <li class="breadcrumb-item active">Cetak Cs WO</li>
                 </ol>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <div class="card">
 
         <div class="card-header">
-            <h3 class="card-title">Cetak Cs</h3>
+            <h3 class="card-title">Cetak Cs WO</h3>
         </div>
 
         <div class="card-body">
