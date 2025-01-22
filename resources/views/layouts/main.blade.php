@@ -74,14 +74,8 @@
     <script src="{{ asset('plugins') }}/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="{{ asset('plugins') }}/datatables-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('plugins') }}/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="{{ asset('plugins') }}/pdfmake/pdfmake.min.js"></script>
-    <script src="{{ asset('plugins') }}/pdfmake/vfs_fonts.js"></script>
-    <script src="{{ asset('plugins') }}/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="{{ asset('plugins') }}/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="{{ asset('plugins') }}/datatables-buttons/js/buttons.colVis.min.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Sweet Alert -->
     @include('sweetalert::alert')
