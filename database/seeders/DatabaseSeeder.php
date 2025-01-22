@@ -37,7 +37,11 @@ class DatabaseSeeder extends Seeder
             AnggotaSeeder::class,
             tempAkadMus::class,
             MmSeeder::class,
-            tempAkadMus::class,
+            simpanan::class,
+            simpanan_pokok::class,
+            simpanan_wajib::class,
+            tunggakan::class,
+
         ]);
 
 
