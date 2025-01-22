@@ -46,10 +46,10 @@ class tempAkadMus extends Seeder
                 'userid' => '001',
                 'status' => 'ANGGOTA',
                 'status_usia' => 'NO',
-                'status_app' => 'APPROVE',
+                'status_app' => 'MUSYARAKAH',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                'persen_margin' => 0.075,
 
             ],
             [
@@ -85,10 +85,10 @@ class tempAkadMus extends Seeder
                 'userid' => '001',
                 'status' => 'ANGGOTA',
                 'status_usia' => 'NO',
-                'status_app' => 'APPROVE',
+                'status_app' => 'MUSYARAKAH',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                'persen_margin' => 0.075,
 
             ],
 
@@ -125,11 +125,10 @@ class tempAkadMus extends Seeder
                 'userid' => '001',
                 'status' => 'ANGGOTA',
                 'status_usia' => 'NO',
-                'status_app' => 'APPROVE',
+                'status_app' => 'MUSYARAKAH',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
-
+                'persen_margin' => 0.075,
 
             ]
 

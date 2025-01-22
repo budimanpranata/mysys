@@ -41,7 +41,6 @@ class DatabaseSeeder extends Seeder
             simpanan_pokok::class,
             simpanan_wajib::class,
             tunggakan::class,
-
         ]);
 
 

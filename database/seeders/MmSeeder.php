@@ -15,12 +15,12 @@ class MmSeeder extends Seeder
     {
         DB::table('mm')->insert([
             [
-                'nik' => '016010512',
+                'nik' => '013010512',
                 'nama' => 'JEHAN ISKANDAR',
                 'alamat' => '-',
                 'tgl_lahir' => '2024-12-16 09:01:28',
                 'jabatan' => 'Marketing Manager',
-                'No_tlp' => '-',
+                'no_tlp' => '-',
                 'tmt' => '2024-12-16 09:01:28',
                 'unit' => '001',
                 'foto' => NULL,
