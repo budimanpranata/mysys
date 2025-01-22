@@ -103,7 +103,10 @@ class KelompokController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $kelompok = Kelompok::where('code_kel', $id)->first();
+        $kelompok->update($request->all());
+
+        return response()->json('Data berhasil disimpan', 200);
     }
 
     /**
