@@ -62,7 +62,7 @@
     <!-- ./wrapper -->
 
     <!-- jQuery -->
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script> --}}
     <!-- Bootstrap 4 -->
     <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
@@ -75,7 +75,7 @@
     <script src="{{ asset('plugins') }}/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
     <script src="{{ asset('plugins') }}/datatables-buttons/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('plugins') }}/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
 
     <!-- Sweet Alert -->

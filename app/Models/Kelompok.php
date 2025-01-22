@@ -9,8 +9,6 @@ class Kelompok extends Model
 {
     protected $table = 'kelompok';
     use HasFactory;
-
-    protected $table = 'kelompok';
     protected $guarded = [];
     protected $primaryKey = 'code_kel';
 }
