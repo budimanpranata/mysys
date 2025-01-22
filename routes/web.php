@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\RealisasiWakalahController;
 use App\Http\Controllers\RealisasiMurabahahController;
 use App\Http\Controllers\CetakMusyarakahController;
@@ -37,6 +38,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
+
+    Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
+    Route::resource('anggota', AnggotaController::class);
 
 });
 
