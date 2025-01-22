@@ -89,7 +89,7 @@
 
     <!-- /.card-footer-->
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @include('sweetalert::alert')
     <script>
@@ -134,7 +134,7 @@
                                 rows += `
                                 <tr data-id="${item.cif}">
                                     <td>${index + 1}</td>
-                                    <td><input type="checkbox" data-id="${item.cif}"></td>
+                                    <td><input type="checkbox" data-id="${item.cif}" checked></td>
                                     <td>${item.nama_kel}</td>
                                     <td>${item.nama}</td>
                                     <td>${new Intl.NumberFormat('id-ID').format(item.plafond)}</td>

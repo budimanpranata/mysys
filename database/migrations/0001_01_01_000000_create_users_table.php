@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->unsignedBigInteger('role_id');
             $table->date('param_tanggal');
+            $table->string('unit');
             $table->rememberToken();
             $table->timestamps();
         });
