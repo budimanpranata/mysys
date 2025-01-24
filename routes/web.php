@@ -11,6 +11,8 @@ use App\Http\Controllers\RealisasiMurabahahController;
 use App\Http\Controllers\CetakMusyarakahController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PDFController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -41,6 +43,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
+    Route::get('/proxy/search', function (Request $request) {
+        $ktp = $request->query('ktp');
+        $response = Http::get("http://185.201.9.210/apimobcol/rmc.php?ktp=$ktp");
+        return $response->json(); // Return JSON langsung ke frontend
+    })->name('proxy.search');
 
 });
 

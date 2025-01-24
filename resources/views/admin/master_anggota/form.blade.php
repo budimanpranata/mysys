@@ -57,23 +57,34 @@
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">No Identitas <span class="text-danger">*</span></span>
-                                <div class="col-sm-6">
-                                    <input type="number" class="form-control" name="ktp" id="ktp" placeholder="Masukkan No Identitas" required>
+                                <div class="col-sm-7">
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" name="ktp" id="ktp" placeholder="Masukkan No Identitas" required>
+                                        
+                                        <div class="input-group-append">
+                                            <a href="#" class="btn btn-primary" id="searchLink">
+                                                <i class="fas fa-search"></i>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
-                                <a href="" class="btn btn-primary"><i class="fas fa-search"></i></a>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukkan Nama" required>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Tempat Lahir <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="Masukkan Tempat Lahir">
+                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir" placeholder="Masukkan Tempat Lahir" required>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
@@ -84,21 +95,23 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <textarea name="alamat" class="form-control" id="alamat" cols="5" rows="3" placeholder="Masukkan Alamat"></textarea>
+                                    <textarea name="alamat" class="form-control" id="alamat" cols="5" rows="3" placeholder="Masukkan Alamat" required></textarea>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="rtrw" id="rtrw">
+                                    <input type="text" class="form-control" name="rtrw" id="rtrw" placeholder="Masukkan RT/RW" required>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kelurahan/Desa <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="desa" id="desa" required>
+                                    <input type="text" class="form-control" name="desa" id="desa" placeholder="Masukkan Kelurahan/Desa" required>
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -106,100 +119,163 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kecamatan <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kecamatan" id="kecamatan">
+                                    <input type="text" class="form-control" name="kecamatan" id="kecamatan" placeholder="Masukkan Kecamatan" required>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kabupaten <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kota" id="kota">
+                                    <input type="text" class="form-control" name="kota" id="kota" placeholder="Masukkan Kabupaten" required>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kode Pos <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="kota" id="kota" placeholder="Masukkan Kode POS" required>
+                                    <span class="help-block with-errors text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-10 col-form-label">Alamat Domisili <br>
+                                    <span class="text-danger"> *abaikan jika alamat sama dengan alamat KTP</span>
+                                </label>
+                            </div>
+
+                            <div class="form-group row">
+                                <span class="col-sm-4 col-form-label">Alamat</span>
+                                <div class="col-sm-7">
+                                    <textarea name="alamat" class="form-control" id="alamat" cols="5" rows="3" placeholder="Masukkan Alamat"></textarea>
+                                    <span class="help-block with-errors text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <span class="col-sm-4 col-form-label">RT/RW</span>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="rtrw" id="rtrw">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <span class="col-sm-4 col-form-label">Kelurahan/Desa</span>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="desa" id="desa">
+                                    <span class="help-block with-errors text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <span class="col-sm-4 col-form-label">Kecamatan</span>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="kecamatan" id="kecamatan">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <span class="col-sm-4 col-form-label">Kabupaten</span>
+                                <div class="col-sm-7">
                                     <input type="text" class="form-control" name="kota" id="kota">
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <span class="col-sm-4 col-form-label">Kode Pos</span>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="kode_pos" id="kode_pos">
+                                </div>
+                            </div>
+
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <span class="col-sm-4 col-form-label">Status Kawin <span class="text-danger">*</span></span>
+                                <span class="col-sm-4 col-form-label">Status Perkawinan <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="cao" id="cao" class="form-control" required>
-                                        <option hidden value="">-- Pilih Status Kawin --</option>
-                                        @foreach ($ao as $item)
-                                            <option value="{{ $item->cao }}">{{ $item->nama_ao }}</option>
-                                        @endforeach
+                                    <select name="status_menikah" id="status_menikah" class="form-control" required>
+                                        <option hidden value="">-- Pilih Status Perkawinan --</option>
+                                        <option value="Menikah">Menikah</option>
+                                        <option value="Belum Menikah">Belum Menikah</option>
+                                        <option value="Janda">Janda</option>
                                     </select>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Agama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="cao" id="cao" class="form-control" required>
+                                    <select name="agama" id="agama" class="form-control" required>
                                         <option hidden value="">-- Pilih Agama --</option>
-                                        @foreach ($ao as $item)
-                                            <option value="{{ $item->cao }}">{{ $item->nama_ao }}</option>
-                                        @endforeach
+                                        <option value="Islam">Islam</option>
+                                        <option value="Kristen">Kristen</option>
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Buddha">Buddha</option>
+                                        <option value="Konghucu">Konghucu</option>
                                     </select>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Pendidikan <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="cao" id="cao" class="form-control" required>
+                                    <select name="pendidikan" id="pendidikan" class="form-control" required>
                                         <option hidden value="">-- Pilih Pendidikan --</option>
-                                        @foreach ($ao as $item)
-                                            <option value="{{ $item->cao }}">{{ $item->nama_ao }}</option>
-                                        @endforeach
+                                        <option value="SD">SD</option>
+                                        <option value="SMP">SMP</option>
+                                        <option value="SMA">SMA</option>
                                     </select>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kewarganegaraan <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="cao" id="cao" class="form-control" required>
+                                    <select name="kewarganegaraan" id="kewarganegaraan" class="form-control" required>
                                         <option hidden value="">-- Pilih Kewarganegaraan --</option>
-                                        @foreach ($ao as $item)
-                                            <option value="{{ $item->cao }}">{{ $item->nama_ao }}</option>
-                                        @endforeach
+                                        <option value="Indonesia">Indonesia</option>
                                     </select>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Nama Pasangan <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kota" id="kota">
+                                    <input type="text" class="form-control" name="waris" id="waris" required>
+                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">No. Telp <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kota" id="kota">
+                                    <input type="text" class="form-control" name="no_hp" id="no_hp" placeholder="Masukkan No. Telp">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">No. Telp Pasangan <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kota" id="kota">
+                                    <input type="text" class="form-control" name="hp_pasangan" id="hp_pasangan" placeholder="Masukkan No. Telp Pasangan">
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Nama Ibu Kandung <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kota" id="kota">
+                                    <input type="text" class="form-control" name="ibu_kandung" id="ibu_kandung" placeholder="Masukkan Ibu Kandung">
                                 </div>
+                            </div>
+
+                            <div class="form-group row" id="ktpResult">
+                                {{-- untuk memunculkan data KTP dan KK --}}
                             </div>
 
                         </div>

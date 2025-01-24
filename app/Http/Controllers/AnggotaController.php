@@ -28,6 +28,7 @@ class AnggotaController extends Controller
 
             // dd($kelompok);
     }
+    
     /**
      * Display a listing of the resource.
      */

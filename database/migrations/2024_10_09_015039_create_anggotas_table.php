@@ -25,6 +25,7 @@ return new class extends Migration
             $table->String('kecamatan');
             $table->String('kota');
             $table->String('rtrw');
+            $table->String('kode_pos', 10);
             $table->String('no_hp');
             $table->String('hp_pasangan');
             $table->String('kelamin');
