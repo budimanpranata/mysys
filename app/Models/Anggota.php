@@ -12,4 +12,9 @@ class Anggota extends Model
     protected $table = 'anggota';
     protected $guarded = [];
     protected $primaryKey = 'no';
+
+    public function temp_mus_akad()
+    {
+        return $this->hasMany(temp_akad_mus::class, 'no_anggota', 'no');
+    }
 }

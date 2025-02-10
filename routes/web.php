@@ -6,9 +6,11 @@ use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\CetakMurabahahController;
 use App\Http\Controllers\RealisasiWakalahController;
 use App\Http\Controllers\RealisasiMurabahahController;
 use App\Http\Controllers\CetakMusyarakahController;
+use App\Http\Controllers\CetakSimpananLimaPersenController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PDFController;
 use Illuminate\Http\Request;
@@ -41,6 +43,16 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
+    Route::get('/cetak/murabahah', [CetakMurabahahController::class, 'index'])->name('cetak_murabahah');
+    Route::post('/cetak-murabahah/filter', [CetakMurabahahController::class, 'filter'])->name('cetak-murabahah.filter');
+    Route::post('/cetak-murabahah/pdf', [CetakMurabahahController::class, 'cetakPDF'])->name('cetak-murabahah.pdf');
+
+    Route::get('/cetak/simpanan-5-persen', [CetakSimpananLimaPersenController::class, 'index'])->name('cetak-simpanan-5-persen');
+    Route::post('/simpanan-5-persen/filter', [CetakSimpananLimaPersenController::class, 'filter'])->name('cetakSimpanan5Persen.filter');
+    Route::post('/simpanan-5-persen/pdf', [CetakSimpananLimaPersenController::class, 'cetakPDF'])->name('cetakSimpanan5Persen.pdf');
+
+
+    
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
     Route::get('/proxy/search', function (Request $request) {

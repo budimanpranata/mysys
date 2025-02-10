@@ -36,7 +36,7 @@ class MenuSeeder extends Seeder
             'name' => 'Input Data Anggota',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
-            'url' => '/anggota-baru', // Contoh URL
+            'url' => '/anggota', // Contoh URL
             'left' => 'null',
             'order' => 1,
         ]);
@@ -82,7 +82,7 @@ class MenuSeeder extends Seeder
             'name' => 'Cetak Murabahah',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
-            'url' => '/dashboard-v2',
+            'url' => '/cetak/murabahah',
             'left' => 'null',
             'order' => 5,
         ]);
@@ -94,6 +94,15 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/musyarakah',
             'left' => 'null',
             'order' => 6,
+        ]);
+
+        Menu::create([
+            'name' => 'Cetak Simapanan 5 %',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/simpanan-5-persen',
+            'left' => 'null',
+            'order' => 7,
         ]);
 
 
