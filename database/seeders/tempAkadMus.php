@@ -35,8 +35,8 @@ class tempAkadMus extends Seeder
                 'usaha' => '30',
                 'nama_usaha' => '(BENGKEL SEPATU)',
                 'unit' => '001',
-                'tgl_wakalah' => '2020-09-30 00:00:00',
-                'tgl_akad' => '2020-10-07',
+                'tgl_wakalah' => '2025-01-13 00:00:00',
+                'tgl_akad' => '2025-01-20',
                 'tgl_murab' => '2020-10-07 00:00:00',
                 'next_schedule' => '2024-01-01 00:00:00',
                 'maturity_date' => '2021-03-31 00:00:00',
@@ -46,10 +46,10 @@ class tempAkadMus extends Seeder
                 'userid' => '001',
                 'status' => 'ANGGOTA',
                 'status_usia' => 'NO',
-                'status_app' => 'BATAL',
+                'status_app' => 'MUSYARAKAH',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                'persen_margin' => 0.075,
 
             ],
             [
@@ -74,9 +74,9 @@ class tempAkadMus extends Seeder
                 'usaha' => '30',
                 'nama_usaha' => '(BENGKEL SEPATU)',
                 'unit' => '001',
-                'tgl_wakalah' => '2020-09-30 00:00:00',
-                'tgl_akad' => '2020-10-07',
-                'tgl_murab' => '2020-10-07 00:00:00',
+                'tgl_wakalah' => '2025-01-13 00:00:00',
+                'tgl_akad' => '2025-01-20',
+                'tgl_murab' => '2025-01-20 00:00:00',
                 'next_schedule' => '2024-01-01 00:00:00',
                 'maturity_date' => '2021-03-31 00:00:00',
                 'last_payment' => '2024-01-01',
@@ -85,10 +85,10 @@ class tempAkadMus extends Seeder
                 'userid' => '001',
                 'status' => 'ANGGOTA',
                 'status_usia' => 'NO',
-                'status_app' => 'BATAL',
+                'status_app' => 'MUSYARAKAH',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
+                'persen_margin' => 0.075,
 
             ],
 
@@ -114,9 +114,9 @@ class tempAkadMus extends Seeder
                 'usaha' => '30',
                 'nama_usaha' => '(BENGKEL SEPATU)',
                 'unit' => '001',
-                'tgl_wakalah' => '2020-09-30 00:00:00',
-                'tgl_akad' => '2020-10-07',
-                'tgl_murab' => '2020-10-07 00:00:00',
+                'tgl_wakalah' => '2025-01-13 00:00:00',
+                'tgl_akad' => '2025-01-20',
+                'tgl_murab' => '2025-01-20 00:00:00',
                 'next_schedule' => '2024-01-01 00:00:00',
                 'maturity_date' => '2021-03-31 00:00:00', // tgl jatuh tempo
                 'last_payment' => '2024-01-01',
@@ -125,11 +125,10 @@ class tempAkadMus extends Seeder
                 'userid' => '001',
                 'status' => 'ANGGOTA',
                 'status_usia' => 'NO',
-                'status_app' => 'BATAL',
+                'status_app' => 'MUSYARAKAH',
                 'gol' => '1',
                 'deal_produk' => NULL,
-                'persen_margin' => 0.0075, // 0,75% dalam desimal
-                
+                'persen_margin' => 0.075,
 
             ]
 

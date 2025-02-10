@@ -95,7 +95,31 @@ class MenuSeeder extends Seeder
             'left' => 'null',
             'order' => 6,
         ]);
+        Menu::create([
+            'name' => 'Cetak Cs',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/cs',
+            'left' => 'null',
+            'order' => 7,
+        ]);
+        Menu::create([
+            'name' => 'Cetak Cs WO',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/cs_wo',
+            'left' => 'null',
+            'order' => 8,
+        ]);
 
+        Menu::create([
+            'name' => 'Cetak La Risywah',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/larisywah',
+            'left' => 'null',
+            'order' => 9,
+        ]);
 
         $Realisasi = Menu::create([
             'name' => 'Realisasi',
@@ -103,7 +127,8 @@ class MenuSeeder extends Seeder
             'parent_id' => null,
             'url' => null,
             'left' => 'right fas fa-angle-left',
-            'order' => 7,
+            'order' => 10,
+
         ]);
 
         // Submenu
@@ -113,8 +138,8 @@ class MenuSeeder extends Seeder
             'parent_id' => $Realisasi->id,
             'url' => '/realisasi_wakalah',
             'left' => 'null',
-            'order' => 8,
-        ]);
+            'order' => 11,
+       ]);
 
         Menu::create([
             'name' => 'Realisasi Murabahah',
@@ -122,7 +147,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $Realisasi->id,
             'url' => '/realisasi/murabahah',
             'left' => 'null',
-            'order' => 9,
+            'order' => 12,
         ]);
 
         Menu::create([
@@ -131,7 +156,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
             'left' => 'null',
-            'order' => 10,
+            'order' => 13,
         ]);
 
         Menu::create([
@@ -140,7 +165,8 @@ class MenuSeeder extends Seeder
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
             'left' => 'null',
-            'order' => 11,
+            'order' => 14,
+
         ]);
         Menu::create([
             'name' => 'Hapus Buku',
@@ -148,7 +174,8 @@ class MenuSeeder extends Seeder
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
             'left' => 'null',
-            'order' => 12,
+            'order' => 15,
+
         ]);
     }
 }

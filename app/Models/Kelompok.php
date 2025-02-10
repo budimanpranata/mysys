@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kelompok extends Model
 {
-    use HasFactory;
-
     protected $table = 'kelompok';
+    use HasFactory;
     protected $guarded = [];
     protected $primaryKey = 'code_kel';
 }

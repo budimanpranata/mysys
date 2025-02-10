@@ -26,8 +26,6 @@ class KelompokController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
-
-            // dd($kelompok);
     }
     /**
      * Display a listing of the resource.
