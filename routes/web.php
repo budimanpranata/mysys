@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
+use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\RealisasiWakalahController;
 use App\Http\Controllers\RealisasiMurabahahController;
 use App\Http\Controllers\CetakMusyarakahController;
@@ -12,7 +13,10 @@ use App\Http\Controllers\CetakCsController;
 use App\Http\Controllers\CetakLaRisywahController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PDFController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\CetakCsWoController;
+
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -47,6 +51,14 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/cetak/larisywah/result', [CetakLaRisywahController::class, 'hasil'])->name('form_larisywah');
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
+
+    Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
+    Route::resource('anggota', AnggotaController::class);
+    Route::get('/proxy/search', function (Request $request) {
+        $ktp = $request->query('ktp');
+        $response = Http::get("http://185.201.9.210/apimobcol/rmc.php?ktp=$ktp");
+        return $response->json(); // Return JSON langsung ke frontend
+    })->name('proxy.search');
 
 });
 
