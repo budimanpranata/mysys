@@ -37,6 +37,13 @@ class CetakMurabahahController extends Controller
             ->whereDate('temp_akad_mus.tgl_murab', $tgl_murab)
             ->get();
 
+        if ($data->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data tidak ditemukan!'
+            ]);
+        }
+    
         return response()->json([
             'status' => 'success',
             'data' => $data
@@ -72,10 +79,8 @@ class CetakMurabahahController extends Controller
         }
 
         // Generate PDF
-        $pdf = PDF::loadView('admin.cetak_murabahah.pdf', compact('data', 'tgl_murab'));
-
-        // // Unduh PDF
-        // return $pdf->download('Murabahah-' . $tglMurab . '.pdf');
+        $pdf = PDF::loadView('admin.cetak_murabahah.pdf', compact('data', 'tgl_murab'))
+        ->setPaper('a4', 'portrait');
 
         // Tampilkan preview di browser
         return $pdf->stream('Murabahah-' . $tgl_murab . '.pdf');

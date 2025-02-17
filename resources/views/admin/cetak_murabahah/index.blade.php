@@ -69,54 +69,93 @@
 
     <script>
         $(document).ready(function () {
-        $('#filterButton').click(function () {
-            // Ambil nilai input
-            var code_kel = $('#code_kel').val();
-            var tgl_murab = $('#tgl_murab').val();
+            $('#filterButton').click(function () {
+                // Ambil nilai input
+                var code_kel = $('#code_kel').val();
+                var tgl_murab = $('#tgl_murab').val();
 
-            // Validasi input
-            if (code_kel === '' || tgl_murab === '') {
-                alert('Kode Kelompok dan Tanggal Akad harus diisi!');
-                return;
-            }
-
-            // AJAX request
-            $.ajax({
-                url: "{{ route('cetakMurabahah.filter') }}",
-                method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    code_kel: code_kel,
-                    tgl_murab: tgl_murab
-                },
-                success: function (response) {
-                    var tbody = $('table tbody');
-                    tbody.empty(); // Bersihkan tabel
-
-                    if (response.data.length > 0) {
-                        // Loop hasil pencarian
-                        $.each(response.data, function (index, item) {
-                            tbody.append(`
-                                <tr>
-                                    <td>${index + 1}</td>
-                                    <td>${item.tgl_murab}</td>
-                                    <td>${item.cif}</td>
-                                    <td>${item.ktp}</td>
-                                    <td>${item.nama_anggota}</td>
-                                </tr>
-                            `);
-                        });
-                    } else {
-                        tbody.append('<tr><td colspan="5" class="text-center">Data tidak ditemukan</td></tr>');
-                    }
-                },
-                error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('Terjadi kesalahan, silakan coba lagi.');
+                // Validasi input kosong
+                if (code_kel === '' || tgl_murab === '') {
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: 'Kode Kelompok dan Tanggal harus diisi!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
                 }
+
+                // Tampilkan loading sebelum request AJAX
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Silakan tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // AJAX request
+                $.ajax({
+                    url: "{{ route('cetakMurabahah.filter') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        code_kel: code_kel,
+                        tgl_murab: tgl_murab
+                    },
+                    success: function (response) {
+                        Swal.close(); // Tutup loading
+                        var tbody = $('table tbody');
+                        tbody.empty(); // Bersihkan tabel sebelum menampilkan data baru
+
+                        if (response.status === 'success' && response.data.length > 0) {
+                            // Loop hasil pencarian
+                            $.each(response.data, function (index, item) {
+                                tbody.append(`
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${item.tgl_murab}</td>
+                                        <td>${item.cif}</td>
+                                        <td>${item.ktp}</td>
+                                        <td>${item.nama_anggota}</td>
+                                    </tr>
+                                `);
+                            });
+
+                            // SweetAlert jika data ditemukan
+                            Swal.fire({
+                                title: 'Data Ditemukan!',
+                                text: response.data.length + ' data berhasil dimuat.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+
+                        } else {
+                            Swal.fire({
+                                title: 'Data Tidak Ditemukan!',
+                                text: 'Tidak ada data yang cocok dengan pencarian Anda.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                            tbody.append('<tr><td colspan="5" class="text-center text-danger">Data tidak ditemukan</td></tr>');
+                        }
+                    },
+                    error: function (xhr) {
+                        Swal.close(); // Tutup loading
+                        Swal.fire({
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Gagal mengambil data, silakan coba lagi.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                        console.error(xhr.responseText);
+                    }
+                });
             });
         });
-    });
+
+
 
         // Tombol Cetak PDF
         document.getElementById('cetakButton').addEventListener('click', function(e) {
@@ -127,7 +166,12 @@
 
             // Validasi input sebelum cetak
             if (!kodeKel || !tglMurab) {
-                alert('Harap masukkan Kode Kelompok dan pilih Tanggal Akad untuk mencetak PDF!');
+                Swal.fire({
+                    title: 'Data Tidak Ditemukan!',
+                    text: 'Harap masukkan Kode Kelompok dan pilih Tanggal untuk mencetak PDF!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 

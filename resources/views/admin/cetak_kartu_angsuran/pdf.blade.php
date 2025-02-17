@@ -19,6 +19,14 @@
                 font-family: Arial, sans-serif;
             }
 
+            .info {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            }
+            .info span {
+                display: block;
+            }
+
             table {
                 width: 100%;
                 border-collapse: collapse;
@@ -38,21 +46,75 @@
             h3 {
                 text-align: center;
             }
+
+            .tabel-info {
+                border-collapse: collapse;
+                width: 100%;
+                border: none;
+            }
+
+            .tabel-info td, 
+            .tabel-info th {    
+                border: none;
+                padding: 1px;
+            }
+
+            .info td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
         </style>
     </head>
 
     <body>
         <h3>DAFTAR KARTU ANGSURAN DAN TABUNGAN</h3>
-
-        <p>Nomor Rekening: {{ $item->norek }}</p>
-        <p>Nama: {{ $item->nama_anggota }}</p>
-        <p>Plafond Pembiayaan: {{ number_format($item->plafond) }}</p>
-        <p>Tanggal Realisasi: {{ $tanggal }}</p>
-        <p>Jangka Waktu: {{ $item->tenor }} Minggu</p>
-        <p>Tanggal Jatuh Tempo: {{ $jatuh_tempo }}</p>
-        <p>Simpanan Pokok: {{ $item->pokok }}</p>
-        <p>Simpanan Wajib: {{ $item->os }}</p>
-        <p>Nama Kelompok: {{ $item->nama_kel }}</p>
+        
+        <div class="info">
+            <table class="tabel-info">
+                <tr>
+                    <td style="width: 260px;">Nomor Rekening</td>
+                    <td>:</td>
+                    <td>{{ $item->norek }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Nama</td>
+                    <td>:</td>
+                    <td>{{ $item->nama_anggota }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Plafond Pembiayaan</td>
+                    <td>:</td>
+                    <td>{{ number_format($item->plafond) }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Tanggal Realisasi</td>
+                    <td>:</td>
+                    <td>{{ $tanggal }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Tanggal Jatuh Tempo</td>
+                    <td>:</td>
+                    <td>{{ $jatuh_tempo }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Simpanan Pokok</td>
+                    <td>:</td>
+                    <td>{{ number_format($item->pokok) }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Simpanan Wajib</td>
+                    <td>:</td>
+                    <td>{{ number_format($item->os) }}</td>
+                </tr>
+                <tr>
+                    <td style="width: 260px;">Nama Kelompok</td>
+                    <td>:</td>
+                    <td>{{ $item->nama_kel }}</td>
+                </tr>
+            </table>
+        </div>
 
         <table class="table-sm">
             <thead>

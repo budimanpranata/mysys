@@ -94,10 +94,9 @@ class CetakAdendumController extends Controller
             ->update(['status' => 'done']);
 
         // Generate PDF
-        $pdf = PDF::loadView('admin.cetak_adendum.pdf', compact('data', 'jenis_rest', 'hari_ini', 'today'));
+        $pdf = PDF::loadView('admin.cetak_adendum.pdf', compact('data', 'jenis_rest', 'hari_ini', 'today'))
+        ->setPaper('a4', 'portrait');
 
-        // // Unduh PDF
-        // return $pdf->download('Murabahah-' . $tglMurab . '.pdf');
 
         // Tampilkan preview di browser
         return $pdf->stream('Adendum-' . $code_kel . '.pdf');

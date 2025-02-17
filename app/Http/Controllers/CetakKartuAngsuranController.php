@@ -66,10 +66,9 @@ class CetakKartuAngsuranController extends Controller
         }
 
         // Generate PDF
-        $pdf = PDF::loadView('admin.cetak_kartu_angsuran.pdf', compact('data', 'tgl_wakalah'));
+        $pdf = PDF::loadView('admin.cetak_kartu_angsuran.pdf', compact('data', 'tgl_wakalah'))
+        ->setPaper('a4', 'portrait');
 
-        // // Unduh PDF
-        // return $pdf->download('Murabahah-' . $tglMurab . '.pdf');
 
         // Tampilkan preview di browser
         return $pdf->stream('Cetak Kartu Angsuran-' . $tgl_wakalah . '.pdf');

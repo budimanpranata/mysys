@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <span class="col-sm-2 col-form-label">Pilih Tanggal Akad</span>
+                        <label class="col-sm-2 col-form-label">Pilih Tanggal</label>
                         <div class="col-sm-6">
                             <input type="date" class="form-control" id="tgl_wakalah">
                         </div>
@@ -75,9 +75,22 @@
 
                 // Validasi input
                 if (code_kel === '' || tgl_wakalah === '') {
-                    alert('Kode Kelompok dan Tanggal Akad harus diisi!');
+                    Swal.fire({
+                        title: 'Kode Kelompok dan Tanggal harus diisi!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
                     return;
                 }
+
+                Swal.fire({
+                    title: 'Memproses...',
+                    text: 'Silakan tunggu',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
 
                 // AJAX request
                 $.ajax({
@@ -89,6 +102,7 @@
                         tgl_wakalah: tgl_wakalah
                     },
                     success: function (response) {
+                        Swal.close(); // Tutup loading
                         var tbody = $('table tbody');
                         tbody.empty(); // Bersihkan tabel
 
@@ -104,13 +118,33 @@
                                     </tr>
                                 `);
                             });
+
+                            // SweetAlert jika data ditemukan
+                            Swal.fire({
+                                title: 'Data Ditemukan!',
+                                text: response.data.length + ' data berhasil dimuat.',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
                         } else {
+                            Swal.fire({
+                                title: 'Data Tidak Ditemukan!',
+                                text: 'Tidak ada data yang cocok dengan pencarian Anda.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
                             tbody.append('<tr><td colspan="5" class="text-center">Data tidak ditemukan</td></tr>');
                         }
                     },
                     error: function (xhr) {
+                        Swal.close(); // Tutup loading
+                        Swal.fire({
+                            title: 'Terjadi Kesalahan!',
+                            text: 'Gagal mengambil data, silakan coba lagi.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
                         console.error(xhr.responseText);
-                        alert('Terjadi kesalahan, silakan coba lagi.');
                     }
                 });
             });
@@ -125,7 +159,12 @@
 
             // Validasi input sebelum cetak
             if (!kodeKel || !tglWakalah) {
-                alert('Harap masukkan Kode Kelompok dan pilih Tanggal Akad untuk mencetak PDF!');
+                Swal.fire({
+                    title: 'Data Tidak Ditemukan!',
+                    text: 'Harap masukkan Kode Kelompok dan pilih Tanggal untuk mencetak PDF!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
                 return;
             }
 

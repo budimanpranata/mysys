@@ -26,10 +26,8 @@ class CetakSimpananLimaPersenController extends Controller
         $data = DB::table('temp_akad_mus')
             ->join('anggota', 'temp_akad_mus.no_anggota', '=', 'anggota.no') // Relasi antar tabel
             ->select(
-                'temp_akad_mus.tgl_akad',
-                'temp_akad_mus.code_kel',
-                'anggota.cif',
-                'anggota.ktp',
+                'temp_akad_mus.*',
+                'anggota.*',
                 'anggota.nama as nama_anggota'
             )
             ->where('temp_akad_mus.code_kel', $code_kel)
@@ -50,12 +48,8 @@ class CetakSimpananLimaPersenController extends Controller
         $data = DB::table('temp_akad_mus')
             ->join('anggota', 'temp_akad_mus.no_anggota', '=', 'anggota.no') // Relasi antar tabel anggota
             ->select(
-                'temp_akad_mus.tgl_akad',
-                'temp_akad_mus.code_kel',
-                'temp_akad_mus.plafond',
-                'anggota.cif',
-                'anggota.ktp',
-                'anggota.norek',
+                'temp_akad_mus.*',
+                'anggota.*',
                 'anggota.nama as nama_anggota',
             )
             ->where('temp_akad_mus.code_kel', $code_kel)
@@ -85,7 +79,8 @@ class CetakSimpananLimaPersenController extends Controller
         }
 
         // generate PDF
-        $pdf = PDF::loadView('admin.cetak_simpanan_5_persen.pdf', compact('data', 'tgl_akad', 'data_kel'));
+        $pdf = PDF::loadView('admin.cetak_simpanan_5_persen.pdf', compact('data', 'tgl_akad', 'data_kel'))
+        ->setPaper('a4', 'portrait');
 
         // tampilkan preview di browser
         return $pdf->stream('Simpanan 5 persen - ' . $tgl_akad . '.pdf');
