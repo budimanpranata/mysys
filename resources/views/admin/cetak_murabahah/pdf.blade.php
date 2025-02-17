@@ -61,15 +61,15 @@
                     <div class="section-content">
                         Dengan memohon petunjuk dan Ridho Allah SWT, pada Hari ini {{ $hari }} tanggal
                         {{ $tanggal }} yang bertanda tangan di bawah ini : <br><br>
-                        I. Nama KATRINE TIARA DEWI SEPTIANA, jabatan Marketing Manager dalam hal ini bertindak untuk dan
+                        I. Nama {{ $item->nama_mm }}, jabatan {{ $item->jabatan }} dalam hal ini bertindak untuk dan
                         atas nama Koperasi Simpan Pinjam dan Pembiayaan Syariah (KSPPS) Nur Insani berkedudukan di Kota
                         Tangerang Selatan berdasarkan Akta Pendirian No. 02 tanggal 7 Mei 2011 melalui notaris Nelly
                         Iralita Iswari, SH, MSI, MKn dan telah memperoleh persetujuan Kementerian Koperasi dan Usaha
                         Kecil dan Menengah No. 1024/BHM.KUM.2/XI/2011 serta perubahan-perubahannya, selanjutnya disebut
                         sebagai PIHAK PERTAMA.<br><br>
-                        II. Nyonya {{ $item->nama }} berdomisili di {{ $item->anggota->alamat }}
-                        {{ $item->anggota->desa }} {{ $item->anggota->kecamatan }} {{ $item->anggota->kota }}, pemegang
-                        KTP dengan NIK {{ $item->anggota->ktp }} Selanjutnya disebut sebagai PIHAK KEDUA.<br><br>
+                        II. Nyonya {{ $item->nama_anggota }} berdomisili di {{ $item->alamat }}
+                        {{ $item->desa }} {{ $item->kecamatan }} {{ $item->kota }}, pemegang
+                        KTP dengan NIK {{ $item->ktp }} Selanjutnya disebut sebagai PIHAK KEDUA.<br><br>
                         PIHAK PERTAMA dan PIHAK KEDUA selanjutnya bersama-sama disebut "Para Pihak", sepakat untuk
                         membuat dan menandatangani Pembiayaan Akad Murabahah (selanjutnya disebut 'Akad') dengan syarat
                         dan ketentuan sebagai berikut:
@@ -80,10 +80,10 @@
                     <div class="section-content">
                         Ketentuan-ketentuan pokok Akad ini meliputi sebagai berikut :<br>
                         a. Barang (Object Murabahah) : (Dijelaskan dalam Tanda Terima Barang)<br>
-                        b. Harga Beli : Rp. 2,500,000 (Dua Juta Lima Ratus Ribu)<br>
-                        c. Keuntungan : Rp. 512,500 (Lima Ratus Dua Belas Ribu Lima Ratus)<br>
-                        d. Harga Jual/Piutang Murabahah : Rp3,012,500 (Tiga Juta Dua Belas Ribu Lima Ratus)<br>
-                        e. Jumlah Angsuran Mingguan : Rp. 120,500 (Seratus Dua Puluh Ribu Lima Ratus)<br>
+                        b. Harga Beli : Rp. {{ number_format($item->plafond) }} ({{ terbilang($item->plafond) }})<br>
+                        c. Keuntungan : Rp. {{ number_format($item->saldo_margin) }} ({{ terbilang($item->saldo_margin) }})<br>
+                        d. Harga Jual/Piutang Murabahah : Rp. {{ number_format($item->os)}} ({{ terbilang($item->os) }})<br>
+                        e. Jumlah Angsuran Mingguan : Rp. {{ number_format($item->angsuran) }} ({{ terbilang($item->angsuran) }})<br>
                         f. Hari Pembayaran Angsuran : setiap hari {{ $item->hari }}<br>
                         g. Jangka Waktu Pembiayaan : {{ $item->tenor }} Minggu<br>
                         h. Tanggal Jatuh Tempo Pembiayaan : Tanggal {{ $jatuh_tempo }}
@@ -162,11 +162,11 @@
                             <tr>
                                 <td>
                                     <p>PIHAK PERTAMA</p><br><br>
-                                    <p>(KATRINE TIARA DEWI SEPTIANA)<br>Marketing Manager</p>
+                                    <p>( {{ $item->nama_mm }} )<br>{{ $item->jabatan }}</p>
                                 </td>
                                 <td>
                                     <p>PIHAK KEDUA</p><br><br>
-                                    <p>( {{ $item->nama }} )<br></p>
+                                    <p>( {{ $item->nama_anggota }} )<br></p>
                                     {{-- Ketua Kelompok --}}
                                 </td>
                             </tr>

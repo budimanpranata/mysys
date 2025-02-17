@@ -28,7 +28,7 @@
                     <div class="form-group row">
                         <span class="col-sm-2 col-form-label">Pilih Tanggal Akad</span>
                         <div class="col-sm-6">
-                            <input type="date" class="form-control" id="tgl_murab">
+                            <input type="date" class="form-control" id="tgl_wakalah">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -46,7 +46,6 @@
                             <thead>
                                 <tr>
                                     <th>NO</th>
-                                    <th>TANGGAL MURABAHAH</th>
                                     <th>CIF</th>
                                     <th>NIK</th>
                                     <th>NAMA ANGGOTA</th>
@@ -69,71 +68,70 @@
 
     <script>
         $(document).ready(function () {
-        $('#filterButton').click(function () {
-            // Ambil nilai input
-            var code_kel = $('#code_kel').val();
-            var tgl_murab = $('#tgl_murab').val();
+            $('#filterButton').click(function () {
+                // Ambil nilai input
+                var code_kel = $('#code_kel').val();
+                var tgl_wakalah = $('#tgl_wakalah').val();
 
-            // Validasi input
-            if (code_kel === '' || tgl_murab === '') {
-                alert('Kode Kelompok dan Tanggal Akad harus diisi!');
-                return;
-            }
-
-            // AJAX request
-            $.ajax({
-                url: "{{ route('cetakMurabahah.filter') }}",
-                method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    code_kel: code_kel,
-                    tgl_murab: tgl_murab
-                },
-                success: function (response) {
-                    var tbody = $('table tbody');
-                    tbody.empty(); // Bersihkan tabel
-
-                    if (response.data.length > 0) {
-                        // Loop hasil pencarian
-                        $.each(response.data, function (index, item) {
-                            tbody.append(`
-                                <tr>
-                                    <td>${index + 1}</td>
-                                    <td>${item.tgl_murab}</td>
-                                    <td>${item.cif}</td>
-                                    <td>${item.ktp}</td>
-                                    <td>${item.nama_anggota}</td>
-                                </tr>
-                            `);
-                        });
-                    } else {
-                        tbody.append('<tr><td colspan="5" class="text-center">Data tidak ditemukan</td></tr>');
-                    }
-                },
-                error: function (xhr) {
-                    console.error(xhr.responseText);
-                    alert('Terjadi kesalahan, silakan coba lagi.');
+                // Validasi input
+                if (code_kel === '' || tgl_wakalah === '') {
+                    alert('Kode Kelompok dan Tanggal Akad harus diisi!');
+                    return;
                 }
+
+                // AJAX request
+                $.ajax({
+                    url: "{{ route('cetakkartuAngsuran.filter') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        code_kel: code_kel,
+                        tgl_wakalah: tgl_wakalah
+                    },
+                    success: function (response) {
+                        var tbody = $('table tbody');
+                        tbody.empty(); // Bersihkan tabel
+
+                        if (response.data.length > 0) {
+                            // Loop hasil pencarian
+                            $.each(response.data, function (index, item) {
+                                tbody.append(`
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${item.cif}</td>
+                                        <td>${item.ktp}</td>
+                                        <td>${item.nama_anggota}</td>
+                                    </tr>
+                                `);
+                            });
+                        } else {
+                            tbody.append('<tr><td colspan="5" class="text-center">Data tidak ditemukan</td></tr>');
+                        }
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.responseText);
+                        alert('Terjadi kesalahan, silakan coba lagi.');
+                    }
+                });
             });
         });
-    });
 
         // Tombol Cetak PDF
         document.getElementById('cetakButton').addEventListener('click', function(e) {
             e.preventDefault();
 
             const kodeKel = document.getElementById('code_kel').value;
-            const tglMurab = document.getElementById('tgl_murab').value;
+            const tglWakalah = document.getElementById('tgl_wakalah').value;
 
             // Validasi input sebelum cetak
-            if (!kodeKel || !tglMurab) {
+            if (!kodeKel || !tglWakalah) {
                 alert('Harap masukkan Kode Kelompok dan pilih Tanggal Akad untuk mencetak PDF!');
                 return;
             }
 
             const form = document.createElement('form');
             form.method = 'POST';
-            form.action = '{{ route('cetakMurabahah.pdf') }}';
+            form.action = '{{ route('cetakkartuAngsuran.pdf') }}';
             // form.target = '_blank'; // Membuka PDF di tab baru
 
             const csrfInput = document.createElement('input');
@@ -146,14 +144,14 @@
             kodeKelInput.name = 'code_kel';
             kodeKelInput.value = kodeKel;
 
-            const tglMurabInput = document.createElement('input');
-            tglMurabInput.type = 'hidden';
-            tglMurabInput.name = 'tgl_murab';
-            tglMurabInput.value = tglMurab;
+            const tglWakalahInput = document.createElement('input');
+            tglWakalahInput.type = 'hidden';
+            tglWakalahInput.name = 'tgl_wakalah';
+            tglWakalahInput.value = tglWakalah;
 
             form.appendChild(csrfInput);
             form.appendChild(kodeKelInput);
-            form.appendChild(tglMurabInput);
+            form.appendChild(tglWakalahInput);
 
             document.body.appendChild(form);
             form.submit();

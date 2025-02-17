@@ -97,12 +97,30 @@ class MenuSeeder extends Seeder
         ]);
 
         Menu::create([
-            'name' => 'Cetak Simapanan 5 %',
+            'name' => 'Cetak Simapanan 5%',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/cetak/simpanan-5-persen',
             'left' => 'null',
             'order' => 7,
+        ]);
+
+        Menu::create([
+            'name' => 'Cetak Adendum',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/adendum',
+            'left' => 'null',
+            'order' => 8,
+        ]);
+
+        Menu::create([
+            'name' => 'Cetak Kartu Angsuran',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/kartu-angsuran',
+            'left' => 'null',
+            'order' => 9,
         ]);
 
 

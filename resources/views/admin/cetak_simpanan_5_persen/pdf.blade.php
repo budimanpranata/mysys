@@ -13,7 +13,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            /* margin: 20px; */
         }
         .header {
             text-align: center;
@@ -105,7 +105,7 @@
                     <td>{{ $item->nama_anggota }}</td>
                     <td style="text-align: right">{{ number_format($item->plafond, 0, ',', '.') }}</td>
                     <td style="text-align: right">{{ number_format($simpanan_lima_persen, 0, ',', '.') }}</td>
-                    <td></td>
+                    <td style="width: 120px"></td>
                 </tr>
             @endforeach
         
