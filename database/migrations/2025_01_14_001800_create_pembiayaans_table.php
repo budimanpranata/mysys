@@ -47,6 +47,7 @@ return new class extends Migration
             $table->string('status_app', 30);
             $table->string('gol', 10)->nullable();
             $table->integer('deal_produk')->nullable();
+            $table->double('persen_margin', 8, 4)->nullable(); // Total 8 digit, 4 angka desimal
             $table->primary('cif');
             $table->index('no_anggota');
             $table->index('code_kel');

@@ -6,9 +6,13 @@ use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\CetakAdendumController;
+use App\Http\Controllers\CetakKartuAngsuranController;
+use App\Http\Controllers\CetakMurabahahController;
 use App\Http\Controllers\RealisasiWakalahController;
 use App\Http\Controllers\RealisasiMurabahahController;
 use App\Http\Controllers\CetakMusyarakahController;
+use App\Http\Controllers\CetakSimpananLimaPersenController;
 use App\Http\Controllers\CetakCsController;
 use App\Http\Controllers\CetakLaRisywahController;
 use App\Http\Controllers\KelompokController;
@@ -52,6 +56,22 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
+    Route::get('/cetak/murabahah', [CetakMurabahahController::class, 'index'])->name('cetakMurabahah');
+    Route::post('/cetak/murabahah/filter', [CetakMurabahahController::class, 'filter'])->name('cetakMurabahah.filter');
+    Route::post('/cetak/murabahah/pdf', [CetakMurabahahController::class, 'cetakPDF'])->name('cetakMurabahah.pdf');
+
+    Route::get('/cetak/simpanan-5-persen', [CetakSimpananLimaPersenController::class, 'index'])->name('cetak-simpanan-5-persen');
+    Route::post('/cetak/simpanan-5-persen/filter', [CetakSimpananLimaPersenController::class, 'filter'])->name('cetakSimpanan5Persen.filter');
+    Route::post('/cetak/simpanan-5-persen/pdf', [CetakSimpananLimaPersenController::class, 'cetakPDF'])->name('cetakSimpanan5Persen.pdf');
+
+    Route::get('/cetak/adendum', [CetakAdendumController::class, 'index'])->name('cetakAdendum');
+    Route::post('/cetak/adendum/filter', [CetakAdendumController::class, 'filter'])->name('cetakAdendum.filter');
+    Route::post('/cetak/adendum/pdf', [CetakAdendumController::class, 'cetakPDF'])->name('cetakAdendum.pdf');
+
+    Route::get('/cetak/kartu-angsuran', [CetakKartuAngsuranController::class, 'index'])->name('cetakkartuAngsuran');
+    Route::post('/cetak/kartu-angsuran/filter', [CetakKartuAngsuranController::class, 'filter'])->name('cetakkartuAngsuran.filter');
+    Route::post('/cetak/kartu-angsuran/pdf', [CetakKartuAngsuranController::class, 'cetakPDF'])->name('cetakkartuAngsuran.pdf');
+    
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
     Route::get('/proxy/search', function (Request $request) {
