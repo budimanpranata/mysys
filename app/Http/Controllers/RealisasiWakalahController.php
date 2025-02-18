@@ -33,7 +33,7 @@ class RealisasiWakalahController extends Controller
         );
 
 
-    // Filter jika diperlukan
+
     if ($request->kode_kelompok) {
         $query->where('kelompok.code_kel', 'LIKE', '%' . $request->kode_kelompok . '%');
     }
@@ -42,15 +42,15 @@ class RealisasiWakalahController extends Controller
         $query->where('tgl_wakalah', $request->tanggal_realisasi);
     }
 
-    // Ambil data
+
     $data = $query->get();
-    //dd($data);
+
     return response()->json($data);
 
     }
     public function realisasiWakalah(Request $request)
     {
-        // Validasi input
+
             $ids = $request->ids;
 
 
@@ -58,7 +58,7 @@ class RealisasiWakalahController extends Controller
             return response()->json(['message' => 'Tidak ada data yang dipilih.'], 400);
         }
 
-        // Update status_realisasi di database
+
         temp_akad_mus::whereIn('cif', $ids)->update(['status_app' => 'MURAB']);
 
         return response()->json(['message' => 'Realisasi Wakalah berhasil dilakukan.']);

@@ -20,7 +20,7 @@
 <div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Cetak Musyarakah</h3>
+      <h3 class="card-title">Cetak La Risywah</h3>
     </div>
     <div class="card-body">
       @if($results->isEmpty())
@@ -28,7 +28,7 @@
       @else
       <div class="editor-container">
         <iframe
-          src="{{ route('pdf.generateMusyarakah', ['feature' => 'cetak_musyarakah', 'date' => $results->first()->tgl_akad]) }}"
+          src="{{ route('pdf.generateLaRisywah', ['feature' => 'cetak_larisywah', 'kelompok' => $results->first()->code_kel, 'date' => $results->first()->tgl_akad]) }}"
           width="100%" height="800" frameborder="0">
         </iframe>
       </div>
