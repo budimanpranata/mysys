@@ -53,7 +53,6 @@ return new class extends Migration
             $table->index('code_kel');
             $table->index('unit');
             $table->index('cao');
-            $table->double('persen_margin', 8, 4);
             $table->timestamps();
         });
     }
