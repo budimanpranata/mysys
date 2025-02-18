@@ -39,6 +39,12 @@
                 text-align: center;
             }
 
+            .info td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
             th {
                 background-color: #f2f2f2;
             }
@@ -57,12 +63,6 @@
             .tabel-info th {    
                 border: none;
                 padding: 1px;
-            }
-
-            .info td {
-                border: 1px solid black;
-                padding: 8px;
-                text-align: left;
             }
 
         </style>

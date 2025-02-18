@@ -88,10 +88,20 @@
                 var code_kel = $('#code_kel').val();
                 var jenis_rest = $('#jenis_rest').val();
 
-                // Validasi input
-                if (code_kel === '' || jenis_rest === '') {
+                if (code_kel === '') {
                     Swal.fire({
-                        title: 'Kode Kelompok dan Tanggal harus diisi!',
+                        title: 'Peringatan!',
+                        text: 'Kode Kelompok harus diisi!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                if (jenis_rest === '') {
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: 'Tanggal harus diisi!',
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });

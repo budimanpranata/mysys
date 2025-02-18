@@ -82,10 +82,20 @@
                 var tgl_akad = $('#tgl_akad').val();
 
                 // Validasi input
-                if (code_kel === '' || tgl_akad === '') {
+                if (code_kel === '') {
                     Swal.fire({
                             title: 'Peringatan!',
-                            text: 'Kode Kelompok dan Tanggal harus diisi!',
+                            text: 'Kode Kelompok harus diisi!',
+                            icon: 'warning',
+                            confirmButtonText: 'OK'
+                        });
+                    return;
+                }
+
+                if (tgl_akad === '') {
+                    Swal.fire({
+                            title: 'Peringatan!',
+                            text: 'Tanggal harus diisi!',
                             icon: 'warning',
                             confirmButtonText: 'OK'
                         });

@@ -73,10 +73,20 @@
                 var code_kel = $('#code_kel').val();
                 var tgl_wakalah = $('#tgl_wakalah').val();
 
-                // Validasi input
-                if (code_kel === '' || tgl_wakalah === '') {
+                if (code_kel === '') {
                     Swal.fire({
-                        title: 'Kode Kelompok dan Tanggal harus diisi!',
+                        title: 'Peringatan!',
+                        text: 'Kode Kelompok harus diisi!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                if (tgl_wakalah === '') {
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: 'Tanggal harus diisi!',
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });

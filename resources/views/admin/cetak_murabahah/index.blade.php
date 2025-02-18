@@ -75,10 +75,20 @@
                 var tgl_murab = $('#tgl_murab').val();
 
                 // Validasi input kosong
-                if (code_kel === '' || tgl_murab === '') {
+                if (code_kel === '') {
                     Swal.fire({
                         title: 'Peringatan!',
-                        text: 'Kode Kelompok dan Tanggal harus diisi!',
+                        text: 'Kode Kelompok harus diisi!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    return;
+                }
+
+                if (tgl_murab === '') {
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: 'Tanggal harus diisi!',
                         icon: 'warning',
                         confirmButtonText: 'OK'
                     });
