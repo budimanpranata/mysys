@@ -15,6 +15,16 @@ class RekomendasiSeeder extends Seeder
     {
         DB::table('rekomendasi')->insert([
             [
+                'norek' => '00108612001',
+                'cif' => '086120',
+                'nominal' => '1000000'
+            ],
+            [
+                'norek' => '00108612101',
+                'cif' => '086121',
+                'nominal' => '1000000'
+            ],
+            [
                 'norek' => '00108612201',
                 'cif' => '086122',
                 'nominal' => '1000000'

@@ -24,6 +24,7 @@ class PDFController extends Controller
             abort(404, 'Template not found');
         }
 
+        $unit = $request->unit;
         $tanggalCetak = \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
 
         // Query menggunakan join
@@ -31,7 +32,10 @@ class PDFController extends Controller
             ->leftJoin('anggota', 'temp_akad_mus.cif', '=', 'anggota.cif')
             ->leftJoin('ao', 'anggota.cao', '=', 'ao.cao') // Join the ao table to get atasan
             ->leftJoin('mm', 'ao.atasan', '=', 'mm.nik') // Join the mm table to get details using atasan
-            ->where('temp_akad_mus.tgl_akad', $tanggalCetak)
+            ->where([
+                ['temp_akad_mus.tgl_akad', $tanggalCetak],
+                ['temp_akad_mus.unit', $unit]
+            ])
             ->orderBy('temp_akad_mus.code_kel')
             ->select(
                 'temp_akad_mus.*',
@@ -110,13 +114,17 @@ class PDFController extends Controller
             abort(404, 'Template not found');
         }
 
+        $unit = $request->unit;
         $tanggalCetak = \Carbon\Carbon::createFromFormat('Y-m-d', $date)->format('Y-m-d');
 
         $results = DB::table('temp_akad_mus')
             ->leftJoin('kelompok', 'temp_akad_mus.code_kel', '=', 'kelompok.code_kel')
-            ->where('temp_akad_mus.tgl_akad', $tanggalCetak)
-            ->where('temp_akad_mus.code_kel', $kelompok)
-            ->where('temp_akad_mus.status_app', 'MUSYARAKAH')
+            ->where([
+                ['temp_akad_mus.tgl_akad', $tanggalCetak],
+                ['temp_akad_mus.code_kel', $kelompok],
+                ['temp_akad_mus.unit', $unit],
+                ['temp_akad_mus.status_app', 'MUSYARAKAH']
+            ])
             ->select(
                 'temp_akad_mus.*',
                 'kelompok.nama_kel as kelompok_name'
@@ -148,6 +156,92 @@ class PDFController extends Controller
         $pdf = PDF::loadView($viewPath, $data);
 
         return $pdf->stream("{$feature}_{$kelompok}_{$tanggalCetak}.pdf");
+    }
+
+    public function generateApprovalPdf(Request $request, $feature, $date)
+    {
+        $viewPath = "admin.{$feature}.template";
+        abort_unless(view()->exists($viewPath), 404, 'Template not found');
+
+        $unit = $request->unit;
+        $tanggalMurab = \Carbon\Carbon::parse($date)->format('Y-m-d H:i:s');
+
+        $namaMM = DB::table('mm')->where('unit', $unit)->value('nama');
+
+        $anggota = DB::table('temp_akad_mus')
+            ->leftJoin('anggota', 'temp_akad_mus.cif', '=', 'anggota.cif')
+            ->leftJoinSub(
+                DB::table('rekomendasi')
+                    ->select('cif', DB::raw('MAX(nominal) AS nominal'))
+                    ->groupBy('cif'),
+                'rekomendasi',
+                'temp_akad_mus.cif',
+                '=',
+                'rekomendasi.cif'
+            )
+            ->where([
+                ['temp_akad_mus.tgl_murab', $tanggalMurab],
+                ['temp_akad_mus.unit', $unit]
+            ])
+            ->select(
+                'temp_akad_mus.*',
+                'anggota.cif AS cif_anggota',
+                'anggota.nama AS nama_anggota',
+                'anggota.kode_kel',
+                'anggota.kota',
+                'anggota.kecamatan',
+                'anggota.desa',
+                'anggota.waris',
+                'rekomendasi.nominal'
+            )
+            ->get()
+            ->map(function ($item) {
+                $item->plafond = 'Rp. ' . number_format($item->plafond, 0, ',', '.');
+                $item->nominal = 'Rp. ' . number_format($item->nominal, 0, ',', '.');
+
+                $item->tgl_akad = \Carbon\Carbon::parse($item->tgl_akad)->translatedFormat('d F Y');
+                $item->tgl_wakalah = $item->tgl_akad;
+                return $item;
+            });
+
+        abort_if($anggota->isEmpty(), 404, 'No records found for the specified date');
+
+        $totalPlafond = 'Rp. ' . number_format(
+            $anggota->sum(fn($a) => (int) str_replace(['Rp. ', '.'], '', $a->plafond)),
+            0,
+            ',',
+            '.'
+        );
+
+        $totalAnggota = $anggota->count();
+
+        $groupedData = $anggota->groupBy('kode_kel')->map(function ($items) {
+            return [
+                'count' => $items->count(),
+                'total_plafond' => 'Rp. ' . number_format(
+                    $items->sum(fn($a) => (int) str_replace(['Rp. ', '.'], '', $a->plafond)),
+                    0,
+                    ',',
+                    '.'
+                ),
+            ];
+        });
+
+        $kelompok = DB::table('kelompok')
+            ->leftJoin('ao', 'ao.cao', '=', 'kelompok.cao')
+            ->whereIn('code_kel', $groupedData->keys())
+            ->select('kelompok.*', 'ao.nama_ao')
+            ->get()
+            ->map(function ($item) use ($groupedData) {
+                $kodeKel = $item->code_kel;
+                $item->count = $groupedData[$kodeKel]['count'] ?? 0;
+                $item->total_plafond = $groupedData[$kodeKel]['total_plafond'] ?? 'Rp. 0';
+                return $item;
+            });
+
+        return PDF::loadView($viewPath, compact('anggota', 'kelompok', 'totalPlafond', 'totalAnggota', 'namaMM', 'unit'))
+            ->setPaper('a4', 'landscape')
+            ->stream("{$feature}_{$tanggalMurab}.pdf");
     }
 
     private function convertToRupiahText($number)

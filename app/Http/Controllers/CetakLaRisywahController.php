@@ -24,15 +24,18 @@ class CetakLaRisywahController extends Controller
         $request->validate([
             'kode_kelompok' => 'required',
             'tanggal' => 'required|date_format:Y-m-d',
+            'unit' => 'required|string'
         ]);
 
         $tanggalCetak = \Carbon\Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('Y-m-d');
         $kodeKelompok = $request->kode_kelompok; // Match form input name
+        $unit = $request->unit;
 
         // Ngambil dari table akad Mus
         $results = DB::table('temp_akad_mus')
             ->where('tgl_akad', $tanggalCetak)
             ->where('code_kel', $kodeKelompok)
+            ->where('unit', $unit)
             ->where('status_app', 'MUSYARAKAH')
             ->get();
 
@@ -55,6 +58,7 @@ class CetakLaRisywahController extends Controller
                 'feature' => 'cetak_larisywah',
                 'kelompok' => $kodeKelompok,
                 'date' => $tanggalCetak,
+                'unit' => $unit,
             ]);
 
             return response()->json([
