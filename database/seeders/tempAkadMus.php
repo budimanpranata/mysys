@@ -76,7 +76,7 @@ class tempAkadMus extends Seeder
                 'unit' => '001',
                 'tgl_wakalah' => '2025-01-13 00:00:00',
                 'tgl_akad' => '2025-01-20',
-                'tgl_murab' => '2025-01-20 00:00:00',
+                'tgl_murab' => '2020-10-07 00:00:00',
                 'next_schedule' => '2024-01-01 00:00:00',
                 'maturity_date' => '2021-03-31 00:00:00',
                 'last_payment' => '2024-01-01',
@@ -116,7 +116,7 @@ class tempAkadMus extends Seeder
                 'unit' => '001',
                 'tgl_wakalah' => '2025-01-13 00:00:00',
                 'tgl_akad' => '2025-01-20',
-                'tgl_murab' => '2025-01-20 00:00:00',
+                'tgl_murab' => '2020-10-07 00:00:00',
                 'next_schedule' => '2024-01-01 00:00:00',
                 'maturity_date' => '2021-03-31 00:00:00', // tgl jatuh tempo
                 'last_payment' => '2024-01-01',

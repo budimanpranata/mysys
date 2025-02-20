@@ -20,6 +20,7 @@ use App\Http\Controllers\PDFController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\CetakCsWoController;
+use App\Http\Controllers\CetakApprovalController;
 
 
 //  jika user belum login
@@ -42,17 +43,19 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/realisasi_wakalah', [RealisasiWakalahController::class, 'index']);
     Route::POST('/proses_realisasi_wakalah', [RealisasiWakalahController::class, 'realisasiWakalah']);
     Route::get('realisasi_wakalah/getData', [RealisasiWakalahController::class, 'getData']);
-    Route::get('/cetak/musyarakah', [CetakMusyarakahController::class, 'index'])->name('cetak_musyarakah');
     Route::get('/cetak/cs', [CetakCsController::class, 'index'])->name('cetak.cs.index');
     Route::get('/cetak/kode_ao', [CetakCsController::class, 'cariAo'])->name('cetak.kode.ao');
     Route::get('/cetak/pdf_cs', [CetakCsController::class, 'pdfCs'])->name('pdfCs');
     Route::get('/cetak/cs_wo', [CetakCsWoController::class, 'index'])->name('cetak.cs.wo.index');
     Route::get('/cetak/pdf_cs_wo', [CetakCsWoController::class, 'pdfCsWo'])->name('pdfCsWo');
 
+    Route::get('/cetak/musyarakah', [CetakMusyarakahController::class, 'index'])->name('cetak_musyarakah');
     Route::post('/cetak/musyarakah/result', [CetakMusyarakahController::class, 'hasil'])->name('form_musyarakah');
-    Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
     Route::get('/cetak/larisywah', [CetakLaRisywahController::class, 'index'])->name('cetak_larisywah');
     Route::post('/cetak/larisywah/result', [CetakLaRisywahController::class, 'hasil'])->name('form_larisywah');
+    Route::get('/cetak/approval', [CetakApprovalController::class, 'index'])->name('cetak_approval');
+    Route::post('/cetak/approval/result', [CetakApprovalController::class, 'hasil'])->name('form_approval');
+    Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
@@ -71,7 +74,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/cetak/kartu-angsuran', [CetakKartuAngsuranController::class, 'index'])->name('cetakkartuAngsuran');
     Route::post('/cetak/kartu-angsuran/filter', [CetakKartuAngsuranController::class, 'filter'])->name('cetakkartuAngsuran.filter');
     Route::post('/cetak/kartu-angsuran/pdf', [CetakKartuAngsuranController::class, 'cetakPDF'])->name('cetakkartuAngsuran.pdf');
-    
+
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
     Route::get('/proxy/search', function (Request $request) {
@@ -80,6 +83,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
         return $response->json(); // Return JSON langsung ke frontend
     })->name('proxy.search');
 
+    // DOMpdf
+    Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
+    Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
+    Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateApprovalPdf'])->name('pdf.generateApproval');
+
 });
 
 // untuk Al
@@ -87,9 +95,4 @@ Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al', [AlController::class, 'index']);
 
 });
-
-// DOMpdf
-
-Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
-Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
 
