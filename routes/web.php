@@ -74,6 +74,8 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
+    Route::get('/get-kelompok', [AnggotaController::class, 'getKelompokData']);
+    
     Route::get('/proxy/search', function (Request $request) {
         $ktp = $request->query('ktp');
         $response = Http::get("http://185.201.9.210/apimobcol/rmc.php?ktp=$ktp");
