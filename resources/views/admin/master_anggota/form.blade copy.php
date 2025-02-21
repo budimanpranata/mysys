@@ -1,5 +1,5 @@
-<form action="{{ route('anggota.store') }}" method="post">
-{{-- <form id="form-tambah-data"> --}}
+{{-- <form action="{{ route('anggota.store') }}" method="post"> --}}
+<form id="form-tambah-data">
     @csrf
     @method('post')
     <div class="row">
@@ -13,7 +13,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="unit" id="unit"
-                                        value="" readonly>
+                                        value="{{ Auth()->user()->id }}" readonly>
                                 </div>
                             </div>
 
@@ -106,16 +106,6 @@
                             </div>
 
                             <div class="form-group row">
-                                <span class="col-sm-4 col-form-label">Tanggal Lahir <span
-                                        class="text-danger">*</span></span>
-                                <div class="col-sm-7">
-                                    <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
-                                        placeholder="Masukkan Tempat Lahir" required>
-                                    <span class="help-block with-errors text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label class="col-sm-4 col-form-label">Alamat KTP</label>
                             </div>
 
@@ -171,7 +161,7 @@
                                 <span class="col-sm-4 col-form-label">Kode Pos <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kode_pos" id="kode_pos"
+                                    <input type="text" class="form-control" name="kota" id="kota"
                                         placeholder="Masukkan Kode POS" required>
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
@@ -239,7 +229,7 @@
                                     <select name="kewarganegaraan" id="kewarganegaraan" class="form-control"
                                         required>
                                         <option hidden value="">-- Pilih Kewarganegaraan --</option>
-                                        <option selected value="Indonesia">Indonesia</option>
+                                        <option value="Indonesia">Indonesia</option>
                                     </select>
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
@@ -251,16 +241,6 @@
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="waris" id="waris"
                                         placeholder="Masukkan Nama Pasangan" required>
-                                    <span class="help-block with-errors text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <span class="col-sm-4 col-form-label">Nama Pasangan <span
-                                        class="text-danger">*</span></span>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="pekerjaan_pasangan" id="pekerjaan_pasangan"
-                                        placeholder="Masukkan Pekerjaan Pasangan" required>
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>

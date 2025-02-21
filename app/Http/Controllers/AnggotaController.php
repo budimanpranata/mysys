@@ -7,6 +7,7 @@ use App\Models\ao;
 use App\Models\Kelompok;
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -60,72 +61,115 @@ class AnggotaController extends Controller
 
     public function getKelompokData(Request $request)
     {
-        $code_kel = $request->code_kel;
-        Log::info("Menerima request untuk kode_kel: " . $code_kel); // Debug
+        $code_kel = $request->input('code_kel');
 
-        // $kelompok = DB::table('kelompok')->where('code_kel', $code_kel)->first();
-    // $kelompok = Kelompok::where('code_kel', $code_kel)->first();
-    $kelompok = Kelompok::where('code_kel', (int) $code_kel)->first();
-
-
+        $kelompok = DB::table('kelompok')
+        ->join('ao', 'kelompok.cao', '=', 'ao.cao')
+        ->where('kelompok.code_kel', (int) $code_kel)
+        ->select(
+            'kelompok.cao',
+            'kelompok.no_tlp',
+            'ao.nama_ao' // Ambil nama_ao dari tabel ao
+        )
+        ->first();
+    
         if ($kelompok) {
-            Log::info("Data ditemukan:", $kelompok->toArray()); // Debug
             return response()->json([
-                'cif' => $kelompok->cif, 
+                'nama_ao' => $kelompok->nama_ao,
                 'no_tlp' => $kelompok->no_tlp
             ]);
-        } else {
-            Log::info("Data tidak ditemukan untuk kode_kel: " . $code_kel);
-            return response()->json([
-                'cif' => '',
-                'np_tlp' => ''
-            ]);
         }
+    
+        return response()->json([]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
 
-     public function store(Request $request)
-     {
+    public function store(Request $request)
+    {
+        // dd($request);
+        //validate form
+        // $request->validate([
+        //     'kode_kel' => 'required',
+        //     'nama'   => 'required',
+        //     'alamat' => 'required',
+        //     'rtrw' => 'required',
+        //     'desa' => 'required',
+        //     'kecamatan' => 'required',
+        //     'kota' => 'required',
+        //     'ho_hp' => 'required|numeric',
+        //     'hp_pasangan' => 'required|numeric',
+        //     'tgl_lahir' => 'required',
+        //     'ktp' => 'required',
+        //     'kewarganegaraan' => 'required',
+        //     'status_menikah' => 'required',
+        //     'agama' => 'required',
+        //     'ibu_kandung' => 'required',
+        //     'pendidikan' => 'required',
+        //     'tempat_lahir' => 'required',
+        //     'waris' => 'required',
+        //     'cao' => 'required',
+        // ]);
 
-        dd($request);
-         try {
-             // Validasi input
-            //  $request->validate([
-            //      'no_anggota' => 'required',
-            //      'cif' => 'required',
-            //      'nama' => 'required',
-            //      'alamat' => 'required',
-            //      'tempat_lahir' => 'required',
-            //      'tgl_lahir' => 'required|date',
-            //      'unit' => 'required',
-            //  ]);
-     
-             // Simpan data
-             Anggota::create($request->all());
-     
-             // Response sukses
-             return response()->json([
-                 'message' => 'Data berhasil disimpan!',
-             ], 200);
-     
-         } catch (\Illuminate\Validation\ValidationException $e) {
-             // Tangani error validasi
-             return response()->json([
-                 'message' => 'Validasi gagal.',
-                 'errors' => $e->errors(),
-             ], 422);
-     
-         } catch (\Exception $e) {
-             // Tangani error lainnya
-             return response()->json([
-                 'message' => 'Terjadi kesalahan saat menyimpan data.',
-                 'error' => $e->getMessage(),
-             ], 500);
-         }
-     }
+        try {
+            // Log data yang diterima
+            Log::info('Data yang diterima:', $request->all());
+
+            $anggota = Anggota::create([
+                'unit' => Auth::id(),
+                'no' => '123456',
+                'kode_kel' => $request->code_kel,
+                'norek' => '123456',
+                'tgl_join' => Carbon::now(),
+                'cif' => '123456',
+                'nama' => $request->nama,
+                'deal_type' => '1',
+                'alamat' => $request->alamat,
+                'desa' => $request->desa,
+                'kecamatan' => $request->kecamatan,
+                'kota' => $request->kota,
+                'rtrw' => $request->rtrw,
+                'no_hp' => $request->no_hp,
+                'hp_pasangan' => $request->hp_pasangan,
+                'kelamin' => 'P',
+                'tgl_lahir' => $request->tgl_lahir,
+                'ktp' => $request->ktp,
+                'kewarganegaraan' => $request->kewarganegaraan,
+                'status_menikah' => $request->status_menikah,
+                'agama' => $request->agama,
+                'ibu_kandung' => $request->ibu_kandung,
+                'npwp' => 0,
+                'source_income' => 1,
+                'pendidikan' => $request->pendidikan,
+                'tempat_lahir' => $request->tempat_lahir,
+                'id_expired' => 0,
+                'waris' => $request->waris,
+                'cao' => $request->cao,
+                'userid' => Auth::id(),
+                'status' => 'ANGGOTA',
+                'pekerjaan_pasangan' => $request->pekerjaan_pasangan,
+                'kode_pos' => $request->kode_pos,
+            ]);
+
+            Log::info('Data anggota berhasil disimpan:', $anggota->toArray());
+        
+            alert()->success('Berhasil!', 'Data Berhasil Disimpan.');
+            return redirect()->route('anggota.index');
+
+        } catch (\Throwable $th) {
+            // Log error yang terjadi
+            Log::error('Error saat menyimpan data anggota:', [
+                'message' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ]);
+
+            // Redirect dengan pesan error
+            alert()->error('Gagal!', 'Gagal saat menyimpan data.');
+            return redirect()->back()->withInput()->with(['error' => 'Terjadi kesalahan: ' . $th->getMessage()]);
+        }
+    }
 
 
     /**

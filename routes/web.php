@@ -53,6 +53,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
     Route::get('/cetak/larisywah', [CetakLaRisywahController::class, 'index'])->name('cetak_larisywah');
     Route::post('/cetak/larisywah/result', [CetakLaRisywahController::class, 'hasil'])->name('form_larisywah');
+
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
@@ -72,15 +73,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/cetak/kartu-angsuran/filter', [CetakKartuAngsuranController::class, 'filter'])->name('cetakkartuAngsuran.filter');
     Route::post('/cetak/kartu-angsuran/pdf', [CetakKartuAngsuranController::class, 'cetakPDF'])->name('cetakkartuAngsuran.pdf');
     
-    Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
+    Route::get('/anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
+    Route::get('/get-kelompok-data', [AnggotaController::class, 'getKelompokData']);
     Route::resource('anggota', AnggotaController::class);
-    Route::get('/get-kelompok', [AnggotaController::class, 'getKelompokData']);
-    
-    Route::get('/proxy/search', function (Request $request) {
-        $ktp = $request->query('ktp');
-        $response = Http::get("http://185.201.9.210/apimobcol/rmc.php?ktp=$ktp");
-        return $response->json(); // Return JSON langsung ke frontend
-    })->name('proxy.search');
 
 });
 
