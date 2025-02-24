@@ -1,5 +1,4 @@
 <form action="{{ route('anggota.store') }}" method="post">
-{{-- <form id="form-tambah-data"> --}}
     @csrf
     @method('post')
     <div class="row">
@@ -21,7 +20,7 @@
                                 <span class="col-sm-4 col-form-label">CIF <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="cif" id="cif"
-                                        value="001250218" readonly>
+                                        value="" readonly>
                                 </div>
                             </div>
 
@@ -73,7 +72,7 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="ktp" id="nikInput"
-                                            placeholder="Masukkan No Identitas" required>
+                                            placeholder="Masukkan No Identitas">
 
                                         <div class="input-group-append">
                                             <a href="#" class="btn btn-primary" onclick="searchByNik()"
@@ -89,10 +88,19 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="nama" id="nama"
-                                        placeholder="Masukkan Nama" required>
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama"
+                                        placeholder="Masukkan Nama">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
                             </div>
 
                             <div class="form-group row">
@@ -100,7 +108,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
-                                        placeholder="Masukkan Tempat Lahir" required>
+                                        placeholder="Masukkan Tempat Lahir">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -110,7 +118,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
-                                        placeholder="Masukkan Tempat Lahir" required>
+                                        placeholder="Masukkan Tempat Lahir">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -123,7 +131,7 @@
                                 <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <textarea name="alamat" class="form-control" id="alamat" cols="5" rows="3"
-                                        placeholder="Masukkan Alamat" required></textarea>
+                                        placeholder="Masukkan Alamat"></textarea>
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -132,7 +140,7 @@
                                 <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="rtrw" id="rtrw"
-                                        placeholder="Masukkan RT/RW" required>
+                                        placeholder="Masukkan RT/RW">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -142,7 +150,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="desa" id="desa"
-                                        placeholder="Masukkan Kelurahan/Desa" required>
+                                        placeholder="Masukkan Kelurahan/Desa">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -152,7 +160,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="kecamatan" id="kecamatan"
-                                        placeholder="Masukkan Kecamatan" required>
+                                        placeholder="Masukkan Kecamatan">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -162,7 +170,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="kota" id="kota"
-                                        placeholder="Masukkan Kabupaten" required>
+                                        placeholder="Masukkan Kabupaten">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -172,7 +180,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="kode_pos" id="kode_pos"
-                                        placeholder="Masukkan Kode POS" required>
+                                        placeholder="Masukkan Kode POS">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -193,7 +201,7 @@
                                 <span class="col-sm-4 col-form-label">Status Perkawinan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="status_menikah" id="status_menikah" class="form-control" required>
+                                    <select name="status_menikah" id="status_menikah" class="form-control">
                                         <option hidden value="">-- Pilih Status Perkawinan --</option>
                                         <option value="Menikah">Menikah</option>
                                         <option value="Belum Menikah">Belum Menikah</option>
@@ -206,7 +214,7 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Agama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="agama" id="agama" class="form-control" required>
+                                    <select name="agama" id="agama" class="form-control">
                                         <option hidden value="">-- Pilih Agama --</option>
                                         <option value="Islam">Islam</option>
                                         <option value="Kristen">Kristen</option>
@@ -222,7 +230,7 @@
                                 <span class="col-sm-4 col-form-label">Pendidikan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="pendidikan" id="pendidikan" class="form-control" required>
+                                    <select name="pendidikan" id="pendidikan" class="form-control">
                                         <option hidden value="">-- Pilih Pendidikan --</option>
                                         <option value="SD">SD</option>
                                         <option value="SMP">SMP</option>
@@ -237,7 +245,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <select name="kewarganegaraan" id="kewarganegaraan" class="form-control"
-                                        required>
+                                    >
                                         <option hidden value="">-- Pilih Kewarganegaraan --</option>
                                         <option selected value="Indonesia">Indonesia</option>
                                     </select>
@@ -250,7 +258,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="waris" id="waris"
-                                        placeholder="Masukkan Nama Pasangan" required>
+                                        placeholder="Masukkan Nama Pasangan">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
@@ -260,7 +268,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="pekerjaan_pasangan" id="pekerjaan_pasangan"
-                                        placeholder="Masukkan Pekerjaan Pasangan" required>
+                                        placeholder="Masukkan Pekerjaan Pasangan">
                                     <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>

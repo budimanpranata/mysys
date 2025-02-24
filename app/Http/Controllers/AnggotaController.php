@@ -63,6 +63,8 @@ class AnggotaController extends Controller
     {
         $code_kel = $request->input('code_kel');
 
+        // dd($code_kel);
+
         $kelompok = DB::table('kelompok')
         ->join('ao', 'kelompok.cao', '=', 'ao.cao')
         ->where('kelompok.code_kel', (int) $code_kel)
@@ -72,14 +74,14 @@ class AnggotaController extends Controller
             'ao.nama_ao' // Ambil nama_ao dari tabel ao
         )
         ->first();
-    
+
         if ($kelompok) {
             return response()->json([
                 'nama_ao' => $kelompok->nama_ao,
                 'no_tlp' => $kelompok->no_tlp
             ]);
         }
-    
+        
         return response()->json([]);
     }
 
@@ -91,39 +93,53 @@ class AnggotaController extends Controller
     {
         // dd($request);
         //validate form
-        // $request->validate([
-        //     'kode_kel' => 'required',
-        //     'nama'   => 'required',
-        //     'alamat' => 'required',
-        //     'rtrw' => 'required',
-        //     'desa' => 'required',
-        //     'kecamatan' => 'required',
-        //     'kota' => 'required',
-        //     'ho_hp' => 'required|numeric',
-        //     'hp_pasangan' => 'required|numeric',
-        //     'tgl_lahir' => 'required',
-        //     'ktp' => 'required',
-        //     'kewarganegaraan' => 'required',
-        //     'status_menikah' => 'required',
-        //     'agama' => 'required',
-        //     'ibu_kandung' => 'required',
-        //     'pendidikan' => 'required',
-        //     'tempat_lahir' => 'required',
-        //     'waris' => 'required',
-        //     'cao' => 'required',
-        // ]);
+        $request->validate([
+            'kode_kel' => 'required',
+            'nama'   => 'required',
+            'alamat' => 'required',
+            'rtrw' => 'required',
+            'desa' => 'required',
+            'kecamatan' => 'required',
+            'kota' => 'required',
+            'ho_hp' => 'required|numeric|min:11|max:12',
+            'hp_pasangan' => 'required|numeric|min:11|max:12',
+            'tgl_lahir' => 'required',
+            'ktp' => 'required',
+            'kewarganegaraan' => 'required',
+            'status_menikah' => 'required',
+            'agama' => 'required',
+            'ibu_kandung' => 'required',
+            'pendidikan' => 'required',
+            'tempat_lahir' => 'required',
+            'waris' => 'required',
+            'cao' => 'required',
+        ]);
 
         try {
             // Log data yang diterima
             Log::info('Data yang diterima:', $request->all());
 
+            // Generate no anggota
+            // $unit = Auth::id();
+            $unit = '001';
+            $date = Carbon::now()->format('ymd'); // Format tanggal: TahunBulanTanggal (20231025)
+            // $lastAnggota = Anggota::whereDate('created_at', Carbon::today())->latest()->first(); // Ambil data terakhir hari ini
+            $lastAnggota = Anggota::latest()->first(); // Ambil record terakhir
+
+            // Nomor urut
+            $sequence = $lastAnggota ? intval(substr($lastAnggota->no, -3)) + 1 : 1;
+            $sequenceFormatted = str_pad($sequence, 3, '0', STR_PAD_LEFT); // Format urutan (001, 002, dst.)
+
+            // Gabungkan no anggota
+            $noAnggota = "{$unit}{$date}{$sequenceFormatted}";
+
             $anggota = Anggota::create([
                 'unit' => Auth::id(),
-                'no' => '123456',
+                'no' => $noAnggota,
                 'kode_kel' => $request->code_kel,
-                'norek' => '123456',
+                'norek' => '123459',
                 'tgl_join' => Carbon::now(),
-                'cif' => '123456',
+                'cif' => $request->cif,
                 'nama' => $request->nama,
                 'deal_type' => '1',
                 'alamat' => $request->alamat,

@@ -41,6 +41,22 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fungsi untuk menghasilkan string acak
+            function generateRandomString(length) {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += characters.charAt(Math.floor(Math.random() * characters.length));
+                }
+                return result;
+            }
+
+            // Mengambil elemen input CIF
+            document.getElementById('cif').value = generateRandomString(8);
+        });
+
         function openImageModal(imageUrl) {
             // Set sumber gambar di modal
             document.getElementById('modalImage').src = imageUrl;
@@ -51,17 +67,16 @@
             $('#code_kel').change(function() {
                 // Ambil nilai yang dipilih
                 var selectedCode = $(this).val();
-                console.log("Kode Kelompok yang dikirim:", selectedCode); // Debug
+                var selectedCodeString = selectedCode ? selectedCode.toString() : '';
+                console.log("Kode Kelompok yang dikirim:", selectedCodeString); // Debug
 
-                // Lakukan AJAX request untuk mendapatkan data kelompok
                 if (selectedCode) {
                     $.ajax({
-                        url: '/get-kelompok-data', // Ganti dengan URL endpoint Anda
+                        url: '/get-kelompok-data',
                         type: 'GET',
-                        data: { code_kel: selectedCode },
+                        data: { code_kel: selectedCodeString },
                         success: function(response) {
                             console.log("Response dari Server:", response); // Debug
-                            // Isi data ke input fields
                             $('#nama_ao').val(response.nama_ao);
                             $('#no_tlp').val(response.no_tlp);
                         },
@@ -71,7 +86,7 @@
                     });
                 } else {
                     // Kosongkan input fields jika tidak ada kelompok yang dipilih
-                    $('#cao').val('');
+                    $('#nama_ao').val('');
                     $('#no_tlp').val('');
                 }
             });
