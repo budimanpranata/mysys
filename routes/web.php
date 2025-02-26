@@ -56,6 +56,8 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/cetak/approval', [CetakApprovalController::class, 'index'])->name('cetak_approval');
     Route::post('/cetak/approval/result', [CetakApprovalController::class, 'hasil'])->name('form_approval');
     Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
+    Route::get('/realisasi/murabahah/search', [RealisasiMurabahahController::class, 'search'])->name('realisasi.search');
+    Route::post('/realisasi/murabahah/update', [RealisasiMurabahahController::class, 'updateStatus'])->name('realisasi.update');
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
