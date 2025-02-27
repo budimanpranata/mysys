@@ -106,12 +106,12 @@
                 <tr data-id="${item.cif}">
                   <td>${index + 1}</td>
                   <td><input type="checkbox" class="selectRecord"></td>
-                  <td>SUKSES JAYA</td>
-                  <td>GEANISA UTAMI</td>
-                  <td>Rp. 2.000.000</td>
-                  <td>Rp. 360.000</td>
-                  <td>2024-11-29</td>
-                  <td>2024-11-29</td>
+                  <td>"${item.nama_kelompok}"</td>
+                  <td>"${item.nama}"</td>
+                  <td>"${item.plafond}"</td>
+                  <td>"${item.saldo_margin}"</td>
+                  <td>"${item.tgl_murab}"</td>
+                  <td>"${item.maturity_date}"</td>
                 </tr>`;
               tableBody.append(row);
             });
@@ -167,7 +167,7 @@
               Swal.fire("Sukses", "Status berhasil diperbarui!", "success");
               resetPage();
             },
-            error: function () {
+            error: function (response) {
               Swal.fire("Error", "Terjadi kesalahan, coba lagi!", "error");
             }
           });
