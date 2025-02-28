@@ -129,8 +129,9 @@
       $('#realisasiBtn').prop('disabled', !anyChecked);
     });
 
-    // Fix: Use event delegation for dynamically loaded elements
-    $(document).on('click', '#realisasiBtn', function () {
+    // tambah prevent preventDefault
+    $(document).on('click', '#realisasiBtn', function (e) {
+      e.preventDefault();
       let kodeKelompok = $('#kodeKelompok').val();
       let tanggalRealisasi = $('#tanggalRealisasi').val();
       let userUnit = $('#userUnit').val();
