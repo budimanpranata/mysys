@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 use function Illuminate\Log\log;
 
@@ -52,7 +53,7 @@ class AnggotaController extends Controller
      */
     public function create()
     {
-        $title = 'Master Anggota';
+        $title = 'Input data Anggota';
         $ao = ao::all();
         $kelompok = Kelompok::all();
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
@@ -61,13 +62,10 @@ class AnggotaController extends Controller
 
     public function getKelompokData(Request $request)
     {
-        $code_kel = $request->input('code_kel');
-
-        // dd($code_kel);
 
         $kelompok = DB::table('kelompok')
         ->join('ao', 'kelompok.cao', '=', 'ao.cao')
-        ->where('kelompok.code_kel', (int) $code_kel)
+        ->where('kelompok.code_kel', $request->code_kel)
         ->select(
             'kelompok.cao',
             'kelompok.no_tlp',
@@ -83,6 +81,32 @@ class AnggotaController extends Controller
         }
         
         return response()->json([]);
+    }
+
+    public function cariKtp(Request $request)
+    {
+        // Validasi input NIK
+        $request->validate([
+            'nik' => 'required|string'
+        ]);
+
+        $nik = $request->input('nik');
+
+        // Lakukan request ke API eksternal
+        $response = Http::get("http://mobcol.nurinsani.co.id/apimobcol/rmcKtp.php?ktp={$nik}");
+
+        // Jika request gagal
+        if (!$response->successful()) {
+            return response()->json([
+                'error' => 'Data tidak ditemukan'
+            ], 404);
+        }
+
+        // Ambil data dari response
+        $data = $response->json();
+
+        // Kembalikan data sebagai response JSON
+        return response()->json($data);
     }
 
     /**
@@ -101,6 +125,7 @@ class AnggotaController extends Controller
             'desa' => 'required',
             'kecamatan' => 'required',
             'kota' => 'required',
+            'kode_pos' => 'required',
             'ho_hp' => 'required|numeric|min:11|max:12',
             'hp_pasangan' => 'required|numeric|min:11|max:12',
             'tgl_lahir' => 'required',
@@ -108,11 +133,14 @@ class AnggotaController extends Controller
             'kewarganegaraan' => 'required',
             'status_menikah' => 'required',
             'agama' => 'required',
+            'no_hp' => 'required',
+            'hp_pasangan' => 'required',
             'ibu_kandung' => 'required',
             'pendidikan' => 'required',
             'tempat_lahir' => 'required',
             'waris' => 'required',
             'cao' => 'required',
+            'pekerjaan_pasangan' => 'required',
         ]);
 
         try {
@@ -136,7 +164,7 @@ class AnggotaController extends Controller
             $anggota = Anggota::create([
                 'unit' => Auth::id(),
                 'no' => $noAnggota,
-                'kode_kel' => $request->code_kel,
+                'kode_kel' => $request->kode_kel,
                 'norek' => '123459',
                 'tgl_join' => Carbon::now(),
                 'cif' => $request->cif,

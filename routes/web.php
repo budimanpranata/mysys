@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     
     Route::get('/anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::get('/get-kelompok-data', [AnggotaController::class, 'getKelompokData']);
+    Route::post('/cari-ktp', [AnggotaController::class, 'cariKtp']);
     Route::resource('anggota', AnggotaController::class);
 
 });

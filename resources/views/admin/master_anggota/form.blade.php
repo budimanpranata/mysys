@@ -1,4 +1,4 @@
-<form action="{{ route('anggota.store') }}" method="post">
+<form action="{{ route('anggota.store') }}" method="post" id="form">
     @csrf
     @method('post')
     <div class="row">
@@ -12,7 +12,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="unit" id="unit"
-                                        value="" readonly>
+                                        value="{{ auth()->check() ? auth()->user()->id : 'User Belum Login' }}" readonly>
                                 </div>
                             </div>
 
@@ -27,12 +27,15 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kode AO <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="cao" id="cao" class="form-control">
+                                    <select name="cao" id="cao" class="form-control @error('cao') is-invalid @enderror">
                                         <option value="">-- Pilih AO --</option>
                                         @foreach ($ao as $item)
                                             <option value="{{ $item->cao }}">{{ $item->nama_ao }}</option>
                                         @endforeach
                                     </select>
+                                    @error('cao')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -40,12 +43,15 @@
                                 <span class="col-sm-4 col-form-label">Kode Kelompok <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="code_kel" id="code_kel" class="form-control">
+                                    <select name="kode_kel" id="kode_kel" value="{{ old('kode_kel') }}" class="form-control @error('kode_kel') is-invalid @enderror">
                                         <option value="">-- Pilih Kelompok --</option>
                                         @foreach ($kelompok as $item)
                                             <option value="{{ $item->code_kel }}">{{ $item->nama_kel }}</option>
                                         @endforeach
                                     </select>
+                                    @error('kode_kel')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -71,45 +77,42 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" name="ktp" id="nikInput"
+                                        <input type="text" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp') }}" id="nikInput"
                                             placeholder="Masukkan No Identitas">
-
-                                        <div class="input-group-append">
-                                            <a href="#" class="btn btn-primary" onclick="searchByNik()"
+                                            
+                                            <div class="input-group-append">
+                                                <a href="#" class="btn btn-primary" onclick="cariKtp()"
                                                 id="nikInput">
                                                 <i class="fas fa-search"></i>
                                             </a>
                                         </div>
+                                        @error('ktp')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    <span class="help-block with-errors text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama"
+                                    <input type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" name="nama" id="nama"
                                         placeholder="Masukkan Nama">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('nama')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Tempat Lahir <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
+                                    <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" name="tempat_lahir" id="tempat_lahir"
                                         placeholder="Masukkan Tempat Lahir">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('tempat_lahir')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -117,31 +120,37 @@
                                 <span class="col-sm-4 col-form-label">Tanggal Lahir <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
+                                    <input type="date" class="form-control @error('tgl_lahir') is-invalid @enderror" name="tgl_lahir" id="tgl_lahir"
                                         placeholder="Masukkan Tempat Lahir">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('tgl_lahir')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-4 col-form-label">Alamat KTP</label>
+                            <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
+                                <label class="col-sm-4 col-form-label mx-auto">Isi alamat sesuai KTP</label>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <textarea name="alamat" class="form-control" id="alamat" cols="5" rows="3"
+                                    <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror" id="alamat" cols="5" rows="3"
                                         placeholder="Masukkan Alamat"></textarea>
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('alamat')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="rtrw" id="rtrw"
+                                    <input type="text" class="form-control @error('rtrw') is-invalid @enderror" name="rtrw" id="rtrw"
                                         placeholder="Masukkan RT/RW">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('rtrw')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -149,9 +158,11 @@
                                 <span class="col-sm-4 col-form-label">Kelurahan/Desa <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="desa" id="desa"
+                                    <input type="text" class="form-control @error('desa') is-invalid @enderror" name="desa" id="desa"
                                         placeholder="Masukkan Kelurahan/Desa">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('desa')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -159,9 +170,11 @@
                                 <span class="col-sm-4 col-form-label">Kecamatan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kecamatan" id="kecamatan"
+                                    <input type="text" class="form-control @error('kecamatan') is-invalid @enderror" name="kecamatan" id="kecamatan"
                                         placeholder="Masukkan Kecamatan">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('kecamatan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -169,9 +182,11 @@
                                 <span class="col-sm-4 col-form-label">Kabupaten <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kota" id="kota"
+                                    <input type="text" class="form-control @error('kota') is-invalid @enderror" name="kota" id="kota"
                                         placeholder="Masukkan Kabupaten">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('kota')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -179,9 +194,11 @@
                                 <span class="col-sm-4 col-form-label">Kode Pos <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="kode_pos" id="kode_pos"
+                                    <input type="text" class="form-control @error('kode_pos') is-invalid @enderror" name="kode_pos" id="kode_pos"
                                         placeholder="Masukkan Kode POS">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('kode_pos')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -201,20 +218,22 @@
                                 <span class="col-sm-4 col-form-label">Status Perkawinan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="status_menikah" id="status_menikah" class="form-control">
+                                    <select name="status_menikah" id="status_menikah" class="form-control @error('status_menikah') is-invalid @enderror">
                                         <option hidden value="">-- Pilih Status Perkawinan --</option>
                                         <option value="Menikah">Menikah</option>
                                         <option value="Belum Menikah">Belum Menikah</option>
                                         <option value="Janda">Janda</option>
                                     </select>
-                                    <span class="help-block with-errors text-danger"></span>
+                                    @error('status_menikah')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Agama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="agama" id="agama" class="form-control">
+                                    <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
                                         <option hidden value="">-- Pilih Agama --</option>
                                         <option value="Islam">Islam</option>
                                         <option value="Kristen">Kristen</option>
@@ -222,7 +241,9 @@
                                         <option value="Buddha">Buddha</option>
                                         <option value="Konghucu">Konghucu</option>
                                     </select>
-                                    <span class="help-block with-errors text-danger"></span>
+                                    @error('agama')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -230,13 +251,15 @@
                                 <span class="col-sm-4 col-form-label">Pendidikan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="pendidikan" id="pendidikan" class="form-control">
+                                    <select name="pendidikan" id="pendidikan" class="form-control @error('pendidikan') is-invalid @enderror">
                                         <option hidden value="">-- Pilih Pendidikan --</option>
                                         <option value="SD">SD</option>
                                         <option value="SMP">SMP</option>
                                         <option value="SMA">SMA</option>
                                     </select>
-                                    <span class="help-block with-errors text-danger"></span>
+                                    @error('pendidikan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -244,12 +267,14 @@
                                 <span class="col-sm-4 col-form-label">Kewarganegaraan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="kewarganegaraan" id="kewarganegaraan" class="form-control"
+                                    <select name="kewarganegaraan" id="kewarganegaraan" class="form-control @error('kewarganegaraan') is-invalid @enderror"
                                     >
                                         <option hidden value="">-- Pilih Kewarganegaraan --</option>
                                         <option selected value="Indonesia">Indonesia</option>
                                     </select>
-                                    <span class="help-block with-errors text-danger"></span>
+                                    @error('kewarganegaraan')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -257,19 +282,23 @@
                                 <span class="col-sm-4 col-form-label">Nama Pasangan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="waris" id="waris"
+                                    <input type="text" class="form-control @error('waris') is-invalid @enderror" name="waris" id="waris"
                                         placeholder="Masukkan Nama Pasangan">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('waris')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <span class="col-sm-4 col-form-label">Nama Pasangan <span
+                                <span class="col-sm-4 col-form-label">Pekerjaan Pasangan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="pekerjaan_pasangan" id="pekerjaan_pasangan"
+                                    <input type="text" class="form-control @error('pekerjaan_pasangan') is-invalid @enderror" name="pekerjaan_pasangan" id="pekerjaan_pasangan"
                                         placeholder="Masukkan Pekerjaan Pasangan">
-                                    <span class="help-block with-errors text-danger"></span>
+                                        @error('pekerjaan_pasangan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -277,8 +306,11 @@
                                 <span class="col-sm-4 col-form-label">No. Telp <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="no_hp" id="no_hp"
+                                    <input type="text" class="form-control @error('no_hp') is-invalid @enderror" name="no_hp" id="no_hp"
                                         placeholder="Masukkan No. Telp">
+                                        @error('no_hp')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -286,8 +318,11 @@
                                 <span class="col-sm-4 col-form-label">No. Telp Pasangan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="hp_pasangan" id="hp_pasangan"
+                                    <input type="text" class="form-control @error('hp_pasangan') is-invalid @enderror" name="hp_pasangan" id="hp_pasangan"
                                         placeholder="Masukkan No. Telp Pasangan">
+                                        @error('hp_pasangan')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -295,8 +330,11 @@
                                 <span class="col-sm-4 col-form-label">Nama Ibu Kandung <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="ibu_kandung" id="ibu_kandung"
+                                    <input type="text" class="form-control @error('ibu_kandung') is-invalid @enderror" name="ibu_kandung" id="ibu_kandung"
                                         placeholder="Masukkan Ibu Kandung">
+                                        @error('ibu_kandung')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                 </div>
                             </div>
 
@@ -309,7 +347,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Kembali</button>
                 </div>
             </div>
             

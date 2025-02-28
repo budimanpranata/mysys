@@ -64,7 +64,7 @@
 
         $(document).ready(function() {
             // Ketika dropdown kelompok dipilih
-            $('#code_kel').change(function() {
+            $('#kode_kel').change(function() {
                 // Ambil nilai yang dipilih
                 var selectedCode = $(this).val();
                 var selectedCodeString = selectedCode ? selectedCode.toString() : '';
@@ -92,7 +92,7 @@
             });
         });
 
-        function searchByNik() {
+        async function cariKtp() {
             const nik = document.getElementById('nikInput').value;
             const resultContainer = document.getElementById('resultContainer');
 
@@ -109,18 +109,25 @@
                 return;
             }
 
-            // Lakukan request ke backend
-            fetch(`http://mobcol.nurinsani.co.id/apimobcol/rmcKtp.php?ktp=${nik}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Data tidak ditemukan');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Tampilkan hasil pencarian
-                    resultContainer.innerHTML = `
+            try {
+                // Kirim request ke controller Laravel
+                const response = await fetch('/cari-ktp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ nik })
+                });
 
+                if (!response.ok) {
+                    throw new Error('Data tidak ditemukan');
+                }
+
+                const data = await response.json();
+
+                // Tampilkan hasil pencarian
+                resultContainer.innerHTML = `
                     <div class="col-sm-11">
                         <div class="card mb-3">
                             <div class="card-header">KTP</div>
@@ -153,13 +160,10 @@
                         </div>
                     </div>
                 `;
-
-
-                })
-                .catch(error => {
-                    // Tampilkan pesan error
-                    resultContainer.innerHTML = `<p style="color: red;">${error.message}</p>`;
-                });
+            } catch (error) {
+                // Tampilkan pesan error
+                resultContainer.innerHTML = `<p style="color: red;">${error.message}</p>`;
+            }
         }
 
         $(document).ready(function() {
