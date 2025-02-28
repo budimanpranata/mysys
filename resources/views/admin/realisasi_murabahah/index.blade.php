@@ -106,12 +106,12 @@
                 <tr data-id="${item.cif}">
                   <td>${index + 1}</td>
                   <td><input type="checkbox" class="selectRecord"></td>
-                  <td>"${item.nama_kelompok}"</td>
-                  <td>"${item.nama}"</td>
-                  <td>"${item.plafond}"</td>
-                  <td>"${item.saldo_margin}"</td>
-                  <td>"${item.tgl_murab}"</td>
-                  <td>"${item.maturity_date}"</td>
+                  <td>${item.nama_kelompok}</td>
+                  <td>${item.nama}</td>
+                  <td>${item.plafond}</td>
+                  <td>${item.saldo_margin}</td>
+                  <td>${item.tgl_murab}</td>
+                  <td>${item.maturity_date}</td>
                 </tr>`;
               tableBody.append(row);
             });

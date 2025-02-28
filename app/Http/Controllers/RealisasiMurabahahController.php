@@ -27,14 +27,14 @@ class RealisasiMurabahahController extends Controller
         ]);
 
         $records = DB::table('temp_akad_mus')
-            ->leftJoin('kelompok', 'temp_akad_mus.code_kel', 'kelompok.code_kel')
-            ->where('code_kel', $validated['kode_kel'])
-            ->where('tgl_akad', $validated['tgl_akad'])
-            ->where('unit', $validated['unit'])
-            ->where('status_app', 'WAKALAH')
+            ->leftJoin('kelompok', 'temp_akad_mus.code_kel', '=', 'kelompok.code_kel')
+            ->where('temp_akad_mus.code_kel', $validated['kode_kel'])
+            ->where('temp_akad_mus.tgl_akad', $validated['tgl_akad'])
+            ->where('temp_akad_mus.unit', $validated['unit'])
+            ->where('temp_akad_mus.status_app', 'WAKALAH')
             ->select(
                 'temp_akad_mus.*',
-                'kelopompok.nama_kel AS nama_kelompok',
+                'kelompok.nama_kel AS nama_kelompok'
             )
             ->get();
 
