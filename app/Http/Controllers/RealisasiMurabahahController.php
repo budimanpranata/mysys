@@ -111,75 +111,81 @@ class RealisasiMurabahahController extends Controller
 
                     $transaksiData = [
                         [
+                            'id_transaksi' => null,
                             'unit' => $validated['unit'],
                             'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
                             'kode_rekening' => 1481000,
-                            'tanggal_transaksi' => now(),
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => '',
+                            'keterangan_transaksi' => "Persediaan Murabahah AN {$akad->nama}",
                             'debet' => $akad->plafond,
                             'kredit' => 0,
-                            'tanggal_posting' => $validated['tgl_akad'],
-                            'keterangan_posting' => "Persediaan Murabahah AN {$akad->nama}",
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
                             'id_admin' => $validated['id']
                         ],
                         [
+                            'id_transaksi' => null,
                             'unit' => $validated['unit'],
                             'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
                             'kode_rekening' => 1431000,
-                            'tanggal_transaksi' => now(),
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => '',
+                            'keterangan_transaksi' => "Piutang Wakalah AN {$akad->nama}",
                             'debet' => 0,
                             'kredit' => $akad->plafond,
-                            'tanggal_posting' => $validated['tgl_akad'],
-                            'keterangan_posting' => "Piutang Wakalah AN {$akad->nama}",
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
                             'id_admin' => $validated['id']
                         ],
                         [
+                            'id_transaksi' => null,
                             'unit' => $validated['unit'],
                             'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
                             'kode_rekening' => 1413000,
-                            'tanggal_transaksi' => now(),
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => '',
+                            'keterangan_transaksi' => "Piutang Murabahah Mingguan AN {$akad->nama}",
                             'debet' => $akad->plafond + $akad->saldo_margin,
                             'kredit' => 0,
-                            'tanggal_posting' => $validated['tgl_akad'],
-                            'keterangan_posting' => "Piutang Murabahah Mingguan AN {$akad->nama}",
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
                             'id_admin' => $validated['id']
                         ],
                         [
+                            'id_transaksi' => null,
                             'unit' => $validated['unit'],
                             'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
                             'kode_rekening' => 1481000,
-                            'tanggal_transaksi' => now(),
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => '',
+                            'keterangan_transaksi' => "Persediaan Murabahah AN {$akad->nama}",
                             'debet' => 0,
                             'kredit' => $akad->plafond,
-                            'tanggal_posting' => $validated['tgl_akad'],
-                            'keterangan_posting' => "Persediaan Murabahah AN {$akad->nama}",
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
                             'id_admin' => $validated['id']
                         ],
                         [
+                            'id_transaksi' => null,
                             'unit' => $validated['unit'],
                             'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
                             'kode_rekening' => 1423000,
-                            'tanggal_transaksi' => now(),
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => '',
+                            'keterangan_transaksi' => "PMYD Murabahah Mingguan AN {$akad->nama}",
                             'debet' => 0,
                             'kredit' => $akad->saldo_margin,
-                            'tanggal_posting' => $validated['tgl_akad'],
-                            'keterangan_posting' => "PMYD Murabahah Mingguan AN {$akad->nama}",
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
                             'id_admin' => $validated['id']
                         ]
                     ];
                     DB::table('tabel_transaksi')->insert($transaksiData);
 
                     DB::table('rek_loan')->insert([
-                        'tgl_realisasi' => '',
+                        'ref' => null,
+                        'tgl_realisasi' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                         'unit' => $validated['unit'],
                         'no_anggota' => $akad->no_anggota,
                         'saldo_kredit' => $akad->os,
@@ -192,70 +198,72 @@ class RealisasiMurabahahController extends Controller
                         'ao' => $akad->cao
                     ]);
 
-                    foreach ($adjustedTglJatuhTempo as $date) {
-                        DB::table('pembiayaan_detail')->insert([
-                            'id' => '',
-                            'id_pinjam' => '',
-                            'cicilan' => $akad->run_tenor,
-                            'angsuran_pokok' => $akad->pokok,
-                            'margin' => $akad->ijaroh,
-                            'tgl_jatuh_tempo' => $date,
-                            'tgl_bayar' => '',
-                            'jumlah_bayar' => $akad->bulat,
-                            'keterangan' => '',
-                            'cif' => $akad->cif,
-                            'unit' => $validated['unit'],
-                            'ao' => $akad->cao,
-                            'code_kel' => $validated['kode_kel']
-                        ]);
-                    }
+                    // foreach ($adjustedTglJatuhTempo as $date) {
+                    //     DB::table('pembiayaan_detail')->insert([
+                    //         'id' => null,
+                    //         'id_pinjam' => '',
+                    //         'cicilan' => $akad->run_tenor,
+                    //         'angsuran_pokok' => $akad->pokok,
+                    //         'margin' => $akad->ijaroh,
+                    //         'tgl_jatuh_tempo' => $date,
+                    //         'tgl_bayar' => '',
+                    //         'jumlah_bayar' => $akad->bulat,
+                    //         'keterangan' => '',
+                    //         'cif' => $akad->cif,
+                    //         'unit' => $validated['unit'],
+                    //         'ao' => $akad->cao,
+                    //         'code_kel' => $validated['kode_kel']
+                    //     ]);
+                    // }
 
                     DB::table('jurnal_umum')->insert([
-                        'nomor_jurnal' => '1',
+                        'nomor_jurnal' => null,
                         'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
-                        'tanggal_selesai' => '',
+                        'tanggal_selesai' => $validated['param_tanggal'],
                         'unit' => $validated['unit']
                     ]);
 
-                    $simpananData = [
-                        [
-                            'buss_date' => $validated['param_tanggal'],
-                            'no_rek' => $akad->no_anggota,
-                            'unit' => $validated['unit'],
-                            'cif' => $akad->cif,
-                            'code_kel' => $validated['kode_kel'],
-                            'debet' => $akad->plafond,
-                            'type' => '01',
-                            'kredit' => 0,
-                            'userId' => $validated['id'],
-                            'ket' => "Realisasi Murabahah AN {$akad->nama}",
-                            'cao' => $akad->cao,
-                            'blok' => 0,
-                            'tgl_input' => today(),
-                            'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ],
-                        [
-                            'buss_date' => $validated['param_tanggal'],
-                            'no_rek' => $akad->no_anggota,
-                            'unit' => $validated['unit'],
-                            'cif' => $akad->cif,
-                            'code_kel' => $validated['kode_kel'],
-                            'debet' => 0,
-                            'type' => '01',
-                            'kredit' => $akad->plafond,
-                            'userId' => $validated['id'],
-                            'ket' => "Realisasi Murabahah AN {$akad->nama}",
-                            'cao' => $akad->cao,
-                            'blok' => 0,
-                            'tgl_input' => today(),
-                            'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]
-                    ];
-                    DB::table('simpanan')->insert($simpananData);
+                    // $simpananData = [
+                    //     [
+                    //         'reff' => null,
+                    //         'buss_date' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
+                    //         'no_rek' => $akad->no_anggota,
+                    //         'unit' => $validated['unit'],
+                    //         'cif' => $akad->cif,
+                    //         'code_kel' => $validated['kode_kel'],
+                    //         'debet' => $akad->plafond,
+                    //         'type' => '01',
+                    //         'kredit' => 0,
+                    //         'userId' => $validated['id'],
+                    //         'ket' => "Realisasi Murabahah AN {$akad->nama}",
+                    //         'cao' => $akad->cao,
+                    //         'blok' => 0,
+                    //         'tgl_input' => date('Y-m-d'),
+                    //         'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
+                    //         'created_at' => now(),
+                    //         'updated_at' => now(),
+                    //     ],
+                    //     [
+                    //         'reff' => null,
+                    //         'buss_date' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
+                    //         'no_rek' => $akad->no_anggota,
+                    //         'unit' => $validated['unit'],
+                    //         'cif' => $akad->cif,
+                    //         'code_kel' => $validated['kode_kel'],
+                    //         'debet' => 0,
+                    //         'type' => '01',
+                    //         'kredit' => $akad->plafond,
+                    //         'userId' => $validated['id'],
+                    //         'ket' => "Realisasi Murabahah AN {$akad->nama}",
+                    //         'cao' => $akad->cao,
+                    //         'blok' => 0,
+                    //         'tgl_input' => date('Y-m-d'),
+                    //         'kode_transaksi' => "BS-{$validated['unit']}-{$uniqueId}",
+                    //         'created_at' => now(),
+                    //         'updated_at' => now(),
+                    //     ]
+                    // ];
+                    // DB::table('simpanan')->insert($simpananData);
 
                     // DB::table('temp_akad_mus')
                     //     ->where('cif', $akad->cif)
@@ -289,7 +297,8 @@ class RealisasiMurabahahController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => $e->getMessage()], 500);
+            \Log::critical('Realisasi update error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return response()->json(['error' => $e->getMessage() . ' - Line: ' . $e->getLine()], 500);
         }
     }
 }
