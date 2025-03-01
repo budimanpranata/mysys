@@ -39,7 +39,7 @@
         <!-- Hidden input to store id -->
         <input type="hidden" name="id" id="userId" value="{{ Auth::user()->role_id }}">
         <!-- Hidden input to store param tanggal -->
-        <input type="hidden" name="id" id="userDate" value="{{ Auth::user()->param_tanggal }}">
+        <input type="hidden" name="param_tanggal" id="userDate" value="{{ Auth::user()->param_tanggal }}">
 
         <button type="submit" class="btn btn-primary">Cari</button>
       </form>
@@ -105,7 +105,7 @@
               let row = `
                 <tr data-id="${item.cif}">
                   <td>${index + 1}</td>
-                  <td><input type="checkbox" class="selectRecord"></td>
+                  <td><input type="checkbox" class="selectRecord" checked></td>
                   <td>${item.nama_kelompok}</td>
                   <td>${item.nama}</td>
                   <td>${item.plafond}</td>
@@ -115,6 +115,9 @@
                 </tr>`;
               tableBody.append(row);
             });
+
+            let anyChecked = $('.selectRecord:checked').length > 0;
+            $('#realisasiBtn').prop('disabled', !anyChecked);
           }
         }
       });
@@ -126,8 +129,9 @@
       $('#realisasiBtn').prop('disabled', !anyChecked);
     });
 
-    // Fix: Use event delegation for dynamically loaded elements
-    $(document).on('click', '#realisasiBtn', function () {
+    // tambah prevent preventDefault
+    $(document).on('click', '#realisasiBtn', function (e) {
+      e.preventDefault();
       let kodeKelompok = $('#kodeKelompok').val();
       let tanggalRealisasi = $('#tanggalRealisasi').val();
       let userUnit = $('#userUnit').val();
@@ -164,11 +168,32 @@
               param_tanggal: userDate
             },
             success: function (response) {
-              Swal.fire("Sukses", "Status berhasil diperbarui!", "success");
-              resetPage();
+              if (response.message) {
+                Swal.fire({
+                  title: "Sukses",
+                  text: response.message,
+                  icon: "success"
+                }).then(() => {
+                  resetPage();
+                });
+              } else if (response.failed_cifs && response.failed_cifs.length > 0) {
+                // partial success case
+                let failedNames = response.failed_cifs.map(item => item.nama).join(', ');
+                Swal.fire({
+                  title: "Sebagian Berhasil",
+                  text: `Beberapa transaksi gagal: ${failedNames}`,
+                  icon: "warning"
+                }).then(() => {
+                  resetPage();
+                });
+              }
             },
-            error: function (response) {
-              Swal.fire("Error", "Terjadi kesalahan, coba lagi!", "error");
+            error: function (xhr, status, error) {
+              let errorMessage = "Terjadi kesalahan, coba lagi!";
+              if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMessage = xhr.responseJSON.error;
+              }
+              Swal.fire("Error", errorMessage, "error");
             }
           });
         }
@@ -177,7 +202,7 @@
 
     function resetPage() {
       $('#searchForm')[0].reset();
-      $('#tableBody').load(location.href + ' #tableBody');
+      $('#tableBody').empty().append('<tr id="emptyState"><td colspan="8">Belum ada data</td></tr>');
       $('#realisasiBtn').prop('disabled', true);
     }
   });

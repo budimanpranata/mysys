@@ -31,7 +31,6 @@ class RealisasiMurabahahController extends Controller
             ->where('temp_akad_mus.code_kel', $validated['kode_kel'])
             ->where('temp_akad_mus.tgl_akad', $validated['tgl_akad'])
             ->where('temp_akad_mus.unit', $validated['unit'])
-            ->where('temp_akad_mus.status_app', 'WAKALAH')
             ->select(
                 'temp_akad_mus.*',
                 'kelompok.nama_kel AS nama_kelompok'
@@ -76,17 +75,17 @@ class RealisasiMurabahahController extends Controller
 
                     if ($existingRecord) {
                         if ($existingRecord->os > 0) {
-                            // skip iterasi loop yg skrg
+                            // Skip iterasi loop yang sekarang
                             continue;
                         } else {
-                            // update record yg udah ada dgn value terbaru dr temp akad mus
+                            // Update record yang sudah ada dengan value terbaru dari $akad
                             DB::table('pembiayaan')
-                                ->where('cif', $existingRecord->cif) // Assuming 'id' is the primary key
-                                ->update(array_merge((array) $akad, ['status_app' => 'MURAB']));
+                                ->where('cif', $existingRecord->cif)
+                                ->update((array) $akad);
                         }
                     } else {
-                        // klo gaada record di pembiayaan, lgsg di insert aja
-                        DB::table('pembiayaan')->insert(array_merge((array) $akad, ['status_app' => 'MURAB']));
+                        // Jika tidak ada record di pembiayaan, langsung insert
+                        DB::table('pembiayaan')->insert((array) $akad);
                     }
 
                     $tglJatuhTempo = [];
@@ -258,11 +257,11 @@ class RealisasiMurabahahController extends Controller
                     ];
                     DB::table('simpanan')->insert($simpananData);
 
-                    DB::table('temp_akad_mus')
-                        ->where('cif', $akad->cif)
-                        ->update([
-                            'deleted_at' => DB::raw('NOW()')
-                        ]);
+                    // DB::table('temp_akad_mus')
+                    //     ->where('cif', $akad->cif)
+                    //     ->update([
+                    //         'deleted_at' => DB::raw('NOW()')
+                    //     ]);
 
                 } catch (\Exception $e) {
                     // Catch error for this iteration and store failed CIF
