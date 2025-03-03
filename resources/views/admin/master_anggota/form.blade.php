@@ -201,12 +201,6 @@
                                         @enderror
                                 </div>
                             </div>
-
-                            {{-- <div class="form-group row">
-                                <label class="col-sm-10 col-form-label">Alamat Domisili <br>
-                                    <span class="text-danger"> *abaikan jika alamat sama dengan alamat KTP</span>
-                                </label>
-                            </div> --}}
                             
                             <div class="form-check mb-3">
                                 <input class="form-check-input" type="checkbox" id="sameAddress" onclick="toggleAlamatDomisili()">
