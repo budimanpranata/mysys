@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AnggotaExport;
 use App\Models\Anggota;
+use App\Models\AnggotaDetail;
 use App\Models\ao;
 use App\Models\Kelompok;
 use App\Models\Menu;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-
+use Maatwebsite\Excel\Facades\Excel;
 use function Illuminate\Log\log;
 
 class AnggotaController extends Controller
@@ -25,16 +27,12 @@ class AnggotaController extends Controller
             ->of($anggota)
             ->addIndexColumn()
             ->addColumn('aksi', function($anggota) {
-                // dd($anggota);
                 return '
-                    <button onclick="editForm(`'. route('anggota.update', $anggota->no) .'`)" class="btn btn-sm btn-primary">Edit</button>
-                    <button onclick="hapusData(`'. route('anggota.destroy', $anggota->no) .'`)" class="btn btn-sm btn-danger">Hapus</button>
+                <a href="'. route('anggota.edit', $anggota->no) .'" class="btn btn-sm btn-warning">Edit</a>
                 ';
             })
             ->rawColumns(['aksi'])
             ->make(true);
-
-            // dd($kelompok);
     }
     
     /**
@@ -64,7 +62,7 @@ class AnggotaController extends Controller
     {
 
         $kelompok = DB::table('kelompok')
-        ->join('ao', 'kelompok.cao', '=', 'ao.cao')
+        ->join('ao', 'kelompok.cao', '=', 'ao.cao') // Relasi ke tabel ao
         ->where('kelompok.code_kel', $request->code_kel)
         ->select(
             'kelompok.cao',
@@ -116,8 +114,8 @@ class AnggotaController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        //validate form
         $request->validate([
+            'cao' => 'required',
             'kode_kel' => 'required',
             'nama'   => 'required',
             'alamat' => 'required',
@@ -125,22 +123,53 @@ class AnggotaController extends Controller
             'desa' => 'required',
             'kecamatan' => 'required',
             'kota' => 'required',
-            'kode_pos' => 'required',
-            'ho_hp' => 'required|numeric|min:11|max:12',
-            'hp_pasangan' => 'required|numeric|min:11|max:12',
-            'tgl_lahir' => 'required',
-            'ktp' => 'required',
+            'tgl_lahir' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $umur = Carbon::parse($value)->age; // Hitung umur
+                    if ($umur > 60) {
+                        $fail('Umur tidak boleh lebih dari 60 tahun.'); // Validasi umur
+                    }
+                },
+            ],
+            'ktp' => 'required|digits:16',
             'kewarganegaraan' => 'required',
             'status_menikah' => 'required',
             'agama' => 'required',
-            'no_hp' => 'required',
-            'hp_pasangan' => 'required',
+            'no_hp' => 'required|min:11',
+            'hp_pasangan' => 'required|min:11',
             'ibu_kandung' => 'required',
             'pendidikan' => 'required',
             'tempat_lahir' => 'required',
             'waris' => 'required',
-            'cao' => 'required',
             'pekerjaan_pasangan' => 'required',
+            'kode_pos' => 'required',
+        ], [
+            'cao.required' => 'Nama AO tidak boleh kosong.',
+            'kode_kel.required' => 'Nama Kelompok tidak boleh kosong.',
+            'nama.required' => 'Nama tidak boleh kosong.',
+            'alamat.required' => 'Alamat tidak boleh kosong.',
+            'rtrw.required' => 'RT/RW tidak boleh kosong.',
+            'desa.required' => 'Desa tidak boleh kosong.',
+            'kecamatan.required' => 'Kecamatan tidak boleh kosong.',
+            'kota.required' => 'Kabupaten tidak boleh kosong.',
+            'kode_pos.required' => 'Kode Pos tidak boleh kosong.',
+            'tgl_lahir.required' => 'Tanggal Lahir tidak boleh kosong.',
+            'ktp.required' => 'NIK tidak boleh kosong.',
+            'ktp.digits' => 'NIK harus tepat 16 digit.',
+            'kewarganegaraan.required' => 'Kewarganegaraan tidak boleh kosong.',
+            'status_menikah.required' => 'Status Menikah tidak boleh kosong.',
+            'agama.required' => 'Agama tidak boleh kosong.',
+            'no_hp.required' => 'No. Hp tidak boleh kosong.',
+            'no_hp.min' => 'No Hp minimal 11 karakter.',
+            'hp_pasangan.required' => 'No Hp Pasangan tidak boleh kosong.',
+            'hp_pasangan.min' => 'No Hp Pasangan minimal 11 karakter.',
+            'ibu_kandung.required' => 'Ibu Kandung tidak boleh kosong.',
+            'pendidikan.required' => 'Pendidikan tidak boleh kosong.',
+            'tempat_lahir.required' => 'Tempat Lahir tidak boleh kosong.',
+            'waris.required' => 'Waris tidak boleh kosong.',
+            'pekerjaan_pasangan.required' => 'Pekerjaan Pasangan tidak boleh kosong.',
         ]);
 
         try {
@@ -148,10 +177,9 @@ class AnggotaController extends Controller
             Log::info('Data yang diterima:', $request->all());
 
             // Generate no anggota
-            // $unit = Auth::id();
-            $unit = '001';
+            $unit = Auth::user()->unit;
             $date = Carbon::now()->format('ymd'); // Format tanggal: TahunBulanTanggal (20231025)
-            // $lastAnggota = Anggota::whereDate('created_at', Carbon::today())->latest()->first(); // Ambil data terakhir hari ini
+            // $lastAnggota = Anggota::whereDate('created_at', Carbon::today())->latest()->first();
             $lastAnggota = Anggota::latest()->first(); // Ambil record terakhir
 
             // Nomor urut
@@ -162,10 +190,10 @@ class AnggotaController extends Controller
             $noAnggota = "{$unit}{$date}{$sequenceFormatted}";
 
             $anggota = Anggota::create([
-                'unit' => Auth::id(),
                 'no' => $noAnggota,
+                'unit' => Auth::user()->unit,
                 'kode_kel' => $request->kode_kel,
-                'norek' => '123459',
+                'norek' => $noAnggota,
                 'tgl_join' => Carbon::now(),
                 'cif' => $request->cif,
                 'nama' => $request->nama,
@@ -195,6 +223,16 @@ class AnggotaController extends Controller
                 'status' => 'ANGGOTA',
                 'pekerjaan_pasangan' => $request->pekerjaan_pasangan,
                 'kode_pos' => $request->kode_pos,
+            ]);
+
+            AnggotaDetail::create([
+                'no_anggota' => $noAnggota, // no anggita dari tabel anggota
+                'alamat_domisili' => $request->alamat_domisili,
+                'rtrw_domisili' => $request->rtrw_domisili,
+                'desa_domisili' => $request->desa_domisili,
+                'kecamatan_domisili' => $request->kecamatan_domisili,
+                'desa_domisili' => $request->desa_domisili,
+                'kode_pos_domisili' => $request->kode_pos_domisili,
             ]);
 
             Log::info('Data anggota berhasil disimpan:', $anggota->toArray());
@@ -229,7 +267,12 @@ class AnggotaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $title = 'Edit data Anggota';
+        $anggota = Anggota::where('no', $id)->firstOrFail();
+        $ao = ao::all();
+        $kelompok = Kelompok::all();
+        $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
+        return view('admin.master_anggota.edit', compact('anggota','title','ao', 'kelompok', 'menus'));
     }
 
     /**
@@ -246,5 +289,10 @@ class AnggotaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function export()
+    {
+        return Excel::download(new AnggotaExport, 'anggota.xlsx');
     }
 }

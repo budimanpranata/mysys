@@ -20,6 +20,7 @@
             <div class="card">
                 <div class="card-header">
                     <a href="{{ route('anggota.create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
+                    <a href="{{ route('anggota.export') }}" class="btn btn-sm btn-success">Export Excel</a>
                     {{-- <button onclick="addForm('{{ route('anggota.store') }}')" class="btn btn-sm btn-primary">+ Tambah</button> --}}
                 </div>
                 <div class="card-body">

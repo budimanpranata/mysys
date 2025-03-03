@@ -19,7 +19,7 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">CIF <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="cif" id="cif"
+                                    <input type="text" class="form-control" name="cif" value="{{ $anggota->cif }}" id="cif"
                                         value="" readonly>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                                     <select name="cao" id="cao" class="form-control @error('cao') is-invalid @enderror">
                                         <option value="">-- Pilih AO --</option>
                                         @foreach ($ao as $item)
-                                            <option value="{{ $item->cao }}" {{ old('cao') == $item->cao ? 'selected' : '' }}>{{ $item->nama_ao }}</option>
+                                            <option value="{{ $item->cao }}">{{ $item->nama_ao }}</option>
                                         @endforeach
                                     </select>
                                     @error('cao')
@@ -43,10 +43,10 @@
                                 <span class="col-sm-4 col-form-label">Kode Kelompok <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="kode_kel" id="kode_kel" value="{{ old('kode_kel') }}" class="form-control @error('kode_kel') is-invalid @enderror">
+                                    <select name="kode_kel" id="kode_kel" value="{{ old('kode_kel', $anggota->kode_kel) }}" class="form-control @error('kode_kel') is-invalid @enderror">
                                         <option value="">-- Pilih Kelompok --</option>
                                         @foreach ($kelompok as $item)
-                                            <option value="{{ $item->code_kel }}" {{ old('kode_kel') == $item->code_kel ? 'selected' : '' }}>{{ $item->nama_kel }}</option>
+                                            <option value="{{ $item->code_kel }}">{{ $item->nama_kel }}</option>
                                         @endforeach
                                     </select>
                                     @error('kode_kel')
@@ -77,7 +77,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <div class="input-group">
-                                        <input type="text" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp') }}" id="nikInput"
+                                        <input type="text" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp', $anggota->ktp) }}" id="nikInput"
                                             placeholder="Masukkan No Identitas">
                                             
                                             <div class="input-group-append">
@@ -108,7 +108,7 @@
                                 <span class="col-sm-4 col-form-label">Tempat Lahir <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" name="tempat_lahir" value="{{ old('tempat_lahir') }}" id="tempat_lahir"
+                                    <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" name="tempat_lahir" id="tempat_lahir"
                                         placeholder="Masukkan Tempat Lahir">
                                         @error('tempat_lahir')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -120,7 +120,7 @@
                                 <span class="col-sm-4 col-form-label">Tanggal Lahir <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="date" class="form-control @error('tgl_lahir') is-invalid @enderror" name="tgl_lahir" value="{{ old('tgl_lahir') }}" id="tgl_lahir"
+                                    <input type="date" class="form-control @error('tgl_lahir') is-invalid @enderror" name="tgl_lahir" id="tgl_lahir"
                                         placeholder="Masukkan Tempat Lahir">
                                         @error('tgl_lahir')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -129,14 +129,14 @@
                             </div>
 
                             <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                                <label class="col-sm-4 col-form-label mx-auto">Isi Alamat Sesuai KTP</label>
+                                <label class="col-sm-4 col-form-label mx-auto">Isi alamat sesuai KTP</label>
                             </div>
 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <textarea name="alamat" class="form-control @error('alamat') is-invalid @enderror" id="alamat" cols="5" rows="3"
-                                        placeholder="Masukkan Alamat">{{ old('alamat') }}</textarea>
+                                        placeholder="Masukkan Alamat"></textarea>
                                         @error('alamat')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -146,7 +146,7 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('rtrw') is-invalid @enderror" name="rtrw" value="{{ old('rtrw') }}" id="rtrw"
+                                    <input type="text" class="form-control @error('rtrw') is-invalid @enderror" name="rtrw" id="rtrw"
                                         placeholder="Masukkan RT/RW">
                                         @error('rtrw')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -158,7 +158,7 @@
                                 <span class="col-sm-4 col-form-label">Kelurahan/Desa <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('desa') is-invalid @enderror" name="desa" value="{{ old('desa') }}" id="desa"
+                                    <input type="text" class="form-control @error('desa') is-invalid @enderror" name="desa" id="desa"
                                         placeholder="Masukkan Kelurahan/Desa">
                                         @error('desa')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -170,7 +170,7 @@
                                 <span class="col-sm-4 col-form-label">Kecamatan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('kecamatan') is-invalid @enderror" name="kecamatan" value="{{ old('kecamatan') }}" id="kecamatan"
+                                    <input type="text" class="form-control @error('kecamatan') is-invalid @enderror" name="kecamatan" id="kecamatan"
                                         placeholder="Masukkan Kecamatan">
                                         @error('kecamatan')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -182,7 +182,7 @@
                                 <span class="col-sm-4 col-form-label">Kabupaten <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('kota') is-invalid @enderror" name="kota" value="{{ old('kota') }}" id="kota"
+                                    <input type="text" class="form-control @error('kota') is-invalid @enderror" name="kota" id="kota"
                                         placeholder="Masukkan Kabupaten">
                                         @error('kota')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -194,7 +194,7 @@
                                 <span class="col-sm-4 col-form-label">Kode Pos <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('kode_pos') is-invalid @enderror" name="kode_pos" value="{{ old('kode_pos') }}" id="kode_pos"
+                                    <input type="text" class="form-control @error('kode_pos') is-invalid @enderror" name="kode_pos" id="kode_pos"
                                         placeholder="Masukkan Kode POS">
                                         @error('kode_pos')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -202,96 +202,12 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="form-group row">
+                            <div class="form-group row">
                                 <label class="col-sm-10 col-form-label">Alamat Domisili <br>
                                     <span class="text-danger"> *abaikan jika alamat sama dengan alamat KTP</span>
                                 </label>
-                            </div> --}}
-                            
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="sameAddress" onclick="toggleAlamatDomisili()">
-                                <label class="form-check-label" for="sameAddress">
-                                    Alamat domisili sama dengan alamat sesuai
-                                </label>
                             </div>
-                            
-                            <fieldset id="alamatDomisili">
 
-                                <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                                    <label class="col-sm-4 col-form-label mx-auto">Isi Alamat Domisili</label>
-                                </div>
-
-                                <div class="form-group row">
-                                    <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
-                                    <div class="col-sm-7">
-                                        <textarea name="alamat_domisili" class="form-control @error('alamat_domisili') is-invalid @enderror" id="alamat_domisili" cols="5" rows="3"
-                                            placeholder="Masukkan Alamat">{{ old('alamat_domisili') }}</textarea>
-                                            @error('alamat_domisili')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                    </div>
-                                </div>
-    
-                                <div class="form-group row">
-                                    <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('rtrw_domisili') is-invalid @enderror" name="rtrw_domisili" value="{{ old('rtrw_domisili') }}" id="rtrw"
-                                            placeholder="Masukkan RT/RW">
-                                            @error('rtrw_domisili')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                    </div>
-                                </div>
-    
-                                <div class="form-group row">
-                                    <span class="col-sm-4 col-form-label">Kelurahan/Desa <span
-                                            class="text-danger">*</span></span>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('desa_domisili') is-invalid @enderror" name="desa_domisili" value="{{ old('desa_domisili') }}" id="desa"
-                                            placeholder="Masukkan Kelurahan/Desa">
-                                            @error('desa_domisili')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                    </div>
-                                </div>
-    
-                                <div class="form-group row">
-                                    <span class="col-sm-4 col-form-label">Kecamatan <span
-                                            class="text-danger">*</span></span>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('kecamatan_domisili') is-invalid @enderror" name="kecamatan_domisili" value="{{ old('kecamatan_domisili') }}" id="kecamatan"
-                                            placeholder="Masukkan Kecamatan">
-                                            @error('kecamatan_domisili')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                    </div>
-                                </div>
-    
-                                <div class="form-group row">
-                                    <span class="col-sm-4 col-form-label">Kabupaten <span
-                                            class="text-danger">*</span></span>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('kota_domisili') is-invalid @enderror" name="kota_domisili" value="{{ old('kota_domisili') }}" id="kota"
-                                            placeholder="Masukkan Kabupaten">
-                                            @error('kota_domisili')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                    </div>
-                                </div>
-    
-                                <div class="form-group row">
-                                    <span class="col-sm-4 col-form-label">Kode Pos <span
-                                            class="text-danger">*</span></span>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('kode_pos_domisili') is-invalid @enderror" name="kode_pos_domisili" value="{{ old('kode_pos_domisili') }}" id="kode_pos"
-                                            placeholder="Masukkan Kode POS">
-                                            @error('kode_pos_domisili')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                    </div>
-                                </div>
-                            </fieldset>
-                            
                             {{-- buat form alamat berdasarkan domisili, 
                             jika alamat domisili sesuai dengan alamat ktp maka bisa di hide dengan javascript --}}
 
@@ -304,9 +220,9 @@
                                 <div class="col-sm-7">
                                     <select name="status_menikah" id="status_menikah" class="form-control @error('status_menikah') is-invalid @enderror">
                                         <option hidden value="">-- Pilih Status Perkawinan --</option>
-                                        <option value="Menikah" {{ old('status_menikah') == 'Menikah' ? 'selected' : '' }}>Menikah</option>
-                                        <option value="Belum Menikah" {{ old('status_menikah') == 'Belum Menikah' ? 'selected' : '' }}>Belum Menikah</option>
-                                        <option value="Janda" {{ old('status_menikah') == 'Janda' ? 'selected' : '' }}>Janda</option>
+                                        <option value="Menikah">Menikah</option>
+                                        <option value="Belum Menikah">Belum Menikah</option>
+                                        <option value="Janda">Janda</option>
                                     </select>
                                     @error('status_menikah')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -319,11 +235,11 @@
                                 <div class="col-sm-7">
                                     <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
                                         <option hidden value="">-- Pilih Agama --</option>
-                                        <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
-                                        <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
-                                        <option value="Hindu" {{ old('agama') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
-                                        <option value="Buddha" {{ old('agama') == 'Buddha' ? 'selected' : '' }}>Buddha</option>
-                                        <option value="Konghucu" {{ old('agama') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
+                                        <option value="Islam">Islam</option>
+                                        <option value="Kristen">Kristen</option>
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Buddha">Buddha</option>
+                                        <option value="Konghucu">Konghucu</option>
                                     </select>
                                     @error('agama')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -337,9 +253,9 @@
                                 <div class="col-sm-7">
                                     <select name="pendidikan" id="pendidikan" class="form-control @error('pendidikan') is-invalid @enderror">
                                         <option hidden value="">-- Pilih Pendidikan --</option>
-                                        <option value="SD" {{ old('pendidikan') == 'SD' ? 'selected' : '' }}>SD</option>
-                                        <option value="SMP" {{ old('pendidikan') == 'SMP' ? 'selected' : '' }}>SMP</option>
-                                        <option value="SMA" {{ old('pendidikan') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                                        <option value="SD">SD</option>
+                                        <option value="SMP">SMP</option>
+                                        <option value="SMA">SMA</option>
                                     </select>
                                     @error('pendidikan')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -366,7 +282,7 @@
                                 <span class="col-sm-4 col-form-label">Nama Pasangan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('waris') is-invalid @enderror" name="waris" value="{{ old('waris') }}" id="waris"
+                                    <input type="text" class="form-control @error('waris') is-invalid @enderror" name="waris" id="waris"
                                         placeholder="Masukkan Nama Pasangan">
                                         @error('waris')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -378,7 +294,7 @@
                                 <span class="col-sm-4 col-form-label">Pekerjaan Pasangan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('pekerjaan_pasangan') is-invalid @enderror" name="pekerjaan_pasangan" value="{{ old('pekerjaan_pasangan') }}" id="pekerjaan_pasangan"
+                                    <input type="text" class="form-control @error('pekerjaan_pasangan') is-invalid @enderror" name="pekerjaan_pasangan" id="pekerjaan_pasangan"
                                         placeholder="Masukkan Pekerjaan Pasangan">
                                         @error('pekerjaan_pasangan')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -390,7 +306,7 @@
                                 <span class="col-sm-4 col-form-label">No. Telp <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="number" class="form-control @error('no_hp') is-invalid @enderror" name="no_hp" value="{{ old('no_hp') }}" id="no_hp"
+                                    <input type="text" class="form-control @error('no_hp') is-invalid @enderror" name="no_hp" id="no_hp"
                                         placeholder="Masukkan No. Telp">
                                         @error('no_hp')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -402,7 +318,7 @@
                                 <span class="col-sm-4 col-form-label">No. Telp Pasangan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="number" class="form-control @error('hp_pasangan') is-invalid @enderror" name="hp_pasangan" value="{{ old('hp_pasangan') }}" id="hp_pasangan"
+                                    <input type="text" class="form-control @error('hp_pasangan') is-invalid @enderror" name="hp_pasangan" id="hp_pasangan"
                                         placeholder="Masukkan No. Telp Pasangan">
                                         @error('hp_pasangan')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -414,7 +330,7 @@
                                 <span class="col-sm-4 col-form-label">Nama Ibu Kandung <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control @error('ibu_kandung') is-invalid @enderror" name="ibu_kandung" value="{{ old('ibu_kandung') }}" id="ibu_kandung"
+                                    <input type="text" class="form-control @error('ibu_kandung') is-invalid @enderror" name="ibu_kandung" id="ibu_kandung"
                                         placeholder="Masukkan Ibu Kandung">
                                         @error('ibu_kandung')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -431,7 +347,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                    <a href="{{ route('anggota.index') }}" class="btn btn-sm btn-danger">Kembali</a>
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Kembali</button>
                 </div>
             </div>
             

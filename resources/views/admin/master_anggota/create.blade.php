@@ -42,6 +42,16 @@
 
     <script>
 
+        function toggleAlamatDomisili() {
+            const checkbox = document.getElementById("sameAddress");
+            const domisiliForm = document.getElementById("alamatDomisili");
+            if (checkbox.checked) {
+                domisiliForm.classList.add("d-none");
+            } else {
+                domisiliForm.classList.remove("d-none");
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Fungsi untuk menghasilkan string acak
             function generateRandomString(length) {
