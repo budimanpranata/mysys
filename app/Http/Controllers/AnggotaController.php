@@ -280,7 +280,61 @@ class AnggotaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            // Log data yang diterima
+            Log::info('Data yang diterima:', $request->all());
+
+            $anggota = Anggota::where('no', $id)->first();
+
+            $anggota->update([
+                'unit' => Auth::user()->unit,
+                'kode_kel' => $request->kode_kel,
+                'cif' => $request->cif,
+                'nama' => $request->nama,
+                'deal_type' => '1',
+                'alamat' => $request->alamat,
+                'desa' => $request->desa,
+                'kecamatan' => $request->kecamatan,
+                'kota' => $request->kota,
+                'rtrw' => $request->rtrw,
+                'no_hp' => $request->no_hp,
+                'hp_pasangan' => $request->hp_pasangan,
+                'kelamin' => 'P',
+                'tgl_lahir' => $request->tgl_lahir,
+                'ktp' => $request->ktp,
+                'kewarganegaraan' => $request->kewarganegaraan,
+                'status_menikah' => $request->status_menikah,
+                'agama' => $request->agama,
+                'ibu_kandung' => $request->ibu_kandung,
+                'npwp' => 0,
+                'source_income' => 1,
+                'pendidikan' => $request->pendidikan,
+                'tempat_lahir' => $request->tempat_lahir,
+                'id_expired' => 0,
+                'waris' => $request->waris,
+                'cao' => $request->cao,
+                'userid' => Auth::id(),
+                'status' => 'ANGGOTA',
+                'pekerjaan_pasangan' => $request->pekerjaan_pasangan,
+                'kode_pos' => $request->kode_pos,
+            ]);
+
+            Log::info('Data anggota berhasil disimpan:', $anggota->toArray());
+        
+            alert()->success('Berhasil!', 'Data Berhasil Disimpan.');
+            return redirect()->route('anggota.index');
+
+        } catch (\Throwable $th) {
+            // Log error yang terjadi
+            Log::error('Error saat menyimpan data anggota:', [
+                'message' => $th->getMessage(),
+                'trace' => $th->getTraceAsString()
+            ]);
+
+            // Redirect dengan pesan error
+            alert()->error('Gagal!', 'Gagal saat menyimpan data.');
+            return redirect()->back()->withInput()->with(['error' => 'Terjadi kesalahan: ' . $th->getMessage()]);
+        }
     }
 
     /**
