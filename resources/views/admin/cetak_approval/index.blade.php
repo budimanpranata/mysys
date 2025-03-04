@@ -4,12 +4,12 @@
 <div class="container-fluid">
   <div class="row mb-2">
     <div class="col-sm-6">
-      <h1>Cetak Musyarakah</h1>
+      <h1>Cetak Approval</h1>
     </div>
     <div class="col-sm-6">
       <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item active">Cetak Musyarakah</li>
+        <li class="breadcrumb-item active">Cetak Approval</li>
       </ol>
     </div>
   </div>
@@ -21,17 +21,17 @@
 <div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Cetak Musyarakah</h3>
+      <h3 class="card-title">Cetak Approval</h3>
     </div>
 
     <div class="card-body">
-      <form id="musyarakahForm" action="{{ route('form_musyarakah') }}" method="POST">
+      <form id="approvalForm" action="{{ route('form_approval') }}" method="POST">
         @csrf
         <div class="mb-3">
-          <label for="tanggalCetak" class="form-label">Tanggal Cetak</label>
-          <input type="date" name="tanggal_cetak" class="form-control @error('tanggal_cetak') is-invalid @enderror"
-            id="tanggalCetak" required>
-          @error('tanggal_cetak')
+          <label for="tanggalMurab" class="form-label">Tanggal Murabahah</label>
+          <input type="date" name="tanggal_murab" class="form-control @error('tanggal_murab') is-invalid @enderror"
+            id="tanggalMurab" required>
+          @error('tanggal_murab')
           <div class="invalid-feedback">
             {{ $message }}
           </div>
@@ -53,7 +53,6 @@
 
 <script>
   $(document).ready(function () {
-    // CSRF token dan global AJAX error handling
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -65,7 +64,7 @@
     });
 
     // Handle form submission
-    $('#musyarakahForm').on('submit', function (e) {
+    $('#approvalForm').on('submit', function (e) {
       e.preventDefault();
 
       const form = $(this);
@@ -79,7 +78,6 @@
         success: function (response) {
           if (response.success) {
             Swal.fire('Berhasil!', response.message, 'success');
-            // Load iframe PDF on success
             $('.card-body').html(`
               <iframe src="${response.iframe_url}" width="100%" height="800" frameborder="0"></iframe>
             `);

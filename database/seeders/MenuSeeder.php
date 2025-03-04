@@ -70,12 +70,21 @@ class MenuSeeder extends Seeder
 
         // Submenu
         Menu::create([
+            'name' => 'Cetak Approval',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $CetakData->id,
+            'url' => '/cetak/approval',
+            'left' => 'null',
+            'order' => 4,
+        ]);
+
+        Menu::create([
             'name' => 'Cetak Wakalah',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/anggota-baru', // Contoh URL
             'left' => 'null',
-            'order' => 4,
+            'order' => 5,
         ]);
 
         Menu::create([
@@ -84,7 +93,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/murabahah',
             'left' => 'null',
-            'order' => 5,
+            'order' => 6,
         ]);
 
         Menu::create([
@@ -93,7 +102,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/musyarakah',
             'left' => 'null',
-            'order' => 6,
+            'order' => 7,
         ]);
         Menu::create([
             'name' => 'Cetak Cs',
@@ -101,7 +110,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/cs',
             'left' => 'null',
-            'order' => 7,
+            'order' => 8,
         ]);
         Menu::create([
             'name' => 'Cetak Cs WO',
@@ -109,7 +118,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/cs_wo',
             'left' => 'null',
-            'order' => 8,
+            'order' => 9,
         ]);
 
         Menu::create([
@@ -118,7 +127,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/simpanan-5-persen',
             'left' => 'null',
-            'order' => 9,
+            'order' => 10,
         ]);
 
         Menu::create([
@@ -127,7 +136,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/adendum',
             'left' => 'null',
-            'order' => 10,
+            'order' => 11,
         ]);
 
         Menu::create([
@@ -136,16 +145,16 @@ class MenuSeeder extends Seeder
             'parent_id' => $CetakData->id,
             'url' => '/cetak/kartu-angsuran',
             'left' => 'null',
-            'order' => 11,
+            'order' => 12,
         ]);
-      
-      Menu::create([
-           'name' => 'Cetak La Risywah',
+
+        Menu::create([
+            'name' => 'Cetak La Risywah',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $CetakData->id,
             'url' => '/cetak/larisywah',
             'left' => 'null',
-            'order' => 12,
+            'order' => 13,
         ]);
 
         $Realisasi = Menu::create([
@@ -154,7 +163,7 @@ class MenuSeeder extends Seeder
             'parent_id' => null,
             'url' => null,
             'left' => 'right fas fa-angle-left',
-            'order' => 13,
+            'order' => 14,
 
         ]);
 
@@ -166,7 +175,7 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi_wakalah',
             'left' => 'null',
             'order' => 14,
-       ]);
+        ]);
 
         Menu::create([
             'name' => 'Realisasi Murabahah',
