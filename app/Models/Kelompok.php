@@ -11,4 +11,8 @@ class Kelompok extends Model
     use HasFactory;
     protected $guarded = [];
     protected $primaryKey = 'code_kel';
+
+    protected $casts = [
+        'code_kel' => 'string',
+    ];
 }

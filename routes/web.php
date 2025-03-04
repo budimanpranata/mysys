@@ -53,11 +53,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/cetak/musyarakah/result', [CetakMusyarakahController::class, 'hasil'])->name('form_musyarakah');
     Route::get('/cetak/larisywah', [CetakLaRisywahController::class, 'index'])->name('cetak_larisywah');
     Route::post('/cetak/larisywah/result', [CetakLaRisywahController::class, 'hasil'])->name('form_larisywah');
+
     Route::get('/cetak/approval', [CetakApprovalController::class, 'index'])->name('cetak_approval');
     Route::post('/cetak/approval/result', [CetakApprovalController::class, 'hasil'])->name('form_approval');
     Route::get('/realisasi/murabahah', [RealisasiMurabahahController::class, 'index'])->name('realisasi_murabahah');
     Route::get('/realisasi/murabahah/search', [RealisasiMurabahahController::class, 'search'])->name('realisasi.search');
     Route::post('/realisasi/murabahah/update', [RealisasiMurabahahController::class, 'updateStatus'])->name('realisasi.update');
+
     Route::get('/kelompok/data', [KelompokController::class, 'data'])->name('kelompok.data');
     Route::resource('kelompok', KelompokController::class);
 
@@ -76,14 +78,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/cetak/kartu-angsuran', [CetakKartuAngsuranController::class, 'index'])->name('cetakkartuAngsuran');
     Route::post('/cetak/kartu-angsuran/filter', [CetakKartuAngsuranController::class, 'filter'])->name('cetakkartuAngsuran.filter');
     Route::post('/cetak/kartu-angsuran/pdf', [CetakKartuAngsuranController::class, 'cetakPDF'])->name('cetakkartuAngsuran.pdf');
-
+  
+    Route::get('/anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
+    Route::get('/get-kelompok-data', [AnggotaController::class, 'getKelompokData']);
+    Route::post('/cari-ktp', [AnggotaController::class, 'cariKtp']);
+    Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
-    Route::get('/proxy/search', function (Request $request) {
-        $ktp = $request->query('ktp');
-        $response = Http::get("http://185.201.9.210/apimobcol/rmc.php?ktp=$ktp");
-        return $response->json(); // Return JSON langsung ke frontend
-    })->name('proxy.search');
 
     // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
