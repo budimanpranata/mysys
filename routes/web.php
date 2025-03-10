@@ -85,6 +85,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
+    Route::get('/get-kelompok/{cao}', [AnggotaController::class, 'getKelompokByCao']);
 
     // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');

@@ -204,5 +204,25 @@
                 });
             });
         });
+
+        function getKelompokByCao(cao) {
+            if (cao) {
+                fetch(`/get-kelompok/${cao}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let kelompokSelect = document.getElementById('kode_kel');
+                        kelompokSelect.innerHTML = '<option value="">-- PILIH KELOMPOK --</option>';
+                        data.forEach(kelompok => {
+                            let option = document.createElement('option');
+                            option.value = kelompok.code_kel;
+                            option.text = kelompok.nama_kel;
+                            kelompokSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('kode_kel').innerHTML = '<option value="">-- PILIH KELOMPOK --</option>';
+            }
+        }
     </script>
 @endpush

@@ -30,7 +30,7 @@ Jika No CIF berada di AP yang lain atau input di AP berbeda tampilkan alert CIF 
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Kode AO <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="cao" id="cao" class="form-control @error('cao') is-invalid @enderror">
+                                    <select name="cao" id="cao" class="form-control @error('cao') is-invalid @enderror" onchange="getKelompokByCao(this.value)">
                                         <option value="">-- PILIH AO --</option>
                                         @foreach ($ao as $item)
                                             <option value="{{ $item->cao }}" {{ old('cao') == $item->cao ? 'selected' : '' }}>{{ $item->nama_ao }}</option>

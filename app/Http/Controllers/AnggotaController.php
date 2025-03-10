@@ -107,6 +107,12 @@ class AnggotaController extends Controller
         return response()->json($data);
     }
 
+    public function getKelompokByCao($cao)
+    {
+        $kelompok = Kelompok::where('cao', $cao)->get();
+        return response()->json($kelompok);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
