@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
+use App\Http\Controllers\PembiayaanController;
 
 
 //  jika user belum login
@@ -85,6 +86,10 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
     Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
+
+    Route::get('/pembiayaan', [PembiayaanController::class, 'index'])->name('pembiayaan.index');
+    Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
+    Route::get('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
 
     // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
