@@ -55,7 +55,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Fungsi untuk menghasilkan string acak
             function generateRandomString(length) {
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 let result = '';
                 for (let i = 0; i < length; i++) {
                     result += characters.charAt(Math.floor(Math.random() * characters.length));
@@ -64,7 +64,7 @@
             }
 
             // Mengambil elemen input CIF
-            document.getElementById('cif').value = generateRandomString(8);
+            document.getElementById('cif').value = generateRandomString(7);
         });
 
         function openImageModal(imageUrl) {
