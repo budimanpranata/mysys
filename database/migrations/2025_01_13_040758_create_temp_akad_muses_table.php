@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -31,7 +30,7 @@ return new class extends Migration
             $table->bigInteger('bulat');
             $table->string('run_tenor', 2);
             $table->string('ke', 2);
-            $table->string('usaha', 3);
+            $table->string('usaha', 25);
             $table->string('nama_usaha', 50);
             $table->string('unit', 4);
             $table->dateTime('tgl_wakalah');
@@ -39,7 +38,7 @@ return new class extends Migration
             $table->dateTime('tgl_murab');
             $table->dateTime('next_schedule');
             $table->dateTime('maturity_date');
-            $table->date('last_payment');
+            $table->date('last_payment')->nullable();
             $table->string('hari', 10);
             $table->string('cao', 10);
             $table->string('userid', 8)->nullable();

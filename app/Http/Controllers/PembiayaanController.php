@@ -6,6 +6,7 @@ use App\Models\Menu;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PembiayaanController extends Controller
 {
@@ -22,6 +23,13 @@ class PembiayaanController extends Controller
             $anggota = DB::table('anggota')
                 ->leftJoin('kelompok', 'anggota.kode_kel', '=', 'kelompok.code_kel')
                 ->leftJoin('pembiayaan', 'anggota.cif', '=', 'pembiayaan.cif')
+                ->whereNotExists(function ($query) {
+                    $query->select(DB::raw(1))
+                        ->from('temp_akad_mus')
+                        ->whereColumn('temp_akad_mus.no_anggota', 'anggota.no')
+                        ->whereColumn('temp_akad_mus.cif', 'anggota.cif')
+                        ->whereColumn('temp_akad_mus.unit', 'anggota.unit');
+                })
                 ->select(
                     'kelompok.nama_kel as nama_kelompok',
                     'anggota.kode_kel as kode_kel',
@@ -75,8 +83,8 @@ class PembiayaanController extends Controller
                     $nama = $anggota->nama_anggota;
                     $tgl_lahir = $anggota->tanggal_lahir;
 
-                    return '<button onclick="addForm(`' . $url . '`, `' . $cif . '`, `' . $noAnggota . '`, `' . $unitAnggota . '`, `' . $cao . '`, `' . $code_kel . '`, `' . $nama . '`, `' . $tgl_lahir . '`, this.closest(\'tr\'))" 
-                        class="btn btn-sm btn-primary">Edit</button>';
+                    return '<button onclick="addForm(`' . $url . '`, `' . $cif . '`, `' . $noAnggota . '`, `' . $unitAnggota . '`, `' . $cao . '`, `' . $code_kel . '`, `' . $nama . '`, `' . $tgl_lahir . '`)" 
+                    class="btn btn-sm btn-primary">Edit</button>';
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);
@@ -109,10 +117,12 @@ class PembiayaanController extends Controller
                 'tgl_lahir' => 'required|date'
             ]);
 
-            // Check for existing records
             $existingRecord = DB::table('temp_akad_mus')
-                ->where('cif', $validated['cif'])
-                ->orWhere('no_anggota', $validated['no_rek'])
+                ->where(function ($query) use ($validated) {
+                    $query->where('cif', $validated['cif'])
+                        ->orWhere('no_anggota', $validated['no_rek']);
+                })
+                ->select('unit')
                 ->first();
 
             if ($existingRecord) {
@@ -123,7 +133,6 @@ class PembiayaanController extends Controller
                         'message' => 'NIK / CIF already used in another unit'
                     ], 400);
                 } else {
-                    // Same unit, record already exists
                     return response()->json([
                         'status' => 'error',
                         'message' => 'Record already exist'
@@ -131,9 +140,9 @@ class PembiayaanController extends Controller
                 }
             }
 
-            // Validate approved amount against allowed values
             $paramRecord = DB::table('param_biaya')
                 ->where('pla', $validated['disetujui'])
+                ->select('pla', 'margin', 'tab')
                 ->first();
 
             if (!$paramRecord) {
@@ -143,39 +152,31 @@ class PembiayaanController extends Controller
                 ], 400);
             }
 
-            // Calculate financial values based on parameters
-            $saldoMargin = $paramRecord->pla * ($paramRecord->margin / 100);
+            $persenMargin = $paramRecord->margin / 100;
+            $saldoMargin = $paramRecord->pla * $persenMargin;
             $outStanding = $paramRecord->pla + $saldoMargin;
             $pokokAmount = $paramRecord->pla / $validated['tenor'];
             $ijaroh = $saldoMargin / $validated['tenor'];
             $angsuran = $ijaroh + $pokokAmount;
             $bulatAmount = $paramRecord->tab + $angsuran;
-            $persenMargin = ($paramRecord->margin / 100);
 
-            // Check if wakalah date is not Friday
             $wakalahDate = new \DateTime($validated['tgl_wakalah']);
-            $dayOfWeek = $wakalahDate->format('l');
-            if ($dayOfWeek === 'Friday') {
+            if ($wakalahDate->format('N') == 5) { // hari ke-5
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Friday is not a collection date'
                 ], 400);
             }
+            $dayOfWeek = $wakalahDate->format('l');
 
-            // Check customer age
             $birthDate = new \DateTime($validated['tgl_lahir']);
             $today = new \DateTime();
             $age = $today->diff($birthDate)->y;
 
-            $statusUsia = 'NO';
-            $warningMessage = null;
+            $statusUsia = ($age > 50) ? 'DEVIASI' : 'NO';
+            $warningMessage = ($age > 50) ? 'Customer age is over 50 years' : null;
 
-            if ($age > 50) {
-                $statusUsia = 'DEVIASI';
-                $warningMessage = 'Customer age is over 50 years';
-            }
-
-            // Calculate payment schedule dates
+            // Get all holidays from database
             $tanggalLibur = DB::table('param_tgl')
                 ->pluck('param_tgl')
                 ->toArray();
@@ -190,7 +191,6 @@ class PembiayaanController extends Controller
                 $currentDate->addDays(7);
             }
 
-            // Adjust payment dates to avoid holidays
             $adjustedTglJatuhTempo = [];
             foreach ($tglJatuhTempo as $date) {
                 $formattedDate = Carbon::parse($date)->format('Y-m-d'); // Convert to YYYY-MM-DD
@@ -206,15 +206,15 @@ class PembiayaanController extends Controller
             $nextPayment = reset($adjustedTglJatuhTempo);
             $maturityPayment = end($adjustedTglJatuhTempo);
 
-            // Insert record into database
+            // Use one database operation for insert
             DB::table('temp_akad_mus')->insert([
                 'buss_date' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
                 'code_kel' => $validated['code_kel'],
                 'no_anggota' => $validated['no_rek'],
                 'cif' => $validated['cif'],
                 'nama' => $validated['nama'],
-                'deal_type' => '',
-                'suffix' => '',
+                'deal_type' => '1',
+                'suffix' => '1',
                 'bagi_hasil' => $saldoMargin,
                 'tenor' => $validated['tenor'],
                 'plafond' => $validated['disetujui'],

@@ -128,10 +128,6 @@
 
             </div>
 
-            <!-- Hidden input to store id -->
-            <input type="hidden" name="id" id="userId" value="{{ Auth::user()->role_id }}" required>
-            <!-- Hidden input to store param tanggal -->
-            <input type="hidden" name="param_tanggal" id="userDate" value="{{ Auth::user()->param_tanggal }}" required>
             <!-- Hidden input to store code ao -->
             <input type="hidden" name="cao" id="cao" value="" required>
             <!-- Hidden input to store code kelompok -->

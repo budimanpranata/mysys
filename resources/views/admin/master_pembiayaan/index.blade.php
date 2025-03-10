@@ -47,7 +47,6 @@
 
 <script>
   let table;
-  let currentRow;
 
   $(function () {
     table = $('.table').DataTable({
@@ -87,8 +86,8 @@
           tgl_akad: $('#tgl_akad').val(),
           bidang_usaha: $('#bidang_usaha').val(),
           keterangan_usaha: $('#keterangan_usaha').val(),
-          id: $('#id').val(),
-          param_tanggal: $('#param_tanggal').val(),
+          id: "{{ Auth::user()->role_id }}",
+          param_tanggal: "{{ Auth::user()->param_tanggal }}",
           cao: $('#cao').val(),
           code_kel: $('#code_kel').val(),
           nama: $('#nama').val(),
@@ -110,11 +109,7 @@
               }).then(() => {
                 $('#add-form').modal('hide');
 
-                // Remove the row if we have a reference to it
-                if (currentRow) {
-                  table.row(currentRow).remove().draw();
-                  currentRow = null;
-                }
+                table.ajax.reload();
               });
             } else {
               // Handle success response
@@ -125,13 +120,7 @@
               }).then(() => {
                 $('#add-form').modal('hide');
 
-                // Remove the row if we have a reference to it
-                if (currentRow) {
-                  table.row(currentRow).remove().draw();
-                  currentRow = null;
-                } else {
-                  table.ajax.reload();
-                }
+                table.ajax.reload();
               });
             }
           },
@@ -161,15 +150,13 @@
     });
   });
 
-  function addForm(url, cif, no_rek, unit, cao, code_kel, nama, tgl_lahir, row) {
+  function addForm(url, cif, no_rek, unit, cao, code_kel, nama, tgl_lahir) {
     $('#add-form').modal('show');
     $('#add-form .modal-title').text('Pengajuan Pembiayaan');
 
     $('#add-form form')[0].reset();
     $('#add-form form').attr('action', url);
     $('#add-form [name=_method]').val('post');
-
-    currentRow = row;
 
     // autofill field (readonly/hidden)
     $('#cif').val(cif);

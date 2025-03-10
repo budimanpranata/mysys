@@ -79,7 +79,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/cetak/kartu-angsuran', [CetakKartuAngsuranController::class, 'index'])->name('cetakkartuAngsuran');
     Route::post('/cetak/kartu-angsuran/filter', [CetakKartuAngsuranController::class, 'filter'])->name('cetakkartuAngsuran.filter');
     Route::post('/cetak/kartu-angsuran/pdf', [CetakKartuAngsuranController::class, 'cetakPDF'])->name('cetakkartuAngsuran.pdf');
-  
+
     Route::get('/anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::get('/get-kelompok-data', [AnggotaController::class, 'getKelompokData']);
     Route::post('/cari-ktp', [AnggotaController::class, 'cariKtp']);
@@ -89,7 +89,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/pembiayaan', [PembiayaanController::class, 'index'])->name('pembiayaan.index');
     Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
-    Route::get('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
+    Route::post('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
 
     // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
