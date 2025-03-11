@@ -39,6 +39,7 @@ class PembiayaanController extends Controller
                     'anggota.cao as anggota_cao',
                     'anggota.nama as nama_anggota',
                     'anggota.tgl_lahir as tanggal_lahir',
+                    'pembiayaan.suffix as suffix',
                     DB::raw('COALESCE(pembiayaan.plafond, 0) as plafond'),
                     DB::raw('COALESCE(pembiayaan.os, 0) as os'),
                     DB::raw('COALESCE(pembiayaan.tenor, 0) as tenor')
@@ -82,8 +83,9 @@ class PembiayaanController extends Controller
                     $code_kel = $anggota->kode_kel;
                     $nama = $anggota->nama_anggota;
                     $tgl_lahir = $anggota->tanggal_lahir;
+                    $suffix = $anggota->suffix;
 
-                    return '<button onclick="addForm(`' . $url . '`, `' . $cif . '`, `' . $noAnggota . '`, `' . $unitAnggota . '`, `' . $cao . '`, `' . $code_kel . '`, `' . $nama . '`, `' . $tgl_lahir . '`)" 
+                    return '<button onclick="addForm(`' . $url . '`, `' . $cif . '`, `' . $noAnggota . '`, `' . $unitAnggota . '`, `' . $cao . '`, `' . $code_kel . '`, `' . $nama . '`, `' . $tgl_lahir . '`, `' . $suffix . '`)" 
                     class="btn btn-sm btn-primary">Edit</button>';
                 })
                 ->rawColumns(['aksi'])
@@ -114,8 +116,12 @@ class PembiayaanController extends Controller
                 'cao' => 'required|string',
                 'code_kel' => 'required|string',
                 'nama' => 'required|string',
-                'tgl_lahir' => 'required|date'
+                'tgl_lahir' => 'required|date',
+                'suffix' => 'required|string'
             ]);
+
+            $validated['suffix'] = (int) $validated['suffix'] + 1;
+            $validated['suffix'] = (string) $validated['suffix'];
 
             $existingRecord = DB::table('temp_akad_mus')
                 ->where(function ($query) use ($validated) {
@@ -214,7 +220,7 @@ class PembiayaanController extends Controller
                 'cif' => $validated['cif'],
                 'nama' => $validated['nama'],
                 'deal_type' => '1',
-                'suffix' => '1',
+                'suffix' => $validated['suffix'],
                 'bagi_hasil' => $saldoMargin,
                 'tenor' => $validated['tenor'],
                 'plafond' => $validated['disetujui'],

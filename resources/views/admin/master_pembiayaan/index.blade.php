@@ -92,6 +92,7 @@
           code_kel: $('#code_kel').val(),
           nama: $('#nama').val(),
           tgl_lahir: $('#tgl_lahir').val(),
+          suffix: $('#suffix').val(),
         };
 
         $.ajax({
@@ -150,7 +151,7 @@
     });
   });
 
-  function addForm(url, cif, no_rek, unit, cao, code_kel, nama, tgl_lahir) {
+  function addForm(url, cif, no_rek, unit, cao, code_kel, nama, tgl_lahir, suffix) {
     $('#add-form').modal('show');
     $('#add-form .modal-title').text('Pengajuan Pembiayaan');
 
@@ -166,6 +167,7 @@
     $('#code_kel').val(code_kel);
     $('#nama').val(nama);
     $('#tgl_lahir').val(tgl_lahir);
+    $('#suffix').val(suffix);
 
     $('#modal-form [name=produk]').focus();
   }

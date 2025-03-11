@@ -136,6 +136,8 @@
             <input type="hidden" name="nama" id="nama" value="" required>
             <!-- Hidden input to store tanggal lahir -->
             <input type="hidden" name="tgl_lahir" id="tgl_lahir" value="" required>
+            <!-- Hidden input to store suffix -->
+            <input type="hidden" name="suffix" id="suffix" value="" required>
           </div>
 
         </div>
