@@ -215,7 +215,7 @@ Jika No CIF berada di AP yang lain atau input di AP berbeda tampilkan alert CIF 
                             <fieldset id="alamatDomisili">
 
                                 <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                                    <label class="col-sm-4 col-form-label mx-auto">Isi Alamat Domisili</label>
+                                    <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT DOMISILI</label>
                                 </div>
 
                                 <div class="form-group row">

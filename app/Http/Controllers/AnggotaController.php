@@ -120,6 +120,8 @@ class AnggotaController extends Controller
     public function store(Request $request)
     {
         // dd($request);
+        $unit = Auth::user()->unit;
+
         $request->validate([
             'cao' => 'required',
             'kode_kel' => 'required',
@@ -139,7 +141,16 @@ class AnggotaController extends Controller
                     }
                 },
             ],
-            'ktp' => 'required|digits:16',
+            'ktp' => [
+                'required',
+                'digits:16',
+                function ($attribute, $value, $fail) use ($unit) {
+                    $existingAnggota = Anggota::where('ktp', $value)->first();
+                    if ($existingAnggota && $existingAnggota->unit == $unit) {
+                        $fail('NIK sudah ada di unit lain.');
+                    }
+                },
+            ],
             'kewarganegaraan' => 'required',
             'status_menikah' => 'required',
             'agama' => 'required',
@@ -183,7 +194,7 @@ class AnggotaController extends Controller
             Log::info('Data yang diterima:', $request->all());
 
             // Generate no anggota
-            $unit = Auth::user()->unit;
+            // $unit = Auth::user()->unit;
             $date = Carbon::now()->format('ymd'); // Format tanggal: TahunBulanTanggal (20231025)
             // $lastAnggota = Anggota::whereDate('created_at', Carbon::today())->latest()->first();
             $lastAnggota = Anggota::latest()->first(); // Ambil record terakhir
@@ -232,12 +243,13 @@ class AnggotaController extends Controller
             ]);
     
             AnggotaDetail::create([
-                'no_anggota' => $noAnggota, // no anggita dari tabel anggota
-                'alamat_domisili' => strtoupper($request->alamat_domisili),
-                'rtrw_domisili' => strtoupper($request->rtrw_domisili),
-                'desa_domisili' => strtoupper($request->desa_domisili),
-                'kecamatan_domisili' => strtoupper($request->kecamatan_domisili),
-                'kode_pos_domisili' => strtoupper($request->kode_pos_domisili),
+                'no_anggota' => $noAnggota,
+                'alamat_domisili' => strtoupper($request->alamat_domisili ?? $request->alamat),
+                'rtrw_domisili' => strtoupper($request->rtrw_domisili ?? $request->rtrw),
+                'desa_domisili' => strtoupper($request->desa_domisili ?? $request->desa),
+                'kecamatan_domisili' => strtoupper($request->kecamatan_domisili ?? $request->kecamatan),
+                'kota_domisili' => strtoupper($request->kota_domisili ?? $request->kota),
+                'kode_pos_domisili' => strtoupper($request->kode_pos_domisili ?? $request->kode_pos),
             ]);
 
             Log::info('Data anggota berhasil disimpan:', $anggota->toArray());
@@ -274,10 +286,11 @@ class AnggotaController extends Controller
     {
         $title = 'Edit data Anggota';
         $anggota = Anggota::where('no', $id)->firstOrFail();
+        $anggota_detail = AnggotaDetail::where('no_anggota', $id)->first();
         $ao = ao::all();
         $kelompok = Kelompok::all();
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
-        return view('admin.master_anggota.edit', compact('anggota','title','ao', 'kelompok', 'menus'));
+        return view('admin.master_anggota.edit', compact('anggota','title','ao', 'kelompok', 'menus', 'anggota_detail'));
     }
 
     /**
@@ -285,59 +298,84 @@ class AnggotaController extends Controller
      */
     public function update(Request $request, string $id)
     {
+
+        $unit = Auth::user()->unit;
+
         try {
             // Log data yang diterima
             Log::info('Data yang diterima:', $request->all());
-
-            $anggota = Anggota::where('no', $id)->first();
-
+    
+            $anggota = Anggota::where('no', $id)->firstOrFail();
+    
             $anggota->update([
-                'unit' => Auth::user()->unit,
-                'kode_kel' => $request->kode_kel,
-                'cif' => $request->cif,
-                'nama' => $request->nama,
+                'unit' => $unit,
+                'kode_kel' => strtoupper($request->kode_kel),
+                'cif' => strtoupper($request->cif),
+                'nama' => strtoupper($request->nama),
                 'deal_type' => '1',
-                'alamat' => $request->alamat,
-                'desa' => $request->desa,
-                'kecamatan' => $request->kecamatan,
-                'kota' => $request->kota,
-                'rtrw' => $request->rtrw,
-                'no_hp' => $request->no_hp,
-                'hp_pasangan' => $request->hp_pasangan,
+                'alamat' => strtoupper($request->alamat),
+                'desa' => strtoupper($request->desa),
+                'kecamatan' => strtoupper($request->kecamatan),
+                'kota' => strtoupper($request->kota),
+                'rtrw' => strtoupper($request->rtrw),
+                'no_hp' => strtoupper($request->no_hp),
+                'hp_pasangan' => strtoupper($request->hp_pasangan),
                 'kelamin' => 'P',
                 'tgl_lahir' => $request->tgl_lahir,
-                'ktp' => $request->ktp,
-                'kewarganegaraan' => $request->kewarganegaraan,
-                'status_menikah' => $request->status_menikah,
-                'agama' => $request->agama,
-                'ibu_kandung' => $request->ibu_kandung,
+                'ktp' => strtoupper($request->ktp),
+                'kewarganegaraan' => strtoupper($request->kewarganegaraan),
+                'status_menikah' => strtoupper($request->status_menikah),
+                'agama' => strtoupper($request->agama),
+                'ibu_kandung' => strtoupper($request->ibu_kandung),
                 'npwp' => 0,
                 'source_income' => 1,
-                'pendidikan' => $request->pendidikan,
-                'tempat_lahir' => $request->tempat_lahir,
+                'pendidikan' => strtoupper($request->pendidikan),
+                'tempat_lahir' => strtoupper($request->tempat_lahir),
                 'id_expired' => 0,
-                'waris' => $request->waris,
-                'cao' => $request->cao,
+                'waris' => strtoupper($request->waris),
+                'cao' => strtoupper($request->cao),
                 'userid' => Auth::id(),
                 'status' => 'ANGGOTA',
-                'pekerjaan_pasangan' => $request->pekerjaan_pasangan,
-                'kode_pos' => $request->kode_pos,
+                'pekerjaan_pasangan' => strtoupper($request->pekerjaan_pasangan),
+                'kode_pos' => strtoupper($request->kode_pos),
             ]);
 
-            Log::info('Data anggota berhasil disimpan:', $anggota->toArray());
+            $anggotaDetail = AnggotaDetail::where('no_anggota', $id)->first();
+            if ($anggotaDetail) {
+                $anggotaDetail->update([
+                    'alamat_domisili' => strtoupper($request->alamat_domisili ?? $request->alamat),
+                    'rtrw_domisili' => strtoupper($request->rtrw_domisili ?? $request->rtrw),
+                    'desa_domisili' => strtoupper($request->desa_domisili ?? $request->desa),
+                    'kecamatan_domisili' => strtoupper($request->kecamatan_domisili ?? $request->kecamatan),
+                    'kota_domisili' => strtoupper($request->kota_domisili ?? $request->kota),
+                    'kode_pos_domisili' => strtoupper($request->kode_pos_domisili ?? $request->kode_pos),
+                ]);
+            } else {
+                AnggotaDetail::create([
+                    'no_anggota' => $id,
+                    'alamat_domisili' => strtoupper($request->alamat_domisili ?? $request->alamat),
+                    'rtrw_domisili' => strtoupper($request->rtrw_domisili ?? $request->rtrw),
+                    'desa_domisili' => strtoupper($request->desa_domisili ?? $request->desa),
+                    'kecamatan_domisili' => strtoupper($request->kecamatan_domisili ?? $request->kecamatan),
+                    'kota_domisili' => strtoupper($request->kota_domisili ?? $request->kota),
+                    'kode_pos_domisili' => strtoupper($request->kode_pos_domisili ?? $request->kode_pos),
+                ]);
+            }
+    
+            Log::info('Data anggota berhasil diperbarui:', $anggota->toArray());
         
-            alert()->success('Berhasil!', 'Data Berhasil Disimpan.');
+            alert()->success('Berhasil!', 'Data Berhasil Diperbarui.');
             return redirect()->route('anggota.index');
-
+    
         } catch (\Throwable $th) {
             // Log error yang terjadi
-            Log::error('Error saat menyimpan data anggota:', [
+            Log::error('Error saat memperbarui data anggota:', [
                 'message' => $th->getMessage(),
                 'trace' => $th->getTraceAsString()
             ]);
-
+    
             // Redirect dengan pesan error
-            alert()->error('Gagal!', 'Gagal saat menyimpan data.');
+            alert()->error('Gagal!', 'Gagal saat memperbarui data.');
             return redirect()->back()->withInput()->with(['error' => 'Terjadi kesalahan: ' . $th->getMessage()]);
         }
     }

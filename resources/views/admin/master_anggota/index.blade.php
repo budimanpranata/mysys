@@ -16,13 +16,26 @@
 
 @section('content')
     <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <a href="{{ route('anggota.create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
+                        <button onclick="addForm('{{ route('kelompok.store') }}')" class="btn btn-sm btn-primary">+ Tambah Kelompok</button>
+                        <a href="{{ route('anggota.export') }}" class="btn btn-sm btn-success ml-auto">Export Excel</a>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
+                {{-- <div class="card-header">
                     <a href="{{ route('anggota.create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
                     <a href="{{ route('anggota.export') }}" class="btn btn-sm btn-success">Export Excel</a>
                     <button onclick="addForm('{{ route('kelompok.store') }}')" class="btn btn-sm btn-primary">+ Tambah Kelompok</button>
-                </div>
+                </div> --}}
                 <div class="card-body">
                     <table class="table table-bordered table-hover">
                         <thead>

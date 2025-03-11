@@ -120,7 +120,7 @@
                             </div>
 
                             <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                                <label class="col-sm-4 col-form-label mx-auto">Isi alamat sesuai KTP</label>
+                                <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT SESUAI KTP</label>
                             </div>
 
                             <div class="form-group row">
@@ -193,6 +193,90 @@
                                 </div>
                             </div>
 
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="sameAddress" onclick="toggleAlamatDomisili()">
+                                <label class="form-check-label" for="sameAddress">
+                                    ALAMAT DOMISILI SAMA DENGAN ALAMAT SESUAI
+                                </label>
+                            </div>
+                            
+                            <fieldset id="alamatDomisili">
+
+                                <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
+                                    <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT DOMISILI</label>
+                                </div>
+
+                                <div class="form-group row">
+                                    <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
+                                    <div class="col-sm-7">
+                                        <textarea name="alamat_domisili" class="form-control @error('alamat_domisili') is-invalid @enderror" id="alamat_domisili" cols="5" rows="3"
+                                            placeholder="Masukkan Alamat" style="text-transform: uppercase;">{{ old('alamat_domisili', $anggota_detail->alamat_domisili) }}</textarea>
+                                            @error('alamat_domisili')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control @error('rtrw_domisili') is-invalid @enderror" name="rtrw_domisili" value="{{ old('rtrw_domisili', $anggota_detail->rtrw_domisili) }}" id="rtrw"
+                                            placeholder="Masukkan RT/RW" style="text-transform: uppercase;">
+                                            @error('rtrw_domisili')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <span class="col-sm-4 col-form-label">Kelurahan/Desa <span
+                                            class="text-danger">*</span></span>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control @error('desa_domisili') is-invalid @enderror" name="desa_domisili" value="{{ old('desa_domisili', $anggota_detail->desa_domisili) }}" id="desa"
+                                            placeholder="Masukkan Kelurahan/Desa" style="text-transform: uppercase;">
+                                            @error('desa_domisili')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <span class="col-sm-4 col-form-label">Kecamatan <span
+                                            class="text-danger">*</span></span>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control @error('kecamatan_domisili') is-invalid @enderror" name="kecamatan_domisili" value="{{ old('kecamatan_domisili', $anggota_detail->kecamatan_domisili) }}" id="kecamatan"
+                                            placeholder="Masukkan Kecamatan" style="text-transform: uppercase;">
+                                            @error('kecamatan_domisili')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <span class="col-sm-4 col-form-label">Kabupaten <span
+                                            class="text-danger">*</span></span>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control @error('kota_domisili') is-invalid @enderror" name="kota_domisili" value="{{ old('kota_domisili', $anggota_detail->kota_domisili) }}" id="kota"
+                                            placeholder="Masukkan Kabupaten" style="text-transform: uppercase;">
+                                            @error('kota_domisili')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                </div>
+    
+                                <div class="form-group row">
+                                    <span class="col-sm-4 col-form-label">Kode Pos <span
+                                            class="text-danger">*</span></span>
+                                    <div class="col-sm-7">
+                                        <input type="text" class="form-control @error('kode_pos_domisili') is-invalid @enderror" name="kode_pos_domisili" value="{{ old('kode_pos_domisili', $anggota_detail->kode_pos_domisili) }}" id="kode_pos"
+                                            placeholder="Masukkan Kode POS" style="text-transform: uppercase;">
+                                            @error('kode_pos_domisili')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                    </div>
+                                </div>
+                            </fieldset>
+
                         </div>
 
                         <div class="col-md-6">
@@ -201,22 +285,22 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <select name="status_menikah" id="status_menikah" class="form-control @error('status_menikah') is-invalid @enderror">
-                                        <option hidden value="">-- Pilih Status Perkawinan --</option>
-                                        <option value="Menikah"
-                                        @if ($anggota->status_menikah = 'Menikah')
+                                        <option hidden value="">-- PILIH STATUS PERKAWINAN --</option>
+                                        <option value="MENIKAH"
+                                        @if ($anggota->status_menikah = 'MENIKAH')
                                             selected
                                         @endif
-                                        >Menikah</option>
-                                        <option value="Belum Menikah"
-                                        @if ($anggota->status_menikah = 'Belum Menikah')
+                                        >MENIKAH</option>
+                                        <option value="BELUM MENIKAH"
+                                        @if ($anggota->status_menikah = 'BELUM MENIKAH')
                                             selected
                                         @endif
-                                        >Belum Menikah</option>
-                                        <option value="Janda"
-                                        @if ($anggota->status_menikah = 'Janda')
+                                        >BELUM MENIKAH</option>
+                                        <option value="JANDA"
+                                        @if ($anggota->status_menikah = 'JANDA')
                                             selected
                                         @endif
-                                        >Janda</option>
+                                        >JANDA</option>
                                     </select>
                                     @error('status_menikah')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -228,32 +312,32 @@
                                 <span class="col-sm-4 col-form-label">Agama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
-                                        <option hidden value="">-- Pilih Agama --</option>
-                                        <option value="Islam"
-                                        @if ($anggota->agama = 'Islam')
+                                        <option hidden value="">-- PILIH AGAMA --</option>
+                                        <option value="ISLAM"
+                                        @if ($anggota->agama = 'ISLAM')
                                             selected
                                         @endif
-                                        >Islam</option>
-                                        <option value="Kristen"
-                                        @if ($anggota->agama = 'Kristen')
+                                        >ISLAM</option>
+                                        <option value="KRISTEN"
+                                        @if ($anggota->agama = 'KRISTEN')
                                             selected
                                         @endif
-                                        >Kristen</option>
-                                        <option value="Hindu"
-                                        @if ($anggota->agama = 'Hindu')
+                                        >KRISTEN</option>
+                                        <option value="HINDU"
+                                        @if ($anggota->agama = 'HINDU')
                                                     selected
                                                 @endif
-                                        >Hindu</option>
-                                        <option value="Buddha"
-                                        @if ($anggota->agama = 'Buddha')
+                                        >HINDU</option>
+                                        <option value="BUDDHA"
+                                        @if ($anggota->agama = 'BUDDHA')
                                             selected
                                         @endif
-                                        >Buddha</option>
-                                        <option value="Konghucu"
-                                        @if ($anggota->agama = 'Konghucu')
+                                        >BUDDHA</option>
+                                        <option value="KONGHUCU"
+                                        @if ($anggota->agama = 'KONGHUCU')
                                             selected
                                         @endif
-                                        >Konghucu</option>
+                                        >KONGHUCU</option>
                                     </select>
                                     @error('agama')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -266,7 +350,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <select name="pendidikan" id="pendidikan" class="form-control @error('pendidikan') is-invalid @enderror">
-                                        <option hidden value="">-- Pilih Pendidikan --</option>
+                                        <option hidden value="">-- PILIH PENDIDIKAN --</option>
                                         <option value="SD"
                                         @if ($anggota->pendidikan = 'SD')
                                             selected
@@ -295,8 +379,8 @@
                                 <div class="col-sm-7">
                                     <select name="kewarganegaraan" id="kewarganegaraan" class="form-control @error('kewarganegaraan') is-invalid @enderror"
                                     >
-                                        <option hidden value="">-- Pilih Kewarganegaraan --</option>
-                                        <option selected value="Indonesia">Indonesia</option>
+                                        <option hidden value="">-- PILIH KEWARGANEGARAAN --</option>
+                                        <option selected value="INDONESIA">INDONESIA</option>
                                     </select>
                                     @error('kewarganegaraan')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -373,7 +457,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Kembali</button>
+                    <a href="{{ route('anggota.index') }}" class="btn btn-sm btn-danger">Kembali</a>
                 </div>
             </div>
             

@@ -172,38 +172,16 @@
                 `;
             } catch (error) {
                 // Tampilkan pesan error
-                resultContainer.innerHTML = `<p style="color: red;">${error.message}</p>`;
+                resultContainer.innerHTML = `
+                    <div class="col-sm-11">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <p>Data tidak ditemukan</p>
+                        </div>
+                    </div>
+                `;
             }
         }
-
-        $(document).ready(function() {
-            // Handle form submission
-            $('#form-tambah-anggota').on('submit', function(e) {
-                e.preventDefault(); // Mencegah form submit default
-
-                $.ajax({
-                    url: '/anggota',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
-                            alert(response.message);
-                        } else {
-                            alert('Gagal: ' + response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        // Tangani error
-                        var response = xhr.responseJSON;
-                        if (response && response.message) {
-                            alert('Error: ' + response.message);
-                        } else {
-                            alert('Terjadi kesalahan pada server.');
-                        }
-                    }
-                });
-            });
-        });
 
         function getKelompokByCao(cao) {
             if (cao) {
