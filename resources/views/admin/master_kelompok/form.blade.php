@@ -13,16 +13,17 @@
                 <div class="modal-body">
 
                     <div class="form-group">
+                        <label>Kode Unit</label>
+                        <input type="text" class="form-control" name="code_unit" id="code_unit" value="{{ Auth::user()->unit }}" readonly required>
+                        <span class="help-block with-errors text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
                         <label>Nama Kelompok</label>
                         <input type="text" class="form-control" name="nama_kel" id="nama_kel" required autofocus>
                         <span class="help-block with-errors text-danger"></span>
                     </div>
 
-                    <div class="form-group">
-                        <label>Kode Unit</label>
-                        <input type="text" class="form-control" name="code_unit" id="code_unit" required autofocus>
-                        <span class="help-block with-errors text-danger"></span>
-                    </div>
 
                     <div class="form-group">
                         <label>Pilih AO</label>
@@ -41,9 +42,20 @@
                         <span class="help-block with-errors text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label>CIF Ketua</label>
                         <input type="text" class="form-control" name="cif" id="cif" required>
+                        <span class="help-block with-errors text-danger"></span>
+                    </div> --}}
+
+                    <div class="form-group">
+                        <label>CIF Ketua</label>
+                        <select name="cif" id="cif" class="form-control select2bs4" required>
+                            <option hidden value="">-- Pilih CIF Ketua --</option>
+                            @foreach ($anggota as $item)
+                                <option value="{{ $item->cif }}">{{ $item->cif }} - {{ $item->nama }}</option>
+                            @endforeach
+                        </select>
                         <span class="help-block with-errors text-danger"></span>
                     </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ao;
 use App\Models\Kelompok;
+use App\Models\Anggota;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,7 +36,8 @@ class KelompokController extends Controller
         $title = 'Master Kelompok';
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
         $ao = ao::all();
-        return view('admin.master_kelompok.index', compact('menus', 'title', 'ao'));
+        $anggota = Anggota::all();
+        return view('admin.master_kelompok.index', compact('menus', 'title', 'ao', 'anggota'));
     }
 
     /**

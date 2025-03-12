@@ -18,6 +18,10 @@
     <!-- DataTables -->
     <link rel="stylesheet" href="{{ asset('plugins') }}/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="{{ asset('plugins') }}/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+      <!-- Select2 -->
+  <link rel="stylesheet" href="{{ asset('plugins') }}/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ asset('plugins') }}/select2-bootstrap4-theme/select2-bootstrap4.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -72,13 +76,29 @@
     <script src="{{ asset('plugins') }}/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('plugins') }}/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="{{ asset('plugins') }}/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
+    
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Select2 -->
+    <script src="{{ asset('plugins') }}/select2/js/select2.full.min.js"></script>
 
     <!-- Sweet Alert -->
     @include('sweetalert::alert')
     @stack('scripts')
+
+    <script>
+          $(function () {
+            // //Initialize Select2 Elements
+            // $('.select2').select2()
+
+            //Initialize Select2 Elements
+            $('.select2bs4').select2({
+            theme: 'bootstrap4'
+            })
+        });
+    </script>
 
 </body>
 
