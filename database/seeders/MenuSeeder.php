@@ -45,7 +45,7 @@ class MenuSeeder extends Seeder
             'name' => 'Input Data Pembiayaan',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $masterData->id,
-            'url' => '/dashboard-v2',
+            'url' => '/pembiayaan',
             'left' => 'null',
             'order' => 2,
         ]);
