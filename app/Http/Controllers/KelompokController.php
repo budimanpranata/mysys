@@ -40,6 +40,26 @@ class KelompokController extends Controller
         return view('admin.master_kelompok.index', compact('menus', 'title', 'ao', 'anggota'));
     }
 
+    public function getAnggotaByCif($cif)
+    {
+        // Cari anggota berdasarkan cif
+        $anggota = Anggota::where('cif', $cif)->first();
+
+        // Jika data ditemukan, kembalikan response JSON
+        if ($anggota) {
+            return response()->json([
+                'success' => true,
+                'data' => $anggota
+            ]);
+        }
+
+        // Jika data tidak ditemukan
+        return response()->json([
+            'success' => false,
+            'message' => 'Data tidak ditemukan'
+        ], 404);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -64,17 +84,30 @@ class KelompokController extends Controller
                 'no_tlp' => 'required|max:13|min:11',
             ]);
 
-            $total_records = Kelompok::count();
-            $kelompok = Kelompok::latest()->first() ?? new Kelompok();
-            $validated['code_kel'] = $request->code_unit . '-' . tambah_nol_didepan((int)$kelompok->code_kel +$total_records, 4);
-    
+            // Generate kode kelompok
+            $lastKelompok = Kelompok::latest()->first(); // Ambil record terakhir
+
+            // Nomor urut
+            $sequence = $lastKelompok ? intval(substr($lastKelompok->code_kel, -4)) + 1 : 1;
+            $sequenceFormatted = str_pad($sequence, 4, '0', STR_PAD_LEFT);
+
+            // Gabungkan kode kelompok
+            $validated['code_kel'] = $request->code_unit . '-' . $sequenceFormatted;
+
+            $validated['code_unit'] = strtoupper($validated['code_unit']);
+            $validated['nama_kel'] = strtoupper($validated['nama_kel']);
+            $validated['alamat'] = strtoupper($validated['alamat']);
+            $validated['cao'] = strtoupper($validated['cao']);
+            $validated['cif'] = strtoupper($validated['cif']);
+            $validated['no_tlp'] = strtoupper($validated['no_tlp']);
+
             Kelompok::create($validated);
-    
+
             return response()->json(['message' => 'Data berhasil disimpan'], 200);
         } catch (\Exception $e) {
             // log untuk debugging
             Log::error('Error saat menyimpan data: ' . $e->getMessage());
-    
+
             return response()->json(['message' => 'Terjadi kesalahan'], 500);
         }
     }
