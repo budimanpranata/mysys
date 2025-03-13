@@ -46,7 +46,7 @@
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         let table;
 
@@ -102,7 +102,7 @@
                     })
                     .done((response) => {
                         Swal.fire({
-                            title: 'Data berhasil diinput!',
+                            title: 'Data berhasil disimpan!',
                             icon: 'success',
                             confirmButtonText: 'OK'
                         });
@@ -191,6 +191,41 @@
             });
         }
 
+        document.addEventListener('DOMContentLoaded', function() {
+            const uppercaseElements = document.querySelectorAll('.uppercase');
+
+            uppercaseElements.forEach(function(element) {
+                element.addEventListener('input', function() {
+                    element.value = element.value.toUpperCase();
+                });
+            });
+        });
+
+        $(document).ready(function() {
+            $('#cif').change(function() {
+                var cif = $(this).val();
+
+                if (cif) {
+                    $.ajax({
+                        url: '/get-anggota/' + cif,
+                        type: 'GET',
+                        success: function(response) {
+                            if (response.success) {
+                                $('#no_tlp').val(response.data.no_hp);
+                            } else {
+                                $('#no_tlp').val('');
+                                alert(response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('Terjadi kesalahan saat memuat data.');
+                        }
+                    });
+                } else {
+                    $('#no_tlp').val('');
+                }
+            });
+        });
 
     </script>
 @endpush

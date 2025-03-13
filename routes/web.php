@@ -88,11 +88,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::resource('anggota', AnggotaController::class);
     Route::get('/get-kelompok/{cao}', [AnggotaController::class, 'getKelompokByCao']);
 
+    Route::get('/get-anggota/{cif}', [KelompokController::class, 'getAnggotaByCif']);
     Route::get('/pembiayaan', [PembiayaanController::class, 'index'])->name('pembiayaan.index');
     Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
     Route::post('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
 
-    // DOMpdf
+  // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
     Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateApprovalPdf'])->name('pdf.generateApproval');

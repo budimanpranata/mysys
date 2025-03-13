@@ -20,9 +20,9 @@
             <div class="card">
                 <div class="card-body">
                     <div>
-                        <a href="{{ route('anggota.create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
-                        <button onclick="addForm('{{ route('kelompok.store') }}')" class="btn btn-sm btn-primary">+ Tambah Kelompok</button>
-                        <a href="{{ route('anggota.export') }}" class="btn btn-sm btn-success ml-auto">Export Excel</a>
+                        <a href="{{ route('anggota.create') }}" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Tambah</a>
+                        <button onclick="addForm('{{ route('kelompok.store') }}')" class="btn btn-sm btn-primary"><i class="fas fa-plus"></i> Tambah Kelompok</button>
+                        <a href="{{ route('anggota.export') }}" class="btn btn-sm btn-success ml-auto"><i class="fas fa-file-export"></i> Export Excel</a>
                     </div>
                     <div>
                     </div>
@@ -31,11 +31,6 @@
         </div>
         <div class="col-12">
             <div class="card">
-                {{-- <div class="card-header">
-                    <a href="{{ route('anggota.create') }}" class="btn btn-sm btn-primary">+ Tambah</a>
-                    <a href="{{ route('anggota.export') }}" class="btn btn-sm btn-success">Export Excel</a>
-                    <button onclick="addForm('{{ route('kelompok.store') }}')" class="btn btn-sm btn-primary">+ Tambah Kelompok</button>
-                </div> --}}
                 <div class="card-body">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -147,30 +142,41 @@
             $('#modal-form [name=code_kel]').focus();
         }
 
-        function editForm(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Edit Produk');
+        document.addEventListener('DOMContentLoaded', function() {
+            const uppercaseElements = document.querySelectorAll('.uppercase');
 
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('put');
-            $('#modal-form [name=code_kel]').focus();
+            uppercaseElements.forEach(function(element) {
+                element.addEventListener('input', function() {
+                    element.value = element.value.toUpperCase();
+                });
+            });
+        });
 
-            $.get(url)
-            .done((response) => {
-                $('#modal-form [name=code_kel]').val(response.code_kel);
-                $('#modal-form [name=code_unit]').val(response.code_unit);
-                $('#modal-form [name=nama_kel]').val(response.nama_kel);
-                $('#modal-form [name=alamat]').val(response.alamat);
-                $('#modal-form [name=cao]').val(response.cao);
-                $('#modal-form [name=cif]').val(response.cif);
-                $('#modal-form [name=no_tlp]').val(response.no_tlp);
-            })
-            .fail((errors) => {
-                alert('Tidak dapat menampilkan data.');
-                return;
-            })
-        }
+        $(document).ready(function() {
+            $('#cif').change(function() {
+                var cif = $(this).val();
+
+                if (cif) {
+                    $.ajax({
+                        url: '/get-anggota/' + cif,
+                        type: 'GET',
+                        success: function(response) {
+                            if (response.success) {
+                                $('#no_tlp').val(response.data.no_hp);
+                            } else {
+                                $('#no_tlp').val('');
+                                alert(response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('Terjadi kesalahan saat memuat data.');
+                        }
+                    });
+                } else {
+                    $('#no_tlp').val('');
+                }
+            });
+        });
 
     </script>
 @endpush

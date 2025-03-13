@@ -42,8 +42,9 @@ class AnggotaController extends Controller
     {
         $title = 'Master Anggota';
         $ao = ao::all();
+        $anggota = Anggota::all();
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
-        return view('admin.master_anggota.index', compact('title', 'ao', 'menus'));
+        return view('admin.master_anggota.index', compact('title', 'ao', 'menus', 'anggota'));
     }
 
     /**
