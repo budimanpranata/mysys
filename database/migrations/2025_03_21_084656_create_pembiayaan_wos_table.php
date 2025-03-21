@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pembiayaan_wos', function (Blueprint $table) {
-            $table->id();
             $table->dateTime('buss_date'); // tanggal wo
             $table->string('code_kel', 16);
             $table->string('no_anggota', 16);

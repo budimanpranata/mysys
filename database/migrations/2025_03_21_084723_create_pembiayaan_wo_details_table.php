@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('pembiayaan_wo_details', function (Blueprint $table) {
             $table->id();
-            $table->string('cif', 8)->unsigned();
-            $table->integer('user_id');
-            $table->integer('user_id_approval')->nullable();
+            $table->string('cif', 8);
+            $table->integer('user_id')->unsigned();
+            $table->integer('user_id_approval')->unsigned()->nullable();
             $table->bigInteger('nominal_wo');
             $table->string('status_wo', 20); // ambil dari status anggota
             $table->string('no_rekening', 20);

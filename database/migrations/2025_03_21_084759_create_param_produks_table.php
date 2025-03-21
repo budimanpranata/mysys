@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('param_produks', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_unit', 4)->unsigned();
+            $table->string('kode_unit', 4);
             $table->string('nama_produk', 50);
             $table->timestamps();
         });
