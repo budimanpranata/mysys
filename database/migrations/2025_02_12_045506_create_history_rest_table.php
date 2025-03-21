@@ -23,6 +23,11 @@ return new class extends Migration
             $table->integer('tenor');
             $table->string('jenis_rest', 50);
             $table->string('status', 50);
+            $table->bigInteger('angsuran_baru');
+            $table->integer('tenor_baru');
+            $table->bigInteger('jatpo_baru');
+            $table->dateTime('tgl_jatpo');
+            $table->dateTime('tgl_akad_baru');
             $table->timestamps();
         });
     }
