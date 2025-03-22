@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('code_unit', 4);
             $table->string('nama_kel', 40);
             $table->string('alamat', 80);
-            $table->string('cao', 10;
+            $table->string('cao', 10);
             $table->string('cif', 10);
             $table->string('no_tlp', 16);
             $table->index('cao');
