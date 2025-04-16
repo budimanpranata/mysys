@@ -190,7 +190,7 @@ class MenuSeeder extends Seeder
             'name' => 'Pembatalan Wakalah',
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $Realisasi->id,
-            'url' => '/dashboard-v3',
+            'url' => '/realisasi/pembatalan-wakalah',
             'left' => 'null',
             'order' => 16,
         ]);

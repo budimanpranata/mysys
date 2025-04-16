@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
 use App\Http\Controllers\PembiayaanController;
+use App\Http\Controllers\PembatalanWakalahController;
 
 
 //  jika user belum login
@@ -93,10 +94,14 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
     Route::post('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
 
-  // DOMpdf
+    // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
     Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateApprovalPdf'])->name('pdf.generateApproval');
+
+    Route::get('/realisasi/pembatalan-wakalah', [PembatalanWakalahController::class, 'index'])->name('pembatalan_wakalah');
+    Route::get('/realisasi/pembatalan-wakalah/data', [PembatalanWakalahController::class, 'data'])->name('pembatalan_wakalah.data');
+    Route::get('/realisasi/pembatalan-wakalah/realisasi', [PembatalanWakalahController::class, 'realisasi'])->name('pembatalan_wakalah.realisasi');
 
 });
 
