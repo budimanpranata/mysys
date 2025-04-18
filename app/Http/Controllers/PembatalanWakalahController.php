@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class PembatalanWakalahController extends Controller
@@ -21,14 +21,11 @@ class PembatalanWakalahController extends Controller
     public function data()
     {
         try {
+            //\Log::info('Fetching wakalah data');
             $wakalahData = DB::table('temp_akad_mus')
                 ->leftJoin('anggota', 'temp_akad_mus.cif', '=', 'anggota.cif')
                 ->leftJoin('kelompok', 'temp_akad_mus.code_kel', '=', 'kelompok.code_kel')
-                ->whereNotExists(function ($query) {
-                    $query->select(DB::raw(1))
-                        ->from('temp_akad_mus')
-                        ->whereColumn('temp_akad_mus.status_app', 'BATAL');
-                })
+                ->where('temp_akad_mus.status_app', '!=', 'BATAL')
                 ->select(
                     'temp_akad_mus.cif',
                     'kelompok.nama_kel as nama_kelompok',
@@ -39,6 +36,9 @@ class PembatalanWakalahController extends Controller
                     'temp_akad_mus.maturity_date as tgl_jatuh_tempo'
                 )
                 ->get();
+
+            //\Log::info('Wakalah data count: ' . $wakalahData->count());
+            //\Log::info('Wakalah data: ' . json_encode($wakalahData));
 
             return datatables()
                 ->of($wakalahData)
@@ -69,13 +69,16 @@ class PembatalanWakalahController extends Controller
                 ->rawColumns(['pilih'])
                 ->make(true);
         } catch (\Exception $e) {
-            \Log::error('DataTables Error: ' . $e->getMessage());
+            //\Log::error('DataTables Error: ' . $e->getMessage());
             return response()->json(['error' => 'Something went wrong!'], 500);
         }
     }
 
     public function realisasi(Request $request)
     {
+        //\Log::info('Running Function');
+
+        // dd($request->cifs);
         // Validate request
         $request->validate([
             'cifs' => 'required|array',
@@ -84,37 +87,37 @@ class PembatalanWakalahController extends Controller
             'id' => 'required|string'
         ]);
 
+        //\Log::info('Input Validated');
+
         try {
             DB::beginTransaction();
 
+            //\Log::info('Starting DB Transaction');
+
             foreach ($request->cifs as $cif) {
-                // Update status_app to BATAL
                 DB::table('temp_akad_mus')
                     ->where('cif', $cif)
                     ->update(['status_app' => 'BATAL']);
 
-                // Get the record details
                 $record = DB::table('temp_akad_mus')
                     ->where('cif', $cif)
                     ->first();
 
                 if ($record) {
-                    // Insert into jurnal_umum
                     DB::table('jurnal_umum')->insert([
                         'kode_transaksi' => "BS-{$record->unit}-" . Str::random(7),
                         'tanggal_selesai' => $request->param_tanggal,
                         'unit' => $record->unit
                     ]);
 
-                    // Insert into tabel_transaksi
                     $transaksiData = [
                         [
                             'unit' => $record->unit,
                             'kode_transaksi' => "BS-{$record->unit}-" . Str::random(7),
-                            'kode_rekening' => 1481000,
+                            'kode_rekening' => 1120000,
                             'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($request->param_tanggal)),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => "Persediaan Murabahah AN {$record->nama}",
+                            'keterangan_transaksi' => "Realisasi Pembatalan Wakalah AN {$record->nama}",
                             'debet' => $record->plafond,
                             'kredit' => 0,
                             'tanggal_posting' => date('Y-m-d'),
@@ -127,7 +130,7 @@ class PembatalanWakalahController extends Controller
                             'kode_rekening' => 1431000,
                             'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($request->param_tanggal)),
                             'jenis_transaksi' => 'bukti SYSTEM',
-                            'keterangan_transaksi' => "Piutang Wakalah AN {$record->nama}",
+                            'keterangan_transaksi' => "Realisasi Pembatalan Wakalah AN {$record->nama}",
                             'debet' => 0,
                             'kredit' => $record->plafond,
                             'tanggal_posting' => date('Y-m-d'),
@@ -141,11 +144,11 @@ class PembatalanWakalahController extends Controller
 
             DB::commit();
 
-            \Log::info('Realisasi Pembatalan Wakalah', [
-                'cifs' => $request->cifs,
-                'param_tanggal' => $request->param_tanggal,
-                'id' => $request->id
-            ]);
+            // \Log::info('Realisasi Pembatalan Wakalah', [
+            //     'cifs' => $request->cifs,
+            //     'param_tanggal' => $request->param_tanggal,
+            //     'id' => $request->id
+            // ]);
 
             return response()->json([
                 'success' => true,
@@ -153,7 +156,7 @@ class PembatalanWakalahController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error in realisasi: ' . $e->getMessage());
+            //\Log::error('Error in realisasi: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()

@@ -17,8 +17,6 @@ use App\Http\Controllers\CetakCsController;
 use App\Http\Controllers\CetakLaRisywahController;
 use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PDFController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
 use App\Http\Controllers\PembiayaanController;
@@ -101,7 +99,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/realisasi/pembatalan-wakalah', [PembatalanWakalahController::class, 'index'])->name('pembatalan_wakalah');
     Route::get('/realisasi/pembatalan-wakalah/data', [PembatalanWakalahController::class, 'data'])->name('pembatalan_wakalah.data');
-    Route::get('/realisasi/pembatalan-wakalah/realisasi', [PembatalanWakalahController::class, 'realisasi'])->name('pembatalan_wakalah.realisasi');
+    Route::post('/realisasi/pembatalan-wakalah/realisasi', [PembatalanWakalahController::class, 'realisasi'])->name('pembatalan_wakalah.realisasi');
 
 });
 

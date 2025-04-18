@@ -56,8 +56,6 @@
 <script>
   $(function () {
     let selectedRows = [];
-
-    // Initialize DataTable with AJAX
     let table = $('#wakalahTable').DataTable({
       processing: true,
       serverSide: true,
@@ -83,14 +81,6 @@
         { data: 'tgl_murabahah', name: 'tgl_murabahah' },
         { data: 'tgl_jatuh_tempo', name: 'tgl_jatuh_tempo' }
       ],
-      language: {
-        emptyTable: "Belum ada data"
-      },
-      drawCallback: function(settings) {
-        if (settings.aoData.length === 0) {
-          $('#wakalahTable tbody').html('<tr><td colspan="8" class="text-center">Belum ada data</td></tr>');
-        }
-      }
     });
 
     // Handle checkbox selection
@@ -103,7 +93,6 @@
         selectedRows = selectedRows.filter(rowId => rowId !== id);
       }
 
-      // Enable or disable the realisasi button based on selection
       $('#realisasiBtn').prop('disabled', selectedRows.length === 0);
     });
 
