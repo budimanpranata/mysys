@@ -151,7 +151,7 @@
     });
   });
 
-  function addForm(url, cif, no_rek, unit, cao, code_kel, nama, tgl_lahir, suffix) {
+  function addForm(url, cif, no_anggota, unit, cao, code_kel, nama, tgl_lahir, suffix) {
     $('#add-form').modal('show');
     $('#add-form .modal-title').text('Pengajuan Pembiayaan');
 
@@ -161,7 +161,7 @@
 
     // autofill field (readonly/hidden)
     $('#cif').val(cif);
-    $('#no_rek').val(no_rek);
+    $('#no_rek').val(no_anggota);
     $('#unit').val(unit);
     $('#cao').val(cao);
     $('#code_kel').val(code_kel);
