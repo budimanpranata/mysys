@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Coa;
+use App\Models\RekLoan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -42,7 +44,11 @@ class DatabaseSeeder extends Seeder
             simpanan_wajib::class,
             tunggakan::class,
             branch::class,
-
+            pembiayaan::class,
+            PembiayaanDetailSeeder::class,
+            RekLoanSeeder::class,
+            RekomendasiSeeder::class,
+            CoaSeeder::class,
         ]);
 
 

@@ -19,8 +19,7 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">CIF <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" name="cif" value="{{ $anggota->cif }}" id="cif"
-                                        value="" readonly>
+                                    <input type="text" class="form-control" name="cif" value="{{ $anggota->cif }}" readonly>
                                 </div>
                             </div>
 
@@ -88,7 +87,7 @@
                                 <span class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama', $anggota->nama) }}" name="nama" id="nama"
-                                        placeholder="Masukkan Nama">
+                                        placeholder="Masukkan Nama" style="text-transform: uppercase;">
                                         @error('nama')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -210,7 +209,7 @@
                                     <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                                     <div class="col-sm-7">
                                         <textarea name="alamat_domisili" class="form-control @error('alamat_domisili') is-invalid @enderror" id="alamat_domisili" cols="5" rows="3"
-                                            placeholder="Masukkan Alamat" style="text-transform: uppercase;">{{ old('alamat_domisili', $anggota_detail->alamat_domisili) }}</textarea>
+                                            placeholder="Masukkan Alamat" style="text-transform: uppercase;">{{ old('alamat_domisili', $anggota_detail->alamat_domisili ?? '') }}</textarea>
                                             @error('alamat_domisili')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -220,7 +219,7 @@
                                 <div class="form-group row">
                                     <span class="col-sm-4 col-form-label">RT/RW <span class="text-danger">*</span></span>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('rtrw_domisili') is-invalid @enderror" name="rtrw_domisili" value="{{ old('rtrw_domisili', $anggota_detail->rtrw_domisili) }}" id="rtrw"
+                                        <input type="text" class="form-control @error('rtrw_domisili') is-invalid @enderror" name="rtrw_domisili" value="{{ old('rtrw_domisili', $anggota_detail->rtrw_domisili ?? '') }}" id="rtrw"
                                             placeholder="Masukkan RT/RW" style="text-transform: uppercase;">
                                             @error('rtrw_domisili')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -232,7 +231,7 @@
                                     <span class="col-sm-4 col-form-label">Kelurahan/Desa <span
                                             class="text-danger">*</span></span>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('desa_domisili') is-invalid @enderror" name="desa_domisili" value="{{ old('desa_domisili', $anggota_detail->desa_domisili) }}" id="desa"
+                                        <input type="text" class="form-control @error('desa_domisili') is-invalid @enderror" name="desa_domisili" value="{{ old('desa_domisili', $anggota_detail->desa_domisili ?? '') }}" id="desa"
                                             placeholder="Masukkan Kelurahan/Desa" style="text-transform: uppercase;">
                                             @error('desa_domisili')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -244,7 +243,7 @@
                                     <span class="col-sm-4 col-form-label">Kecamatan <span
                                             class="text-danger">*</span></span>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('kecamatan_domisili') is-invalid @enderror" name="kecamatan_domisili" value="{{ old('kecamatan_domisili', $anggota_detail->kecamatan_domisili) }}" id="kecamatan"
+                                        <input type="text" class="form-control @error('kecamatan_domisili') is-invalid @enderror" name="kecamatan_domisili" value="{{ old('kecamatan_domisili', $anggota_detail->kecamatan_domisili ?? '') }}" id="kecamatan"
                                             placeholder="Masukkan Kecamatan" style="text-transform: uppercase;">
                                             @error('kecamatan_domisili')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -256,7 +255,7 @@
                                     <span class="col-sm-4 col-form-label">Kabupaten <span
                                             class="text-danger">*</span></span>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('kota_domisili') is-invalid @enderror" name="kota_domisili" value="{{ old('kota_domisili', $anggota_detail->kota_domisili) }}" id="kota"
+                                        <input type="text" class="form-control @error('kota_domisili') is-invalid @enderror" name="kota_domisili" value="{{ old('kota_domisili', $anggota_detail->kota_domisili ?? '') }}" id="kota"
                                             placeholder="Masukkan Kabupaten" style="text-transform: uppercase;">
                                             @error('kota_domisili')
                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -268,7 +267,7 @@
                                     <span class="col-sm-4 col-form-label">Kode Pos <span
                                             class="text-danger">*</span></span>
                                     <div class="col-sm-7">
-                                        <input type="text" class="form-control @error('kode_pos_domisili') is-invalid @enderror" name="kode_pos_domisili" value="{{ old('kode_pos_domisili', $anggota_detail->kode_pos_domisili) }}" id="kode_pos"
+                                        <input type="text" class="form-control @error('kode_pos_domisili') is-invalid @enderror" name="kode_pos_domisili" value="{{ old('kode_pos_domisili', $anggota_detail->kode_pos_domisili ?? '') }}" id="kode_pos"
                                             placeholder="Masukkan Kode POS" style="text-transform: uppercase;">
                                             @error('kode_pos_domisili')
                                                 <div class="invalid-feedback">{{ $message }}</div>
