@@ -85,7 +85,6 @@ class ViewDataController extends Controller
     
             $anggota->update([
                 'cao' => $request->cao,
-                'ktp' => $request->ktp,
                 'kode_kel' => strtoupper($request->kode_kel),
                 'alamat' => strtoupper($request->alamat),
                 'desa' => strtoupper($request->desa),
