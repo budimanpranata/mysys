@@ -99,43 +99,6 @@
             })
         });
 
-        $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
-                $.ajax({
-                    url: $('#modal-form form').attr('action'),
-                    type: 'post',
-                    data: $('#modal-form form').serialize()
-                })
-                .done((response) => {
-                    Swal.fire({
-                        title: 'Data berhasil diinput!',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                    $('#modal-form').modal('hide');
-                    table.ajax.reload();
-                })
-                .fail((errors) => {
-                    Swal.fire({
-                        title: 'Tidak dapat menyimpan data!',
-                        icon: 'warning',
-                        confirmButtonText: 'OK'
-                    });
-                    return;
-                })
-            }
-        });
-
-        function addForm(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Tambah Kelompok');
-
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('post');
-            $('#modal-form [name=code_kel]').focus();
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const uppercaseElements = document.querySelectorAll('.uppercase');
 
