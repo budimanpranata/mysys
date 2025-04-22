@@ -25,7 +25,13 @@ class ViewDataController extends Controller
             'anggota.kode_kel as kode_kel_anggota',
             'anggota.nama as nama_anggota',
             'anggota.cif as cif_anggota',
-            'pembiayaan.*',
+            'pembiayaan.tgl_wakalah',
+            'pembiayaan.maturity_date',
+            'pembiayaan.nama_usaha',
+            'pembiayaan.hari',
+            'pembiayaan.plafond as plafond_pembiayaan',
+            'pembiayaan.os as os_pembiayaan',
+            'pembiayaan.saldo_margin as saldo_margin_pembiayaan',
         );
 
         return datatables()
@@ -58,7 +64,7 @@ class ViewDataController extends Controller
             'anggota.*',
             'pembiayaan.*',
         )
-        ->where('no', $id)->firstOrFail();
+        ->where('anggota.no', $id)->firstOrFail();
         $anggota_detail = AnggotaDetail::where('no_anggota', $id)->first();
         $ao = ao::all();
         $kelompok = Kelompok::all();
@@ -75,14 +81,12 @@ class ViewDataController extends Controller
             // Log data yang diterima
             Log::info('Data yang diterima:', $request->all());
     
-            $anggota = Anggota::where('no', $id)->firstOrFail();
+            $anggota = Anggota::where('no', $id)->first();
     
             $anggota->update([
-                'unit' => $unit,
+                'cao' => $request->cao,
+                'ktp' => $request->ktp,
                 'kode_kel' => strtoupper($request->kode_kel),
-                'cif' => strtoupper($request->cif),
-                'nama' => strtoupper($request->nama),
-                'deal_type' => '1',
                 'alamat' => strtoupper($request->alamat),
                 'desa' => strtoupper($request->desa),
                 'kecamatan' => strtoupper($request->kecamatan),
@@ -90,22 +94,8 @@ class ViewDataController extends Controller
                 'rtrw' => strtoupper($request->rtrw),
                 'no_hp' => strtoupper($request->no_hp),
                 'hp_pasangan' => strtoupper($request->hp_pasangan),
-                'kelamin' => 'P',
-                'tgl_lahir' => $request->tgl_lahir,
-                'ktp' => strtoupper($request->ktp),
-                'kewarganegaraan' => strtoupper($request->kewarganegaraan),
                 'status_menikah' => strtoupper($request->status_menikah),
-                'agama' => strtoupper($request->agama),
-                'ibu_kandung' => strtoupper($request->ibu_kandung),
-                'npwp' => 0,
-                'source_income' => 1,
-                'pendidikan' => strtoupper($request->pendidikan),
-                'tempat_lahir' => strtoupper($request->tempat_lahir),
-                'id_expired' => 0,
                 'waris' => strtoupper($request->waris),
-                'cao' => strtoupper($request->cao),
-                'userid' => Auth::id(),
-                'status' => 'ANGGOTA',
                 'pekerjaan_pasangan' => strtoupper($request->pekerjaan_pasangan),
                 'kode_pos' => strtoupper($request->kode_pos),
             ]);
@@ -135,6 +125,8 @@ class ViewDataController extends Controller
             $anggotaPembiayaan = pembiayaan::where('no_anggota', $id)->first();
             if ($anggotaPembiayaan) {
                 $anggotaPembiayaan->update([
+                    'cao' => $anggota->cao,
+                    'code_kel' => $anggota->kode_kel,
                     'tgl_wakalah' => ($request->tgl_wakalah ?? ''),
                     'maturity_date' => ($request->maturity_date ?? ''),
                     'nama_usaha' => strtoupper($request->nama_usaha ?? ''),

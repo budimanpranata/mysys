@@ -82,13 +82,13 @@
                         data: 'nama_anggota'
                     },
                     {
-                        data: 'plafond'
+                        data: 'plafond_pembiayaan'
                     },
                     {
-                        data: 'os'
+                        data: 'os_pembiayaan'
                     },
                     {
-                        data: 'saldo_margin'
+                        data: 'saldo_margin_pembiayaan'
                     },
                     {
                         data: 'aksi',

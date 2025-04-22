@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
 use App\Http\Controllers\PembiayaanController;
+use App\Http\Controllers\PemeliharaanKelompok;
 use App\Http\Controllers\ViewDataController;
 use Illuminate\Contracts\View\View;
 
@@ -97,6 +98,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     // Route::get('/pemeliharaan-data/view-data', [ViewDataController::class, 'index'])->name('pemeliharaan.view-data');
     Route::get('/view-data/data', [ViewDataController::class, 'data'])->name('viewData.data');
     Route::resource('view-data', ViewDataController::class);
+
+    Route::get('/pemeliharaan-kelompok/data', [PemeliharaanKelompok::class, 'data'])->name('pemeliharaan-kelompok.data');
+    Route::resource('pemeliharaan-kelompok', PemeliharaanKelompok::class);
 
 
   // DOMpdf

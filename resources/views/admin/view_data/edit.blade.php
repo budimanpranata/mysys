@@ -152,6 +152,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-11">
+                        <div class="card mb-3">
+                            <div class="card-header">KTP Penjamin</div>
+                            <div class="card-body">
+                                <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].penjamin}" 
+                                    width="580px" 
+                                    alt="Gambar penjamin" 
+                                    class="img-thumbnail" 
+                                    style="cursor: pointer;" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#imageModal"
+                                    onclick="openImageModal('http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].penjamin}')">
+                            </div>
+                        </div>
+                    </div>
                 `;
             } catch (error) {
                 // Tampilkan pesan error

@@ -68,6 +68,8 @@
                                 <div class="col-sm-7">
                                     <div class="input-group">
                                         <input type="text" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp', $anggota->ktp) }}" id="nikInput"
+                                             maxlength="16" onkeypress="return hanyaAngka(event)" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')"
+                                             minlength="16" required
                                             placeholder="Masukkan No Identitas">
                                             
                                             <div class="input-group-append">
@@ -87,7 +89,7 @@
                                 <span class="col-sm-4 col-form-label">Nama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama', $anggota->nama) }}" name="nama" id="nama"
-                                        placeholder="Masukkan Nama" style="text-transform: uppercase;">
+                                        placeholder="Masukkan Nama" style="text-transform: uppercase;" readonly>
                                         @error('nama')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -99,7 +101,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" value="{{ old('tempat_lahir', $anggota->tempat_lahir) }}" name="tempat_lahir" id="tempat_lahir"
-                                        placeholder="Masukkan Tempat Lahir">
+                                        placeholder="Masukkan Tempat Lahir" readonly>
                                         @error('tempat_lahir')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -111,7 +113,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="date" class="form-control @error('tgl_lahir') is-invalid @enderror" value="{{ old('tgl_lahir', $anggota->tgl_lahir) }}" name="tgl_lahir" id="tgl_lahir"
-                                        placeholder="Masukkan Tempat Lahir">
+                                        placeholder="Masukkan Tempat Lahir" readonly>
                                         @error('tgl_lahir')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -310,7 +312,7 @@
                             <div class="form-group row">
                                 <span class="col-sm-4 col-form-label">Agama <span class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
+                                    <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror" disabled>
                                         <option hidden value="">-- PILIH AGAMA --</option>
                                         <option value="ISLAM"
                                         @if ($anggota->agama = 'ISLAM')
@@ -348,7 +350,7 @@
                                 <span class="col-sm-4 col-form-label">Pendidikan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="pendidikan" id="pendidikan" class="form-control @error('pendidikan') is-invalid @enderror">
+                                    <select name="pendidikan" id="pendidikan" class="form-control @error('pendidikan') is-invalid @enderror" disabled>
                                         <option hidden value="">-- PILIH PENDIDIKAN --</option>
                                         <option value="SD"
                                         @if ($anggota->pendidikan = 'SD')
@@ -376,7 +378,7 @@
                                 <span class="col-sm-4 col-form-label">Kewarganegaraan <span
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
-                                    <select name="kewarganegaraan" id="kewarganegaraan" class="form-control @error('kewarganegaraan') is-invalid @enderror"
+                                    <select name="kewarganegaraan" id="kewarganegaraan" class="form-control @error('kewarganegaraan') is-invalid @enderror" disabled
                                     >
                                         <option hidden value="">-- PILIH KEWARGANEGARAAN --</option>
                                         <option selected value="INDONESIA">INDONESIA</option>
@@ -440,7 +442,7 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control @error('ibu_kandung') is-invalid @enderror" value="{{ old('ibu_kandung', $anggota->ibu_kandung) }}" name="ibu_kandung" id="ibu_kandung"
-                                        placeholder="Masukkan Ibu Kandung">
+                                        placeholder="Masukkan Ibu Kandung" readonly>
                                         @error('ibu_kandung')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror

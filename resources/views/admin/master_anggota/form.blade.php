@@ -77,7 +77,10 @@
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <div class="input-group">
-                                        <input type="number" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp') }}" id="nikInput"
+                                        <input type="text" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp') }}" id="nikInput"
+                                        maxlength="16" onkeypress="return hanyaAngka(event)" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')"
+                                             minlength="16" required
+                                            oninvalid="this.setCustomValidity('No Identitas Harus 16 Digit')"
                                             placeholder="Masukkan No Identitas" style="text-transform: uppercase;">
                                             
                                             <div class="input-group-append">
