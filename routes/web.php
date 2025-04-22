@@ -20,8 +20,10 @@ use App\Http\Controllers\PDFController;
 use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
 use App\Http\Controllers\PembiayaanController;
+use App\Http\Controllers\PemeliharaanKelompok;
+use App\Http\Controllers\ViewDataController;
+use Illuminate\Contracts\View\View;
 use App\Http\Controllers\PembatalanWakalahController;
-
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -92,7 +94,14 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
     Route::post('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
 
-    // DOMpdf
+    Route::get('/view-data/data', [ViewDataController::class, 'data'])->name('viewData.data');
+    Route::resource('view-data', ViewDataController::class);
+
+    Route::get('/pemeliharaan-kelompok/data', [PemeliharaanKelompok::class, 'data'])->name('pemeliharaan-kelompok.data');
+    Route::resource('pemeliharaan-kelompok', PemeliharaanKelompok::class);
+
+
+  // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
     Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateApprovalPdf'])->name('pdf.generateApproval');

@@ -213,5 +213,45 @@ class MenuSeeder extends Seeder
             'order' => 18,
 
         ]);
+
+        $pemeliharaan_data = Menu::create([
+            'name' => 'Pemeliharaan Data',
+            'icon' => 'nav-icon fas fa-edit', //
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 19,
+
+        ]);
+
+        Menu::create([
+            'name' => 'View Data',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $pemeliharaan_data->id,
+            'url' => '/view-data',
+            'left' => 'null',
+            'order' => 20,
+
+        ]);
+
+        Menu::create([
+            'name' => 'Pemeliharaan CIF',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $pemeliharaan_data->id,
+            'url' => '/pemeliharaan-cif',
+            'left' => 'null',
+            'order' => 20,
+
+        ]);
+
+        Menu::create([
+            'name' => 'Kelompok',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $pemeliharaan_data->id,
+            'url' => '/pemeliharaan-kelompok',
+            'left' => 'null',
+            'order' => 20,
+
+        ]);
     }
 }

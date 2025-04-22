@@ -21,4 +21,9 @@ class Anggota extends Model
     {
         return $this->hasMany(temp_akad_mus::class, 'no_anggota', 'no');
     }
+
+    public function pembiayaan()
+    {
+        return $this->hasMany(pembiayaan::class, 'no_anggota', 'no');
+    }
 }
