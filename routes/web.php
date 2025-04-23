@@ -21,6 +21,7 @@ use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
 use App\Http\Controllers\PembiayaanController;
 use App\Http\Controllers\PembatalanWakalahController;
+use App\Http\Controllers\SetoranLimaPersenController;
 
 
 //  jika user belum login
@@ -100,6 +101,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/realisasi/pembatalan-wakalah', [PembatalanWakalahController::class, 'index'])->name('pembatalan_wakalah');
     Route::get('/realisasi/pembatalan-wakalah/data', [PembatalanWakalahController::class, 'data'])->name('pembatalan_wakalah.data');
     Route::post('/realisasi/pembatalan-wakalah/realisasi', [PembatalanWakalahController::class, 'realisasi'])->name('pembatalan_wakalah.realisasi');
+
+    Route::get('/setoran-lima-persen', [SetoranLimaPersenController::class, 'index']);
+    Route::get('/setoran-lima-persen-get-kelompok', [SetoranLimaPersenController::class, 'getSetKelompok']);
+    Route::get('/setoran-lima-persen/getData', [SetoranLimaPersenController::class, 'getData']);
+    Route::post('/proses-realisasi-lima-persen', [SetoranLimaPersenController::class, 'realisasiLimaPersen']);
 
 });
 
