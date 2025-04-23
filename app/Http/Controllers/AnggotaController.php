@@ -335,6 +335,7 @@ class AnggotaController extends Controller
                 'id_expired' => 0,
                 'waris' => strtoupper($request->waris),
                 'cao' => strtoupper($request->cao),
+                'cao_promotor' => strtoupper($request->cao),
                 'userid' => Auth::id(),
                 'status' => 'ANGGOTA',
                 'pekerjaan_pasangan' => strtoupper($request->pekerjaan_pasangan),

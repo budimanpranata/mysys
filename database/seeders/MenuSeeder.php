@@ -214,14 +214,52 @@ class MenuSeeder extends Seeder
 
         ]);
 
-        $Transaksi = Menu::create([
-            'name' => 'Transaksi',
-            'icon' => 'nav-icon fas fa-money-bill', //
+    
+          $pemeliharaan_data = Menu::create([
+            'name' => 'Pemeliharaan Data',
+            'icon' => 'nav-icon fas fa-edit', //
             'parent_id' => null,
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 19,
 
+        ]);
+          Menu::create([
+            'name' => 'View Data',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $pemeliharaan_data->id,
+            'url' => '/view-data',
+            'left' => 'null',
+            'order' => 19,
+
+        ]);
+
+        Menu::create([
+            'name' => 'Pemeliharaan CIF',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $pemeliharaan_data->id,
+            'url' => '/pemeliharaan-cif',
+            'left' => 'null',
+            'order' => 21,
+
+        ]);
+
+        Menu::create([
+            'name' => 'Kelompok',
+            'icon' => 'far fa-circle nav-ico',
+            'parent_id' => $pemeliharaan_data->id,
+            'url' => '/pemeliharaan-kelompok',
+            'left' => 'null',
+            'order' => 22,
+        ]);
+      
+        $Transaksi = Menu::create([
+          'name' => 'Transaksi',
+            'icon' => 'nav-icon fas fa-money-bill', //
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 23,
         ]);
 
         Menu::create([
@@ -230,8 +268,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $Transaksi->id,
             'url' => '/setoran-lima-persen',
             'left' => 'null',
-            'order' => 18,
-
-        ]);
+            'order' => 23,
+          ]);
     }
 }

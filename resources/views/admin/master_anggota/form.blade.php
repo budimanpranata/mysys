@@ -1,6 +1,3 @@
-TODO : pada form anggota, di form input tambahkan uppercase pada nama, tempat lahir, dan alamat. <br>
-TODO : pada form anggota, Jika No ktp berada di AP yang lain atau input di AP berbeda tampilkan alert NIK sudah da di AP lain
-Jika No CIF berada di AP yang lain atau input di AP berbeda tampilkan alert CIF sudah da di AP lain.
 <form action="{{ route('anggota.store') }}" method="post" id="form">
     @csrf
     @method('post')
@@ -80,7 +77,10 @@ Jika No CIF berada di AP yang lain atau input di AP berbeda tampilkan alert CIF 
                                         class="text-danger">*</span></span>
                                 <div class="col-sm-7">
                                     <div class="input-group">
-                                        <input type="number" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp') }}" id="nikInput"
+                                        <input type="text" class="form-control @error('ktp') is-invalid @enderror" name="ktp" value="{{ old('ktp') }}" id="nikInput" readonly
+                                        maxlength="16" onkeypress="return hanyaAngka(event)" onkeyup="this.value = this.value.replace(/[^0-9]/g, '')"
+                                             minlength="16" required
+                                            oninvalid="this.setCustomValidity('No Identitas Harus 16 Digit')"
                                             placeholder="Masukkan No Identitas" style="text-transform: uppercase;">
                                             
                                             <div class="input-group-append">

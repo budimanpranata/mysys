@@ -7,6 +7,7 @@ use App\Models\Kelompok;
 use App\Models\Anggota;
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -84,14 +85,15 @@ class KelompokController extends Controller
                 'no_tlp' => 'required|max:13|min:11',
             ]);
 
-            // Generate kode kelompok
-            $lastKelompok = Kelompok::latest()->first(); // Ambil record terakhir
+            // generate kode kelompok
+            $unit = Auth::user()->unit;
+            $lastKelompok = Kelompok::where('code_kel', 'LIKE', $unit.'-%')
+                                ->latest()
+                                ->first();
 
-            // Nomor urut
             $sequence = $lastKelompok ? intval(substr($lastKelompok->code_kel, -4)) + 1 : 1;
             $sequenceFormatted = str_pad($sequence, 4, '0', STR_PAD_LEFT);
 
-            // Gabungkan kode kelompok
             $validated['code_kel'] = $request->code_unit . '-' . $sequenceFormatted;
 
             $validated['code_unit'] = strtoupper($validated['code_unit']);
