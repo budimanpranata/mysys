@@ -24,6 +24,7 @@ use App\Http\Controllers\PemeliharaanKelompok;
 use App\Http\Controllers\ViewDataController;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\PembatalanWakalahController;
+use App\Http\Controllers\SetoranLimaPersenController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -109,6 +110,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/realisasi/pembatalan-wakalah', [PembatalanWakalahController::class, 'index'])->name('pembatalan_wakalah');
     Route::get('/realisasi/pembatalan-wakalah/data', [PembatalanWakalahController::class, 'data'])->name('pembatalan_wakalah.data');
     Route::post('/realisasi/pembatalan-wakalah/realisasi', [PembatalanWakalahController::class, 'realisasi'])->name('pembatalan_wakalah.realisasi');
+
+    Route::get('/setoran-lima-persen', [SetoranLimaPersenController::class, 'index']);
+    Route::get('/setoran-lima-persen-get-kelompok', [SetoranLimaPersenController::class, 'getSetKelompok']);
+    Route::get('/setoran-lima-persen/getData', [SetoranLimaPersenController::class, 'getData']);
+    Route::post('/proses-realisasi-lima-persen', [SetoranLimaPersenController::class, 'realisasiLimaPersen']);
 
 });
 

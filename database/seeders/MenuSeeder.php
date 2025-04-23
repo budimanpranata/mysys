@@ -170,7 +170,7 @@ class MenuSeeder extends Seeder
         // Submenu
         Menu::create([
             'name' => 'Realiasi Wakalah',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
             'url' => '/realisasi_wakalah',
             'left' => 'null',
@@ -179,7 +179,7 @@ class MenuSeeder extends Seeder
 
         Menu::create([
             'name' => 'Realisasi Murabahah',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
             'url' => '/realisasi/murabahah',
             'left' => 'null',
@@ -188,7 +188,7 @@ class MenuSeeder extends Seeder
 
         Menu::create([
             'name' => 'Pembatalan Wakalah',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
             'url' => '/realisasi/pembatalan-wakalah',
             'left' => 'null',
@@ -197,7 +197,7 @@ class MenuSeeder extends Seeder
 
         Menu::create([
             'name' => 'Tagihan Kelompok',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
             'left' => 'null',
@@ -206,7 +206,7 @@ class MenuSeeder extends Seeder
         ]);
         Menu::create([
             'name' => 'Hapus Buku',
-            'icon' => 'far fa-circle nav-ico',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
             'url' => '/dashboard-v3',
             'left' => 'null',
@@ -224,13 +224,13 @@ class MenuSeeder extends Seeder
 
         ]);
 
-        Menu::create([
+      Menu::create([
             'name' => 'View Data',
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $pemeliharaan_data->id,
             'url' => '/view-data',
             'left' => 'null',
-            'order' => 20,
+            'order' => 19,
 
         ]);
 
@@ -250,8 +250,26 @@ class MenuSeeder extends Seeder
             'parent_id' => $pemeliharaan_data->id,
             'url' => '/pemeliharaan-kelompok',
             'left' => 'null',
-            'order' => 20,
+            'order' => 21,
+        ]);
+      
+       $Transaksi = Menu::create([
+            'name' => 'Transaksi',
+            'icon' => 'nav-icon fas fa-money-bill', //
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 22,
 
         ]);
+          
+         Menu::create([
+            'name' => 'Setoran 5%',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/setoran-lima-persen',
+            'left' => 'null',
+            'order' => 22,
+          ]);
     }
 }
