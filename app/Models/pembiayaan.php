@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class pembiayaan extends Model
 {
-    
+
     protected $table = 'pembiayaan';
     use HasFactory;
 
     protected $guarded = [];
-    protected $primaryKey = 'no_anggota';
+    protected $primaryKey = 'cif';
     protected $casts = [
-        'no_anggota' => 'string',
+        'cif' => 'string',
     ];
 }

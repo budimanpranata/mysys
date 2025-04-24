@@ -4,12 +4,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Setoran Lima Persen</h1>
+                <h1>Restrukturisasi Kemampuan Bayar</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Setoran Lima Persen</li>
+                    <li class="breadcrumb-item active">Rest Kemampuan Bayar</li>
                 </ol>
             </div>
         </div>
@@ -20,7 +20,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <div class="container mt-4">
-        <h3 class="mb-4">Setoran Lima Persen</h3>
+        <h3 class="mb-4">Rest Kemampuan Bayar</h3>
         <div class="card shadow rounded-3 p-4">
             <div class="row g-3">
                 <div class="col-md-12">
@@ -29,12 +29,7 @@
                         <option value="">Cari kode kelompok...</option>
                     </select>
                 </div>
-                <br>
 
-                <div class="col-md-12">
-                    <label for="tanggalRealisasi" class="form-label fw-semibold">Tanggal Wakalah</label>
-                    <input type="date" class="form-control" id="tanggalRealisasi">
-                </div>
 
                 <div class="col-12 text-end mt-3">
                     <button type="button" class="btn btn-primary px-5 py-2" id="btnSearch">
@@ -66,18 +61,26 @@
                                 <th>Pembiayaan</th>
                                 <th>Margin</th>
                                 <th>Tgl Murabahah</th>
-                                <th>Tgl Jatuh Tempo</th>
+                                <th>Setoran</th>
+                                <th>Kemampuan Bayar</th>
                             </tr>
                         </thead>
                         <tbody id="dataTable">
                             <tr>
-                                <td colspan="8">Tidak ada data.</td>
+                                <td colspan="9">Tidak ada data.</td>
                             </tr>
                         </tbody>
+                        <tfoot id="tableFooter" style="display: none;">
+                            <tr class="fw-bold bg-light">
+                                <td colspan="7" class="text-end">Total</td>
+                                <td id="totalSetoran">Rp 0</td>
+                                <td id="totalKemampuanBayar">Rp 0</td>
+                            </tr>
+                        </tfoot>
                     </table>
                     <div class="text-end">
                         <button type="button" class="btn btn-success btn-realisasi">
-                            <i class="fas fa-check-circle me-2"></i> Realisasi Setoran 5%
+                            <i class="fas fa-check-circle me-2"></i> Realisasi
                         </button>
                     </div>
                 </div>
@@ -86,22 +89,17 @@
     </div>
 @endsection
 
-
 @push('scripts')
-    <!-- jQuery dan Select2 -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
     @include('sweetalert::alert')
 
     <script>
         $(document).ready(function() {
             $('#kodeKelompok').select2({
                 theme: 'bootstrap3',
-
                 placeholder: 'Cari kode kelompok...',
                 allowClear: false,
-
                 ajax: {
-                    url: '/setoran-lima-persen-get-kelompok',
+                    url: '/rest-kemampuan-bayar-get-kelompok',
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
@@ -123,56 +121,68 @@
 
             $('#btnSearch').on('click', function() {
                 const kodeKelompok = $('#kodeKelompok').val().trim();
-                const tanggalRealisasi = $('#tanggalRealisasi').val().trim();
+
 
                 if (!kodeKelompok) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Kode Kelompok Kosong',
-                        text: 'Harap pilih kode kelompok!',
-                    });
-                    return;
-                }
-
-                if (!tanggalRealisasi) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Tanggal Realisasi Kosong',
-                        text: 'Harap isi tanggal realisasi!',
+                        title: 'Data tidak lengkap',
+                        text: 'Pilih kode kelompokuntuk realisasi!'
                     });
                     return;
                 }
 
                 $('#loading').show();
-                $('#dataTable').html('<tr><td colspan="8">Memuat data...</td></tr>');
+                $('#dataTable').html('<tr><td colspan="9">Memuat data...</td></tr>');
+                $('#tableFooter').hide();
 
                 $.ajax({
-                    url: 'setoran-lima-persen/getData',
+                    url: 'rest-kemampuan-bayar/getData',
                     type: 'GET',
                     data: {
                         kode_kelompok: kodeKelompok,
-                        tanggal_realisasi: tanggalRealisasi,
+
                     },
                     success: function(data) {
                         let rows = '';
+                        let totalSetoran = 0;
+                        let totalKemampuan = 0;
+
                         if (data.length > 0) {
                             data.forEach((item, index) => {
+                                const kemampuanBayar = item.kemampuan_bayar ?? 0;
+                                totalSetoran += parseFloat(item.bulat);
+                                totalKemampuan += parseFloat(kemampuanBayar);
+
                                 rows += `
-                                    <tr data-id="${item.cif}">
-                                        <td>${index + 1}</td>
-                                        <td><input type="checkbox" data-id="${item.cif}" checked></td>
-                                        <td>${item.nama_kel}</td>
-                                        <td>${item.nama}</td>
-                                        <td>${new Intl.NumberFormat('id-ID').format(item.plafond)}</td>
-                                        <td>${new Intl.NumberFormat('id-ID').format(item.saldo_margin)}</td>
-                                        <td>${item.tgl_murab}</td>
-                                        <td>${item.maturity_date}</td>
-                                    </tr>
-                                `;
+                            <tr data-id="${item.cif}">
+                                <td>${index + 1}</td>
+                                <td><input type="checkbox" data-id="${item.cif}" checked></td>
+                                <td>${item.nama_kel}</td>
+                                <td>${item.nama}</td>
+                                <td>${new Intl.NumberFormat('id-ID').format(item.plafond)}</td>
+                                <td>${new Intl.NumberFormat('id-ID').format(item.saldo_margin)}</td>
+                                <td>${item.tgl_murab}</td>
+                                <td>${new Intl.NumberFormat('id-ID').format(item.bulat)}</td>
+                                <td>
+                                    <input type="number" name="kemampuan_bayar[${item.cif}]"
+                                           value="${kemampuanBayar}"
+                                           class="form-control kemampuan-input" />
+                                </td>
+                            </tr>
+                        `;
                             });
+
+                            $('#tableFooter').show();
+                            $('#totalSetoran').text(
+                                `Rp ${new Intl.NumberFormat('id-ID').format(totalSetoran)}`);
+                            $('#totalKemampuanBayar').text(
+                                `Rp ${new Intl.NumberFormat('id-ID').format(totalKemampuan)}`
+                            );
                         } else {
-                            rows = '<tr><td colspan="8">Tidak ada data ditemukan.</td></tr>';
+                            rows = '<tr><td colspan="9">Tidak ada data ditemukan.</td></tr>';
                         }
+
                         $('#dataTable').html(rows);
                     },
                     error: function(xhr) {
@@ -180,7 +190,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal mengambil data',
-                            text: 'Coba lagi dengan kelompok berbeda!',
+                            text: 'Coba lagi dengan kelompok dan tanggal berbeda!',
                         });
                     },
                     complete: function() {
@@ -189,14 +199,22 @@
                 });
             });
 
+            $(document).on('input', '.kemampuan-input', function() {
+                let totalKemampuan = 0;
+                $('.kemampuan-input').each(function() {
+                    const val = parseFloat($(this).val()) || 0;
+                    totalKemampuan += val;
+                });
+                $('#totalKemampuanBayar').text(
+                    `Rp ${new Intl.NumberFormat('id-ID').format(totalKemampuan)}`);
+            });
+
             $(document).on('click', '.btn-realisasi', function(e) {
                 e.preventDefault();
                 const selectedIds = [];
                 $('input[type="checkbox"]:checked').each(function() {
                     const id = $(this).data('id');
-                    if (id) {
-                        selectedIds.push(id);
-                    }
+                    if (id) selectedIds.push(id);
                 });
 
                 if (selectedIds.length === 0) {
@@ -207,6 +225,12 @@
                     });
                     return;
                 }
+
+                const kemampuanBayar = {};
+                selectedIds.forEach(id => {
+                    const val = $(`input[name="kemampuan_bayar[${id}]"]`).val();
+                    kemampuanBayar[id] = val;
+                });
 
                 Swal.fire({
                     title: 'Yakin ingin realisasi?',
@@ -219,20 +243,21 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: '/proses-realisasi-lima-persen',
+                            url: '/proses-rest-kemampuan-bayar',
                             type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
                             data: {
                                 ids: selectedIds,
+                                kemampuan_bayar: kemampuanBayar
                             },
                             success: function(response) {
                                 Swal.fire('Berhasil!', response.message, 'success')
                                     .then(() => {
                                         $('#kodeKelompok').val('').trigger(
                                             'change');
-                                        $('#tanggalRealisasi').val('');
+
                                         location.reload();
                                     });
                             },
