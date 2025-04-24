@@ -25,6 +25,7 @@ use App\Http\Controllers\ViewDataController;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\PembatalanWakalahController;
 use App\Http\Controllers\SetoranLimaPersenController;
+use App\Http\Controllers\RestKemampuanBayarController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -115,6 +116,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/setoran-lima-persen-get-kelompok', [SetoranLimaPersenController::class, 'getSetKelompok']);
     Route::get('/setoran-lima-persen/getData', [SetoranLimaPersenController::class, 'getData']);
     Route::post('/proses-realisasi-lima-persen', [SetoranLimaPersenController::class, 'realisasiLimaPersen']);
+
+    //Rest Kemampuan Bayar
+    Route::get('/rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'index']);
+    Route::get('/rest-kemampuan-bayar-get-kelompok', [RestKemampuanBayarController::class, 'getSetKelompok']);
+    Route::get('/rest-kemampuan-bayar/getData', [RestKemampuanBayarController::class, 'getData']);
+    Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
 
 });
 

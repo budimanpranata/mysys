@@ -349,6 +349,7 @@ class SetoranLimaPersenController extends Controller
         $search = $request->q;
         $kelompok = DB::table('kelompok')
         ->select('code_kel', 'nama_kel')
+        ->where('code_unit', Auth()->user()->unit)
         ->when($search, function ($query, $search) {
             return $query->where('code_kel', 'like', "%$search%")
                          ->orWhere('nama_kel', 'like', "%$search%");
