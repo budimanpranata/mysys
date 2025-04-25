@@ -6,6 +6,7 @@ use App\Models\Anggota;
 use App\Models\ao;
 use App\Models\Kelompok;
 use App\Models\Menu;
+use App\Models\pembiayaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -45,15 +46,29 @@ class PemeliharaanKelompok extends Controller
 
     public function show($id)
     {
-        // $kelompok = Kelompok::where('code_kel', $id)->first();
+        $kelompok = Kelompok::where('code_kel', $id)->first();
 
+        return response()->json($kelompok);
+    }
+
+    public function edit($id)
+    {
         $kelompok = DB::table('kelompok')
         ->join('pembiayaan', 'kelompok.code_kel', '=', 'pembiayaan.code_kel')
         ->select(
             'kelompok.*',
-            'pembiayaan.*',
+            'pembiayaan.hari',
         )->where('kelompok.code_kel', $id)->first();
 
         return response()->json($kelompok);
     }
+
+    public function update(Request $request, string $id)
+    {
+        $kelompok = Kelompok::where('code_kel', $id)->first();
+        $kelompok->update($request->all());
+
+        return response()->json('Data berhasil disimpan', 200);
+    }
+
 }

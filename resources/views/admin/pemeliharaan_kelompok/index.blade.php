@@ -39,7 +39,7 @@
         </div>
     </div>
 
-@include('admin.pemeliharaan_kelompok.form')
+    @include('admin.pemeliharaan_kelompok.form')
 @endsection
 
 @push('scripts')
@@ -90,43 +90,33 @@
                 ]
             })
 
-            $('#modal-form').validator().on('submit', function (e) {
-                if (! e.preventDefault()) {
+            $('#modal-form').validator().on('submit', function(e) {
+                if (!e.preventDefault()) {
                     $.ajax({
-                        url: $('#modal-form form').attr('action'),
-                        type: 'post',
-                        data: $('#modal-form form').serialize()
-                    })
-                    .done((response) => {
-                        Swal.fire({
-                            title: 'Data berhasil disimpan!',
-                            icon: 'success',
-                            confirmButtonText: 'OK'
-                        });
-                        $('#modal-form').modal('hide');
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        Swal.fire({
-                            title: 'Tidak dapat menyimpan data!',
-                            icon: 'warning',
-                            confirmButtonText: 'OK'
-                        });
-                        return;
-                    })
+                            url: $('#modal-form form').attr('action'),
+                            type: 'post',
+                            data: $('#modal-form form').serialize()
+                        })
+                        .done((response) => {
+                            Swal.fire({
+                                title: 'Data berhasil disimpan!',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+                            $('#modal-form').modal('hide');
+                            table.ajax.reload();
+                        })
+                        .fail((errors) => {
+                            Swal.fire({
+                                title: 'Tidak dapat menyimpan data!',
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        })
                 }
             });
         });
-
-        function addForm(url) {
-            $('#modal-form').modal('show');
-            $('#modal-form .modal-title').text('Tambah Kelompok');
-
-            $('#modal-form form')[0].reset();
-            $('#modal-form form').attr('action', url);
-            $('#modal-form [name=_method]').val('post');
-            $('#modal-form [name=code_kel]').focus();
-        }
 
         function editForm(url) {
             $('#modal-form').modal('show');
@@ -138,20 +128,19 @@
             $('#modal-form [name=code_kel]').focus();
 
             $.get(url)
-            .done((response) => {
-                $('#modal-form [name=code_kel]').val(response.code_kel);
-                $('#modal-form [name=code_unit]').val(response.code_unit);
-                $('#modal-form [name=nama_kel]').val(response.nama_kel);
-                $('#modal-form [name=alamat]').val(response.alamat);
-                $('#modal-form [name=cao]').val(response.cao);
-                $('#modal-form [name=cif]').val(response.cif);
-                $('#modal-form [name=no_tlp]').val(response.no_tlp);
-                $('#modal-form [name=hari]').val(response.hari);
-            })
-            .fail((errors) => {
-                alert('Tidak dapat menampilkan data.');
-                return;
-            })
+                .done((response) => {
+                    $('#modal-form [name=code_kel]').val(response.code_kel);
+                    $('#modal-form [name=code_unit]').val(response.code_unit);
+                    $('#modal-form [name=nama_kel]').val(response.nama_kel);
+                    $('#modal-form [name=alamat]').val(response.alamat);
+                    $('#modal-form [name=cao]').val(response.cao);
+                    $('#modal-form [name=cif]').val(response.cif);
+                    $('#modal-form [name=no_tlp]').val(response.no_tlp);
+                })
+                .fail((errors) => {
+                    alert('Tidak dapat menampilkan data.');
+                    return;
+                })
         }
 
         function hapusData(url) {
@@ -167,24 +156,24 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.post(url, {
-                        '_token': $('[name=csrf-token]').attr('content'),
-                        '_method': 'delete'
-                    })
-                    .done((response) => {
-                        Swal.fire(
-                            'Terhapus!',
-                            'Data berhasil dihapus.',
-                            'success'
-                        );
-                        table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        Swal.fire(
-                            'Gagal!',
-                            'Data tidak dapat dihapus.',
-                            'error'
-                        );
-                    });
+                            '_token': $('[name=csrf-token]').attr('content'),
+                            '_method': 'delete'
+                        })
+                        .done((response) => {
+                            Swal.fire(
+                                'Terhapus!',
+                                'Data berhasil dihapus.',
+                                'success'
+                            );
+                            table.ajax.reload();
+                        })
+                        .fail((errors) => {
+                            Swal.fire(
+                                'Gagal!',
+                                'Data tidak dapat dihapus.',
+                                'error'
+                            );
+                        });
                 }
             });
         }
@@ -225,5 +214,10 @@
             });
         });
 
+        $(function () {
+            $('.select2bs4').select2({
+                theme: 'bootstrap4'
+            })
+        });
     </script>
 @endpush
