@@ -42,6 +42,7 @@ return new class extends Migration
             $table->String('id_expired');
             $table->String('waris');
             $table->String('cao',6);
+            $table->String('cao_promotor', 6);
             $table->String('userid', 6);
             $table->String('status', 50);
             $table->String('pekerjaan_pasangan');

@@ -100,6 +100,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::resource('view-data', ViewDataController::class);
 
     Route::get('/pemeliharaan-kelompok/data', [PemeliharaanKelompok::class, 'data'])->name('pemeliharaan-kelompok.data');
+    Route::get('/pemeliharaan-kelompok/get-anggota', [PemeliharaanKelompok::class, 'getAnggota'])->name('pemeliharaan-kelompok.getAnggota');
     Route::resource('pemeliharaan-kelompok', PemeliharaanKelompok::class);
 
 

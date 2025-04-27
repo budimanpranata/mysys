@@ -20,10 +20,9 @@
 
                     <div class="form-group">
                         <label>Nama Kelompok</label>
-                        <input type="text" class="form-control uppercase" name="nama_kel" id="nama_kel" required autofocus>
+                        <input type="text" class="form-control uppercase" name="nama_kel" id="nama_kel" readonly>
                         <span class="help-block with-errors text-danger"></span>
                     </div>
-
 
                     <div class="form-group">
                         <label>Pilih AO</label>
@@ -38,13 +37,13 @@
 
                     <div class="form-group">
                         <label>Alamat</label>
-                        <textarea name="alamat" class="form-control uppercase" id="alamat" cols="5" rows="5" required></textarea>
+                        <textarea name="alamat" class="form-control uppercase" id="alamat" cols="2" rows="2" required></textarea>
                         <span class="help-block with-errors text-danger"></span>
                     </div>
 
                     <div class="form-group">
                         <label>CIF Ketua</label>
-                        <select name="cif" id="cif" class="form-control select2" required>
+                        <select name="cif" id="cif" class="form-control select2bs4" required>
                             <option hidden value="">-- Pilih CIF Ketua --</option>
                             @foreach ($anggota as $item)
                                 <option value="{{ $item->cif }}" data-no-tlp="{{ $item->no_hp }}">{{ $item->cif }} - {{ $item->nama }} - {{ $item->no_hp }}</option>
@@ -56,12 +55,6 @@
                     <div class="form-group">
                         <label>No Telp Ketua</label>
                         <input type="text" class="form-control" name="no_tlp" id="no_tlp" required readonly>
-                        <span class="help-block with-errors text-danger"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Hari Minggon</label>
-                        <input type="text" class="form-control" name="hari" id="hari" required>
                         <span class="help-block with-errors text-danger"></span>
                     </div>
                 </div>

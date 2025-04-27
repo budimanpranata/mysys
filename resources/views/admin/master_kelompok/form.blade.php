@@ -38,7 +38,7 @@
 
                     <div class="form-group">
                         <label>Alamat</label>
-                        <textarea name="alamat" class="form-control uppercase" id="alamat" cols="5" rows="5" required></textarea>
+                        <textarea name="alamat" class="form-control uppercase" id="alamat" cols="2" rows="2" required></textarea>
                         <span class="help-block with-errors text-danger"></span>
                     </div>
 
