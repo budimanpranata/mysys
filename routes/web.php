@@ -24,6 +24,7 @@ use App\Http\Controllers\PemeliharaanKelompok;
 use App\Http\Controllers\ViewDataController;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\PembatalanWakalahController;
+use App\Http\Controllers\RealisasiTagihanKelompokController;
 use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 
@@ -123,6 +124,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/rest-kemampuan-bayar-get-kelompok', [RestKemampuanBayarController::class, 'getSetKelompok']);
     Route::get('/rest-kemampuan-bayar/getData', [RestKemampuanBayarController::class, 'getData']);
     Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
+
+    // realisasi tagihan kelompok
+    Route::get('/realisasi/tagihan-kelompok', [RealisasiTagihanKelompokController::class, 'index']);
+    Route::post('/realisasi/tagihan-kelompok/get-kelompok', [RealisasiTagihanKelompokController::class, 'getKelompok'])->name('realisasi.tagihanKelompok.getKelompok');
+    Route::post('/realisasi/tagihan-kelompok/process', [RealisasiTagihanKelompokController::class, 'processRealisasi'])->name('realisasi.tagihanKelompok.process');
 
 });
 
