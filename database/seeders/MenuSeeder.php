@@ -263,13 +263,22 @@ class MenuSeeder extends Seeder
 
         ]);
 
+        Menu::create([
+            'name' => 'Setoran 5%',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/input_transkasi',
+            'left' => 'null',
+            'order' => 23,
+          ]);
+
          Menu::create([
             'name' => 'Setoran 5%',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/setoran-lima-persen',
             'left' => 'null',
-            'order' => 22,
+            'order' => 24,
           ]);
 
           $Restrukturisasi = Menu::create([
@@ -278,7 +287,7 @@ class MenuSeeder extends Seeder
             'parent_id' => null,
             'url' => null,
             'left' => 'right fas fa-angle-left',
-            'order' => 23,
+            'order' => 25,
 
         ]);
 
@@ -288,7 +297,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $Restrukturisasi->id,
             'url' => '/rest-kemampuan-bayar',
             'left' => 'null',
-            'order' => 23,
+            'order' => 26,
           ]);
     }
 }
