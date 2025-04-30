@@ -11,12 +11,6 @@ class temp_akad_mus extends Model
     protected $table = 'temp_akad_mus';
     use HasFactory;
 
-    protected $guarded = [];
-    protected $primaryKey = 'cif';
-    protected $casts = [
-        'cif' => 'string',
-    ];
-
     public function anggota()
     {
         return $this->belongsTo(Anggota::class, 'no_anggota', 'no');

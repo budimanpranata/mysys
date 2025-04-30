@@ -99,7 +99,9 @@ class RealisasiTagihanKelompokController extends Controller
                     'reff' => $unit . $timestamp . strtoupper(\Str::random(2)),
                     'cao' => $temp_akad_mus->cao,
                     'blok' => '2',
-                    'kode_transaksi' => $noTransaksi
+                    'kode_transaksi' => $noTransaksi,
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
 
                 DB::table('simpanan')->insert([
@@ -116,7 +118,9 @@ class RealisasiTagihanKelompokController extends Controller
                     'reff' => $unit . $timestamp . strtoupper(\Str::random(2)),
                     'cao' => $temp_akad_mus->cao,
                     'blok' => '2',
-                    'kode_transaksi' => $noTransaksi
+                    'kode_transaksi' => $noTransaksi,
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
 
                 DB::table('simpanan')->insert([
@@ -133,7 +137,9 @@ class RealisasiTagihanKelompokController extends Controller
                     'reff' => $unit . $timestamp . strtoupper(\Str::random(2)),
                     'cao' => $temp_akad_mus->cao,
                     'blok' => '2',
-                    'kode_transaksi' => $noTransaksi
+                    'kode_transaksi' => $noTransaksi,
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
 
                 DB::table('simpanan')->insert([
@@ -150,7 +156,9 @@ class RealisasiTagihanKelompokController extends Controller
                     'reff' => $unit . $timestamp . strtoupper(\Str::random(2)),
                     'cao' => $temp_akad_mus->cao,
                     'blok' => '2',
-                    'kode_transaksi' => $noTransaksi
+                    'kode_transaksi' => $noTransaksi,
+                    'created_at' => now(),
+                    'updated_at' => now()
                 ]);
                 
                 $entriesJurnal[] = [
