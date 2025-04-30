@@ -103,7 +103,7 @@
                     return;
                 }
 
-                // Tampilkan loading sebelum request AJAX
+                // tampilkan loading sebelum request AJAX
                 Swal.fire({
                     title: 'Memproses...',
                     text: 'Silakan tunggu',
@@ -122,11 +122,11 @@
                         code_kel: code_kel,
                     },
                     success: function (response) {
-                        Swal.close(); // Tutup loading
+                        Swal.close();
                         var tbody = $('table tbody');
-                        tbody.empty(); // Bersihkan tabel
+                        tbody.empty();
 
-                        // Inisialisasi total
+                        // inisialisasi total
                         var totalPembiayaan = 0;
                         var totalMargin = 0;
                         var totalSetoran = 0;
@@ -136,9 +136,9 @@
                         var totalSisaTwm = 0;
 
                         if (response.data.length > 0) {
-                            // Loop hasil pencarian
+                            // loop hasil pencarian
                             $.each(response.data, function (index, item) {
-                                // Konversi ke number dan hitung total
+                                // konversi ke number dan hitung total
                                 var pembiayaan = parseFloat(item.os) || 0;
                                 var margin = parseFloat(item.saldo_margin) || 0;
                                 var setoran = parseFloat(item.bulat) || 0;
@@ -176,7 +176,7 @@
                                 `);
                             });
 
-                            // Update total footer
+                            // update total footer
                             $('#total-pembiayaan').text(formatNumber(totalPembiayaan));
                             $('#total-margin').text(formatNumber(totalMargin));
                             $('#total-setoran').text(formatNumber(totalSetoran));
@@ -185,7 +185,7 @@
                             $('#total-saldo-twm').text(formatNumber(totalSaldoTwm));
                             $('#total-sisa-twm').text(formatNumber(totalSisaTwm));
                             
-                            // Tampilkan footer total
+                            // tampilkan footer total
                             $('#total-row').show();
 
                             // SweetAlert jika data ditemukan
@@ -204,12 +204,12 @@
                                 confirmButtonText: 'OK'
                             });
                             tbody.append('<tr><td colspan="12" class="text-center text-danger">Data tidak ditemukan</td></tr>');
-                            // Sembunyikan footer total jika tidak ada data
+                            // sembunyikan footer total jika tidak ada data
                             $('#total-row').hide();
                         }
                     },
                     error: function (xhr) {
-                        Swal.close(); // Tutup loading
+                        Swal.close();
                             Swal.fire({
                                 title: 'Terjadi Kesalahan!',
                                 text: 'Gagal mengambil data, silakan coba lagi.',
@@ -221,28 +221,25 @@
                 });
             });
 
-            // Fungsi untuk format number dengan separator ribuan
+            // fungsi untuk format number dengan separator ribuan
             function formatNumber(number) {
                 return new Intl.NumberFormat('id-ID').format(number);
             }
 
-            // Fungsi ketika checkbox diubah
+            // fungsi ketika checkbox diubah
             $(document).on('change', '.realisasi-checkbox', function() {
                 const baris = $(this).closest('tr');
                 
-                // Hanya menandai checkbox yang dipilih
                 if ($(this).is(':checked')) {
-                    // Simpan data yang diperlukan untuk jurnal
                     $(this).data({
                         'cif': $(this).data('cif'),
                     });
                 } else {
-                    // Hapus data jika tidak dicentang
-                    $(this).removeData(['cif', 'plafond', 'margin', 'setoran']);
+                    $(this).removeData(['cif']);
                 }
             });
 
-            // Fungsi simpan realisasi
+            // ini fungsi simpan realisasi
             $('#realisasi').click(function() {
                 const dataDipilih = [];
                 
@@ -276,7 +273,7 @@
                 });
             });
 
-            // Fungsi proses realisasi ke server
+            // fungsi proses realisasi ke controoler
             function prosesRealisasi(data) {
                 Swal.fire({
                     title: 'Memproses...',
@@ -301,7 +298,6 @@
                             icon: 'success',
                             confirmButtonText: 'OK'
                         }).then(() => {
-                            // Muat ulang data
                             $('#filterButton').click();
                         });
                     },
