@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('param_libur', function (Blueprint $table) {
-            $table->id();
+            $table->string('code_tgl');
+            $table->date('tanggal');
+            $table->string('nama_param_tgl');
             $table->timestamps();
         });
     }

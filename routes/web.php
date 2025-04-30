@@ -26,6 +26,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\PembatalanWakalahController;
 use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
+use App\Http\Controllers\RealisasiMusyarokahController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -123,6 +124,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/rest-kemampuan-bayar-get-kelompok', [RestKemampuanBayarController::class, 'getSetKelompok']);
     Route::get('/rest-kemampuan-bayar/getData', [RestKemampuanBayarController::class, 'getData']);
     Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
+
+    //Realisasi Musyarokah
+    Route::get('/realisasi-musyarakah', [RealisasiMusyarokahController::class, 'index']);
+    Route::get('/realisasi-musyarakah-get-kelompok', [RealisasiMusyarokahController::class, 'getSetKelompok']);
+    Route::get('/realisasi-musyarakah/getData', [RealisasiMusyarokahController::class, 'getData']);
+    Route::post('/proses-realisasi-musyarakah', [RealisasiMusyarokahController::class, 'realisasiMusyarokah']);
 
 });
 

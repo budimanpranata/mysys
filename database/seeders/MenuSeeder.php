@@ -213,6 +213,15 @@ class MenuSeeder extends Seeder
             'order' => 18,
 
         ]);
+        Menu::create([
+            'name' => 'Realisasi Musyarokah',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Realisasi->id,
+            'url' => '/realisasi-musyarakah',
+            'left' => 'null',
+            'order' => 18,
+
+        ]);
 
         $pemeliharaan_data = Menu::create([
             'name' => 'Pemeliharaan Data',
