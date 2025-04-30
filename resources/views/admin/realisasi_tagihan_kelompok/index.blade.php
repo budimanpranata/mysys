@@ -59,6 +59,18 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
+                            <tfoot id="total-row" style="display: none;">
+                                <tr>
+                                    <th colspan="5" class="text-right">TOTAL</th>
+                                    <th class="text-right" id="total-pembiayaan">0</th>
+                                    <th class="text-right" id="total-margin">0</th>
+                                    <th class="text-right" id="total-setoran">0</th>
+                                    <th class="text-right" id="total-angsuran">0</th>
+                                    <th class="text-right" id="total-twm">0</th>
+                                    <th class="text-right" id="total-saldo-twm">0</th>
+                                    <th class="text-right" id="total-sisa-twm">0</th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                     <!-- Tombol Cetak PDF -->
@@ -114,9 +126,35 @@
                         var tbody = $('table tbody');
                         tbody.empty(); // Bersihkan tabel
 
+                        // Inisialisasi total
+                        var totalPembiayaan = 0;
+                        var totalMargin = 0;
+                        var totalSetoran = 0;
+                        var totalAngsuran = 0;
+                        var totalTwm = 0;
+                        var totalSaldoTwm = 0;
+                        var totalSisaTwm = 0;
+
                         if (response.data.length > 0) {
                             // Loop hasil pencarian
                             $.each(response.data, function (index, item) {
+                                // Konversi ke number dan hitung total
+                                var pembiayaan = parseFloat(item.os) || 0;
+                                var margin = parseFloat(item.saldo_margin) || 0;
+                                var setoran = parseFloat(item.bulat) || 0;
+                                var angsuran = parseFloat(item.angsuran) || 0;
+                                var twm = parseFloat(item.twm) || 0;
+                                var saldoTwm = parseFloat(item.saldo_twm) || 0;
+                                var sisaTwm = parseFloat(item.sisa_twm) || 0;
+                                
+                                totalPembiayaan += pembiayaan;
+                                totalMargin += margin;
+                                totalSetoran += setoran;
+                                totalAngsuran += angsuran;
+                                totalTwm += twm;
+                                totalSaldoTwm += saldoTwm;
+                                totalSisaTwm += sisaTwm;
+
                                 tbody.append(`
                                     <tr>
                                         <td class="text-center">
@@ -127,16 +165,28 @@
                                         <td>${item.cif}</td>
                                         <td>${item.nama_anggota}</td>
                                         <td>${item.unit}</td>
-                                        <td>${item.os}</td>
-                                        <td>${item.saldo_margin}</td>
-                                        <td>${item.bulat}</td>
-                                        <td>${item.angsuran}</td>
-                                        <td>${item.twm}</td>
-                                        <td>${item.saldo_twm}</td>
-                                        <td>${item.sisa_twm}</td>
+                                        <td class="text-right">${formatNumber(pembiayaan)}</td>
+                                        <td class="text-right">${formatNumber(margin)}</td>
+                                        <td class="text-right">${formatNumber(setoran)}</td>
+                                        <td class="text-right">${formatNumber(angsuran)}</td>
+                                        <td class="text-right">${formatNumber(twm)}</td>
+                                        <td class="text-right">${formatNumber(saldoTwm)}</td>
+                                        <td class="text-right">${formatNumber(sisaTwm)}</td>
                                     </tr>
                                 `);
                             });
+
+                            // Update total footer
+                            $('#total-pembiayaan').text(formatNumber(totalPembiayaan));
+                            $('#total-margin').text(formatNumber(totalMargin));
+                            $('#total-setoran').text(formatNumber(totalSetoran));
+                            $('#total-angsuran').text(formatNumber(totalAngsuran));
+                            $('#total-twm').text(formatNumber(totalTwm));
+                            $('#total-saldo-twm').text(formatNumber(totalSaldoTwm));
+                            $('#total-sisa-twm').text(formatNumber(totalSisaTwm));
+                            
+                            // Tampilkan footer total
+                            $('#total-row').show();
 
                             // SweetAlert jika data ditemukan
                             Swal.fire({
@@ -154,6 +204,8 @@
                                 confirmButtonText: 'OK'
                             });
                             tbody.append('<tr><td colspan="12" class="text-center text-danger">Data tidak ditemukan</td></tr>');
+                            // Sembunyikan footer total jika tidak ada data
+                            $('#total-row').hide();
                         }
                     },
                     error: function (xhr) {
@@ -168,6 +220,11 @@
                     }
                 });
             });
+
+            // Fungsi untuk format number dengan separator ribuan
+            function formatNumber(number) {
+                return new Intl.NumberFormat('id-ID').format(number);
+            }
 
             // Fungsi ketika checkbox diubah
             $(document).on('change', '.realisasi-checkbox', function() {
