@@ -15,7 +15,7 @@ class simpanan extends Seeder
         DB::table('simpanan')->insert([
             [
                 'reff' => 'REF001',
-                'buss_date' => now(),
+                'buss_date' => now()->subMonth(),
                 'norek' => '00108612001',
                 'unit' => '001',
                 'cif' => '086120',
@@ -27,10 +27,10 @@ class simpanan extends Seeder
                 'ket' => 'Initial deposit',
                 'cao' => '00303',
                 'blok' => 0,
-                'tgl_input' => now(),
+                'tgl_input' => now()->subMonth(),
                 'kode_transaksi' => 'TRX001',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->subMonth(),
+                'updated_at' => now()->subMonth(),
             ],
             [
                 'reff' => 'REF002',
@@ -52,6 +52,5 @@ class simpanan extends Seeder
                 'updated_at' => now(),
             ],
         ]);
-
     }
 }

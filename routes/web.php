@@ -27,6 +27,7 @@ use App\Http\Controllers\PembatalanWakalahController;
 use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
+use App\Http\Controllers\HapusBukuController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -104,8 +105,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/pemeliharaan-kelompok/get-anggota', [PemeliharaanKelompok::class, 'getAnggota'])->name('pemeliharaan-kelompok.getAnggota');
     Route::resource('pemeliharaan-kelompok', PemeliharaanKelompok::class);
 
+    Route::get('/realisasi/hapus-buku', [HapusBukuController::class, 'index'])->name('hapus_buku');
+    Route::get('/realisasi/hapus-buku/data', [HapusBukuController::class, 'data'])->name('hapus_buku.data');
+    Route::post('/realisasi/hapus-buku/jurnal', [HapusBukuController::class, 'jurnal'])->name('hapus_buku.jurnal');
 
-  // DOMpdf
+
+    // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
     Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateApprovalPdf'])->name('pdf.generateApproval');
