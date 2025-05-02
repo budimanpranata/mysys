@@ -106,8 +106,10 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::resource('pemeliharaan-kelompok', PemeliharaanKelompok::class);
 
     Route::get('/realisasi/hapus-buku', [HapusBukuController::class, 'index'])->name('hapus_buku');
-    Route::get('/realisasi/hapus-buku/data', [HapusBukuController::class, 'data'])->name('hapus_buku.data');
-    Route::post('/realisasi/hapus-buku/jurnal', [HapusBukuController::class, 'jurnal'])->name('hapus_buku.jurnal');
+    Route::get('/realisasi/hapus-buku/search-cif', [HapusBukuController::class, 'searchCif'])->name('hapus_buku.search_cif');
+    Route::post('/realisasi/hapus-buku/add-transaction', [HapusBukuController::class, 'addTransaction'])->name('hapus_buku.add_transaction');
+    Route::post('/realisasi/hapus-buku/delete-transaction', [HapusBukuController::class, 'deleteTransaction'])->name('hapus_buku.delete_transaction');
+    Route::post('/realisasi/hapus-buku/process-all', [HapusBukuController::class, 'processAll'])->name('hapus_buku.process_all');
 
 
     // DOMpdf

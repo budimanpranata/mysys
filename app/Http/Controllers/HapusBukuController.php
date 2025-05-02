@@ -17,61 +17,61 @@ class HapusBukuController extends Controller
         return view("admin.hapus_buku.index", compact("menus", "title"));
     }
 
-    public function data(Request $request)
+    public function searchCif(Request $request)
     {
         try {
-            $cif = $request->input('cif');
+            $term = $request->input('term');
             $unit = $request->input('unit');
 
-            // First get the pembiayaan data
             $data = DB::table('pembiayaan')
-                ->where('pembiayaan.cif', $cif)
                 ->where('pembiayaan.unit', $unit)
+                ->where(function ($query) use ($term) {
+                    $query->where('pembiayaan.cif', 'LIKE', "%{$term}%")
+                        ->orWhere('pembiayaan.nama', 'LIKE', "%{$term}%");
+                })
                 ->select(
                     'pembiayaan.cif',
                     'pembiayaan.no_anggota',
                     'pembiayaan.nama',
-                    'pembiayaan.plafond as debit',
-                    'pembiayaan.saldo_margin as kredit',
-                    'pembiayaan.status as keterangan',
-                    DB::raw('CAST(pembiayaan.run_tenor AS INTEGER) as minggu_ke')
+                    'pembiayaan.plafond',
+                    'pembiayaan.saldo_margin',
+                    DB::raw('CAST(pembiayaan.run_tenor AS INTEGER) as run_tenor')
                 )
                 ->get();
 
             if ($data->isNotEmpty()) {
-                // Get the kredit value from the latest simpanan record for this CIF
-                $latestSimpananDebet = DB::table('simpanan')
-                    ->where('cif', $cif)
-                    ->orderBy('created_at', 'asc')
-                    ->latest()
-                    ->value('debet');
+                // Get simpanan data for each record
+                $data = $data->map(function ($item) {
+                    // Get latest simpanan record
+                    $simpananData = DB::table('simpanan')
+                        ->where('cif', $item->cif)
+                        ->orderBy('created_at', 'desc')
+                        ->select('kredit', 'debet')
+                        ->first();
 
-                // Generate nomor bukti for each row and add simpanan data
-                $data = $data->map(function ($item) use ($unit, $latestSimpananDebet) {
-                    $item->nomor_bukti = "BS-" . $unit . "-" . Str::random(7);
-                    $item->simpanan = $latestSimpananDebet ?? 0;
-                    $item->minggu_ke = (int) $item->minggu_ke ?? 0;
+                    // Calculate simpanan as kredit - debet
+                    $kredit = $simpananData->kredit ?? 0;
+                    $debet = $simpananData->debet ?? 0;
+                    $item->simpanan = $kredit - $debet;
+
+                    $item->label = "{$item->cif} - {$item->nama}";
+                    $item->value = $item->cif;
                     return $item;
                 });
             }
 
-            return response()->json([
-                'success' => true,
-                'data' => $data
-            ]);
+            return response()->json($data);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error retrieving data: ' . $e->getMessage()
+                'message' => 'Error searching CIF: ' . $e->getMessage()
             ], 500);
         }
     }
 
-    public function jurnal(Request $request)
+    public function addTransaction(Request $request)
     {
         try {
-            // \Log::info('Starting hapus buku process', ['request' => $request->all()]);
-
             $validated = $request->validate([
                 'nomor_bukti' => 'required|string',
                 'tanggal' => 'required|date',
@@ -84,198 +84,264 @@ class HapusBukuController extends Controller
                 'no_anggota' => 'required|string',
                 'userUnit' => 'required|string',
                 'userId' => 'required|string',
-                'userDate' => 'required|date'
+                'userDate' => 'required|date',
+                'nama' => 'required|string'
             ]);
-
-            // \Log::info('Validation passed', ['validated_data' => $validated]);
 
             $pembiayaan = DB::table('pembiayaan')
                 ->where('cif', $validated['cif'])
                 ->first();
 
-            // \Log::info('Found pembiayaan record', ['pembiayaan' => $pembiayaan]);
-
-            // kalkulasi jumlah pokok berdasarkan jenis wo
-            $finalPokok = $validated['pokok'];
-            $runTenor = (int) $pembiayaan->run_tenor;
-
-            // \Log::info('Initial calculation values', [
-            //     'initial_pokok' => $finalPokok,
-            //     'run_tenor' => $runTenor,
-            //     'jenis_wo' => $validated['jenis_wo']
-            // ]);
-
-            if ($validated['jenis_wo'] === 'NPF') {
-                // kalo run_tenor > 13
-                if ($runTenor <= 13) {
-                    throw new \Exception('Run tenor must be greater than 13 for NPF type');
-                }
-                $finalPokok = $validated['pokok'] - $validated['simpanan'];
-            } elseif ($validated['jenis_wo'] === 'Meninggal Dunia') {
-                // 50% tenor
-                $halfTenor = round($pembiayaan->tenor / 2);
-                if ($runTenor < $halfTenor) {
-                    $finalPokok = $validated['pokok'] - $validated['simpanan'];
-                }
+            if (!$pembiayaan) {
+                throw new \Exception('Data pembiayaan tidak ditemukan');
             }
 
-            $totalAmount = $finalPokok + $validated['margin'];
-            // \Log::info('Final amount calculated', [
-            //     'final_pokok' => $finalPokok,
-            //     'margin' => $validated['margin'],
-            //     'total_amount' => $totalAmount
-            // ]);
+            // Calculate final pokok based on jenis_wo
+            $finalPokok = $validated['pokok'];
+            $runTenor = $validated['minggu_ke'];
+            $administrativeAmount = 0;
+
+            if ($validated['jenis_wo'] === 'NPF') {
+                if ((int) $pembiayaan->gol <= 3) {
+                    throw new \Exception('Golongan must be greater than 3 for NPF type');
+                }
+                $finalPokok = $validated['pokok'] - $validated['simpanan'] + $validated['margin'];
+                $administrativeAmount = $validated['pokok'] - $validated['simpanan'];
+            } elseif ($validated['jenis_wo'] === 'Meninggal Dunia') {
+                if ($runTenor >= 13) {
+                    $finalPokok = $validated['pokok'] + $validated['margin'];
+                    $administrativeAmount = $validated['pokok'];
+                } else {
+                    $finalPokok = $validated['pokok'] - $validated['simpanan'] + $validated['margin'];
+                    $administrativeAmount = $validated['pokok'] - $validated['simpanan'];
+                }
+            }
 
             $formattedDate = date('Y-m-d H:i:s', strtotime($validated['userDate']));
 
             DB::beginTransaction();
             try {
-                // \Log::info('Starting database transaction');
-
+                // Insert transaction records
                 $transactionRecords = [
                     [
                         'unit' => $validated['userUnit'],
                         'kode_transaksi' => $validated['nomor_bukti'],
-                        'kode_rekening' => $validated['no_anggota'],
+                        'kode_rekening' => '1423000',
                         'tanggal_transaksi' => $formattedDate,
                         'jenis_transaksi' => 'bukti SYSTEM',
-                        'keterangan_transaksi' => "Pendapatan pokok AN {$pembiayaan->nama}",
-                        'debet' => $finalPokok,
-                        'kredit' => 0,
-                        'tanggal_posting' => $validated['tanggal'],
-                        'keterangan_posting' => "Pendapatan pokok AN {$pembiayaan->nama}",
-                        'id_admin' => $validated['userId']
-                    ],
-                    [
-                        'unit' => $validated['userUnit'],
-                        'kode_transaksi' => $validated['nomor_bukti'],
-                        'kode_rekening' => $validated['no_anggota'],
-                        'tanggal_transaksi' => $formattedDate,
-                        'jenis_transaksi' => 'bukti SYSTEM',
-                        'keterangan_transaksi' => "Piutang pokok AN {$pembiayaan->nama}",
-                        'debet' => 0,
-                        'kredit' => $finalPokok,
-                        'tanggal_posting' => $validated['tanggal'],
-                        'keterangan_posting' => "Piutang pokok AN {$pembiayaan->nama}",
-                        'id_admin' => $validated['userId']
-                    ],
-                    [
-                        'unit' => $validated['userUnit'],
-                        'kode_transaksi' => $validated['nomor_bukti'],
-                        'kode_rekening' => $validated['no_anggota'],
-                        'tanggal_transaksi' => $formattedDate,
-                        'jenis_transaksi' => 'bukti SYSTEM',
-                        'keterangan_transaksi' => "Pendapatan margin AN {$pembiayaan->nama}",
+                        'keterangan_transaksi' => "PMYD-PYD Murabahah Mingguan AN {$validated['nama']}",
                         'debet' => $validated['margin'],
                         'kredit' => 0,
                         'tanggal_posting' => $validated['tanggal'],
-                        'keterangan_posting' => "Pendapatan margin AN {$pembiayaan->nama}",
+                        'keterangan_posting' => "PMYD-PYD Murabahah Mingguan AN {$validated['nama']}",
                         'id_admin' => $validated['userId']
                     ],
                     [
                         'unit' => $validated['userUnit'],
                         'kode_transaksi' => $validated['nomor_bukti'],
-                        'kode_rekening' => $validated['no_anggota'],
+                        'kode_rekening' => '1413000',
                         'tanggal_transaksi' => $formattedDate,
                         'jenis_transaksi' => 'bukti SYSTEM',
-                        'keterangan_transaksi' => "Piutang margin AN {$pembiayaan->nama}",
+                        'keterangan_transaksi' => "Piutang Murabahah Mingguan AN {$validated['nama']}",
                         'debet' => 0,
                         'kredit' => $validated['margin'],
                         'tanggal_posting' => $validated['tanggal'],
-                        'keterangan_posting' => "Piutang margin AN {$pembiayaan->nama}",
+                        'keterangan_posting' => "Piutang Murabahah Mingguan AN {$validated['nama']}",
+                        'id_admin' => $validated['userId']
+                    ],
+                    [
+                        'unit' => $validated['userUnit'],
+                        'kode_transaksi' => $validated['nomor_bukti'],
+                        'kode_rekening' => '1512000',
+                        'tanggal_transaksi' => $formattedDate,
+                        'jenis_transaksi' => 'bukti SYSTEM',
+                        'keterangan_transaksi' => "PPA Umum-PYD Piutang Murabahah AN {$validated['nama']}",
+                        'debet' => $administrativeAmount,
+                        'kredit' => 0,
+                        'tanggal_posting' => $validated['tanggal'],
+                        'keterangan_posting' => "PPA Umum-PYD Piutang Murabahah AN {$validated['nama']}",
+                        'id_admin' => $validated['userId']
+                    ],
+                    [
+                        'unit' => $validated['userUnit'],
+                        'kode_transaksi' => $validated['nomor_bukti'],
+                        'kode_rekening' => '2101000',
+                        'tanggal_transaksi' => $formattedDate,
+                        'jenis_transaksi' => 'bukti SYSTEM',
+                        'keterangan_transaksi' => "Simpanan Wadiah Kelompok AN {$validated['nama']}",
+                        'debet' => $validated['simpanan'],
+                        'kredit' => 0,
+                        'tanggal_posting' => $validated['tanggal'],
+                        'keterangan_posting' => "Simpanan Wadiah Kelompok AN {$validated['nama']}",
+                        'id_admin' => $validated['userId']
+                    ],
+                    [
+                        'unit' => $validated['userUnit'],
+                        'kode_transaksi' => $validated['nomor_bukti'],
+                        'kode_rekening' => '1413000',
+                        'tanggal_transaksi' => $formattedDate,
+                        'jenis_transaksi' => 'bukti SYSTEM',
+                        'keterangan_transaksi' => "Piutang Murabahah Mingguan AN {$validated['nama']}",
+                        'debet' => 0,
+                        'kredit' => $validated['pokok'],
+                        'tanggal_posting' => $validated['tanggal'],
+                        'keterangan_posting' => "Piutang Murabahah Mingguan AN {$validated['nama']}",
+                        'id_admin' => $validated['userId']
+                    ],
+                    [
+                        'unit' => $validated['userUnit'],
+                        'kode_transaksi' => $validated['nomor_bukti'],
+                        'kode_rekening' => '9141000',
+                        'tanggal_transaksi' => $formattedDate,
+                        'jenis_transaksi' => 'bukti SYSTEM',
+                        'keterangan_transaksi' => "Rekening Administratif - Piutang Murabahah AN {$validated['nama']}",
+                        'debet' => $administrativeAmount,
+                        'kredit' => 0,
+                        'tanggal_posting' => $validated['tanggal'],
+                        'keterangan_posting' => "Rekening Administratif - Piutang Murabahah AN {$validated['nama']}",
+                        'id_admin' => $validated['userId']
+                    ],
+                    [
+                        'unit' => $validated['userUnit'],
+                        'kode_transaksi' => $validated['nomor_bukti'],
+                        'kode_rekening' => '9910000',
+                        'tanggal_transaksi' => $formattedDate,
+                        'jenis_transaksi' => 'bukti SYSTEM',
+                        'keterangan_transaksi' => "Rekening Administratif - Rekening Lawan AN {$validated['nama']}",
+                        'debet' => 0,
+                        'kredit' => $administrativeAmount,
+                        'tanggal_posting' => $validated['tanggal'],
+                        'keterangan_posting' => "Rekening Administratif - Rekening Lawan AN {$validated['nama']}",
                         'id_admin' => $validated['userId']
                     ]
                 ];
 
                 DB::table('tabel_transaksi')->insert($transactionRecords);
-                // \Log::info('Inserted transaction records', ['count' => count($transactionRecords)]);
+                DB::commit();
 
-                // Insert into simpanan
-                $simpananRecords = [
-                    [
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Transaction added successfully'
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deleteTransaction(Request $request)
+    {
+        try {
+            $nomor_bukti = $request->input('nomor_bukti');
+
+            DB::beginTransaction();
+            try {
+                // Delete all records with this nomor_bukti
+                DB::table('tabel_transaksi')
+                    ->where('kode_transaksi', $nomor_bukti)
+                    ->delete();
+
+                DB::commit();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Transaction deleted successfully'
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                throw $e;
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting transaction: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function processAll(Request $request)
+    {
+        try {
+            $records = $request->input('records');
+            if (empty($records)) {
+                throw new \Exception('No records to process');
+            }
+
+            DB::beginTransaction();
+            try {
+                foreach ($records as $record) {
+                    $pembiayaan = DB::table('pembiayaan')
+                        ->where('cif', $record['cif'])
+                        ->first();
+
+                    if (!$pembiayaan) {
+                        throw new \Exception("Pembiayaan not found for CIF: {$record['cif']}");
+                    }
+
+                    $totalAmount = $record['pokok'] + $record['margin'];
+                    $formattedDate = date('Y-m-d H:i:s', strtotime($record['userDate']));
+
+                    // Insert into simpanan
+                    DB::table('simpanan')->insert([
                         'reff' => 'WO-' . Str::random(10),
                         'buss_date' => $formattedDate,
-                        'norek' => $validated['no_anggota'],
-                        'unit' => $validated['userUnit'],
-                        'cif' => $validated['cif'],
-                        'code_kel' => $pembiayaan->code_kel,
-                        'debet' => 0,
-                        'kredit' => $totalAmount,
-                        'type' => 'WO',
-                        'ket' => "Hapus buku {$validated['jenis_wo']} AN {$pembiayaan->nama}",
-                        'cao' => $pembiayaan->cao,
-                        'tgl_input' => $validated['tanggal'],
-                        'kode_transaksi' => $validated['nomor_bukti']
-                    ],
-                    [
-                        'reff' => 'WO-' . Str::random(10),
-                        'buss_date' => $formattedDate,
-                        'norek' => $validated['no_anggota'],
-                        'unit' => $validated['userUnit'],
-                        'cif' => $validated['cif'],
+                        'norek' => $record['no_anggota'],
+                        'unit' => $record['userUnit'],
+                        'cif' => $record['cif'],
                         'code_kel' => $pembiayaan->code_kel,
                         'debet' => $totalAmount,
                         'kredit' => 0,
                         'type' => 'WO',
-                        'ket' => "Hapus buku {$validated['jenis_wo']} AN {$pembiayaan->nama}",
+                        'ket' => "Hapus buku {$record['jenis_wo']} AN {$record['nama']}",
                         'cao' => $pembiayaan->cao,
-                        'tgl_input' => $validated['tanggal'],
-                        'kode_transaksi' => $validated['nomor_bukti']
-                    ]
-                ];
+                        'tgl_input' => $record['tanggal'],
+                        'kode_transaksi' => $record['nomor_bukti']
+                    ]);
 
-                DB::table('simpanan')->insert($simpananRecords);
-                // \Log::info('Inserted simpanan records', ['count' => count($simpananRecords)]);
+                    // Insert into rek_loan
+                    DB::table('rek_loan')->insert([
+                        'tgl_realisasi' => $formattedDate,
+                        'unit' => $record['userUnit'],
+                        'no_anggota' => $record['no_anggota'],
+                        'saldo_kredit' => 0,
+                        'debet' => $totalAmount,
+                        'tipe' => 'WO',
+                        'ket' => "Hapus buku {$record['jenis_wo']} AN {$record['nama']}",
+                        'userid' => $record['userId'],
+                        'status' => "HAPUS BUKU {$record['jenis_wo']}",
+                        'cif' => $record['cif'],
+                        'ao' => $pembiayaan->cao
+                    ]);
 
-                // Insert into rek_loan
-                DB::table('rek_loan')->insert([
-                    'tgl_realisasi' => $formattedDate,
-                    'unit' => $validated['userUnit'],
-                    'no_anggota' => $validated['no_anggota'],
-                    'saldo_kredit' => $totalAmount,
-                    'debet' => 0,
-                    'tipe' => 'WO',
-                    'ket' => "Hapus buku {$validated['jenis_wo']} AN {$pembiayaan->nama}",
-                    'userid' => $validated['userId'],
-                    'status' => "HAPUS BUKU {$validated['jenis_wo']}",
-                    'cif' => $validated['cif'],
-                    'ao' => $pembiayaan->cao
-                ]);
+                    // Insert into pembiayaan_wos
+                    $pembiayaanData = (array) $pembiayaan;
+                    $pembiayaanData['os'] = $totalAmount;
+                    DB::table('pembiayaan_wos')->insert($pembiayaanData);
 
-                // Insert into pembiayaan_wos
-                $pembiayaanData = (array) $pembiayaan;
-                $pembiayaanData['os'] = $totalAmount;
-                DB::table('pembiayaan_wos')->insert($pembiayaanData);
-                // \Log::info('Inserted pembiayaan_wos record');
-
-                // Delete from pembiayaan
-                DB::table('pembiayaan')
-                    ->where('cif', $validated['cif'])
-                    ->delete();
+                    // Delete from pembiayaan
+                    DB::table('pembiayaan')
+                        ->where('cif', $record['cif'])
+                        ->delete();
+                }
 
                 DB::commit();
-                // \Log::info('Transaction committed successfully');
-
                 return response()->json([
                     'success' => true,
-                    'message' => 'Hapus buku processed successfully'
+                    'message' => 'All records processed successfully'
                 ]);
             } catch (\Exception $e) {
                 DB::rollback();
-                // \Log::error('Error in transaction, rolling back', [
-                //     'error' => $e->getMessage(),
-                //     'trace' => $e->getTraceAsString()
-                // ]);
                 throw $e;
             }
         } catch (\Exception $e) {
-            // \Log::error('Error processing hapus buku', [
-            //     'error' => $e->getMessage(),
-            //     'trace' => $e->getTraceAsString()
-            // ]);
             return response()->json([
                 'success' => false,
-                'message' => 'Error processing hapus buku: ' . $e->getMessage()
+                'message' => 'Error processing records: ' . $e->getMessage()
             ], 500);
         }
     }

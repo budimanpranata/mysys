@@ -17,151 +17,222 @@
 @endsection
 
 @section('content')
+<style>
+  .cif-container {
+    position: relative;
+  }
+
+  #cifList {
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  #cifList .list-group-item {
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  #cifList .list-group-item:hover {
+    background-color: #f8f9fa;
+  }
+</style>
+
 <div class="container-fluid">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Hapus Buku</h3>
+      <h3 class="card-title">Form Hapus Buku</h3>
     </div>
 
     <div class="card-body">
-      <form id="searchForm">
-        <div class="mb-3">
-          <label for="cif" class="form-label">CIF Anggota</label>
-          <input type="text" class="form-control" id="cif" name="cif" placeholder="Masukkan nomor CIF anggota" required>
+      <form id="hapusBukuForm">
+        <div class="form-group mb-3">
+          <label for="nomor_bukti">Nomor Bukti</label>
+          <input type="text" class="form-control" id="nomor_bukti" name="nomor_bukti" readonly>
         </div>
 
-        <!-- Hidden input to store unit -->
-        <input type="hidden" name="unit" id="userUnit" value="{{ Auth::user()->unit }}">
-        <!-- Hidden input to store id -->
-        <input type="hidden" name="id" id="userId" value="{{ Auth::user()->role_id }}">
-        <!-- Hidden input to store param tanggal -->
-        <input type="hidden" name="param_tanggal" id="userDate" value="{{ Auth::user()->param_tanggal }}">
+        <div class="form-group mb-3 cif-container">
+          <label for="cif">CIF</label>
+          <input type="text" class="form-control" id="cif" name="cif" required>
+          <div id="cifList" class="list-group"></div>
+        </div>
 
-        <button type="submit" class="btn btn-primary">Cari</button>
+        <div class="form-group mb-3">
+          <label for="tanggal">Tanggal</label>
+          <input type="date" class="form-control" id="tanggal" name="tanggal" required value="{{ date('Y-m-d') }}">
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="pokok">Pokok</label>
+          <input type="number" class="form-control" id="pokok" name="pokok" readonly>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="margin">Margin</label>
+          <input type="number" class="form-control" id="margin" name="margin" readonly>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="minggu_ke">Minggu-ke</label>
+          <input type="number" class="form-control" id="minggu_ke" name="minggu_ke" readonly>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="simpanan">Simpanan</label>
+          <input type="number" class="form-control" id="simpanan" name="simpanan" readonly>
+        </div>
+
+        <div class="form-group mb-3">
+          <label for="jenis_wo">Jenis WO</label>
+          <select class="form-control" id="jenis_wo" name="jenis_wo" required>
+            <option value="">Pilih Jenis WO</option>
+            <option value="NPF">NPF</option>
+            <option value="Meninggal Dunia">Meninggal Dunia</option>
+          </select>
+        </div>
+
+        <!-- Hidden inputs -->
+        <input type="hidden" name="no_anggota" id="no_anggota">
+        <input type="hidden" name="unit" id="userUnit" value="{{ Auth::user()->unit }}">
+        <input type="hidden" name="id" id="userId" value="{{ Auth::user()->role_id }}">
+        <input type="hidden" name="param_tanggal" id="userDate" value="{{ Auth::user()->param_tanggal }}">
+        <input type="hidden" name="nama" id="nama">
+
+        <button type="submit" class="btn btn-primary">Simpan</button>
       </form>
     </div>
 
-    <div class="mt-2">
-      <div class="card-body">
-        <table class="table table-bordered align-middle text-center">
-          <thead class="table-light">
-            <tr>
-              <th>NO</th>
-              <th>KODE REKENING</th>
-              <th>NAMA REKENING</th>
-              <th>KETERANGAN</th>
-              <th>DEBIT</th>
-              <th>KREDIT</th>
-              <th>AKSI</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <tr id="emptyState">
-              <td colspan="7">Belum ada data</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="card-body">
+      <table class="table table-bordered align-middle text-center">
+        <thead class="table-light">
+          <tr>
+            <th>NO</th>
+            <th>NOMOR BUKTI</th>
+            <th>CIF</th>
+            <th>NAMA</th>
+            <th>POKOK</th>
+            <th>MARGIN</th>
+            <th>JENIS WO</th>
+            <th>AKSI</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr id="emptyState">
+            <td colspan="8">Belum ada data</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mt-3">
+        <button type="button" class="btn btn-success" id="btnSelesai">Selesai</button>
       </div>
     </div>
   </div>
 </div>
 
-@include('admin.hapus_buku.form-proses')
-
 @include('sweetalert::alert')
 
 <script>
   $(document).ready(function () {
-    $('#searchForm').on('submit', function (e) {
-      e.preventDefault();
+    // Generate nomor bukti on page load
+    generateNomorBukti();
 
-      const cif = $('#cif').val();
+    // Function to generate nomor bukti
+    function generateNomorBukti() {
+      const unit = $('#userUnit').val();
+      const randomStr = Math.random().toString(36).substring(2, 9); // Generate 7 character string
+      $('#nomor_bukti').val('BS-' + unit + '-' + randomStr);
+    }
+
+    // Handle CIF input
+    let searchTimeout;
+    $('#cif').on('keyup', function () {
+      const searchTerm = $(this).val();
       const unit = $('#userUnit').val();
 
-      // Clear existing table data
-      $('#tableBody').empty();
+      // Clear previous timeout
+      clearTimeout(searchTimeout);
 
-      // Make AJAX request
-      $.ajax({
-        url: "{{ route('hapus_buku.data') }}",
-        method: 'GET',
-        data: {
-          cif: cif,
-          unit: unit
-        },
-        success: function (response) {
-          $('#tableBody').empty();
+      // Clear previous results
+      $('#cifList').empty();
 
-          if (response.data && response.data.length > 0) {
-            response.data.forEach((item, index) => {
-              const row = `
-                <tr>
-                  <td>${index + 1}</td>
-                  <td>${item.no_anggota || '-'}</td>
-                  <td>${item.nama || '-'}</td>
-                  <td>${item.keterangan || '-'}</td>
-                  <td>${item.debit || 0}</td>
-                  <td>${item.kredit || 0}</td>
-                  <td>
-                    <button class="btn btn-primary btn-sm process-btn" 
-                      data-cif="${item.cif}"
-                      data-nama="${item.nama}"
-                      data-rekening="${item.no_anggota}"
-                      data-debit="${item.debit || 0}"
-                      data-kredit="${item.kredit || 0}"
-                      data-simpanan="${item.simpanan || 0}"
-                      data-minggu-ke="${item.minggu_ke || 0}"
-                      data-nomor-bukti="${item.nomor_bukti}">
-                        Proses
-                    </button>
-                  </td>
-                </tr>
-              `;
-              $('#tableBody').append(row);
-            });
-          } else {
-            $('#tableBody').html('<tr><td colspan="7">Tidak ada data ditemukan</td></tr>');
-          }
-        },
-        error: function (xhr, status, error) {
-          $('#tableBody').html('<tr><td colspan="7">Terjadi kesalahan saat mengambil data</td></tr>');
-          console.error(error);
+      // Set new timeout
+      searchTimeout = setTimeout(function () {
+        if (searchTerm.length > 0) {
+          $.ajax({
+            url: "{{ route('hapus_buku.search_cif') }}",
+            method: 'GET',
+            data: {
+              term: searchTerm,
+              unit: unit
+            },
+            success: function (data) {
+              $('#cifList').empty();
+              if (data.length > 0) {
+                data.forEach(function (item) {
+                  $('#cifList').append(`
+                  <a href="#" class="list-group-item list-group-item-action cif-item" 
+                     data-cif="${item.cif}"
+                     data-no-anggota="${item.no_anggota}"
+                     data-nama="${item.nama}"
+                     data-plafond="${item.plafond}"
+                     data-saldo-margin="${item.saldo_margin}"
+                     data-run-tenor="${item.run_tenor}"
+                     data-simpanan="${item.simpanan}">
+                    ${item.cif} - ${item.nama}
+                  </a>
+                `);
+                });
+              } else {
+                $('#cifList').append('<div class="list-group-item">Tidak ada data ditemukan</div>');
+              }
+            },
+            error: function (xhr) {
+              console.error('Error:', xhr);
+              $('#cifList').append('<div class="list-group-item">Error mencari data</div>');
+            }
+          });
         }
-      });
+      }, 300); // Wait 300ms after last keyup before searching
     });
 
-    // Handle process button click
-    $(document).on('click', '.process-btn', function () {
-      const cif = $(this).data('cif');
-      const nama = $(this).data('nama');
-      const rekening = $(this).data('rekening')
-      const debit = $(this).data('debit');
-      const kredit = $(this).data('kredit');
-      const simpanan = $(this).data('simpanan');
-      const mingguKe = $(this).data('minggu-ke');
-      const nomorBukti = $(this).data('nomor-bukti');
+    // Handle CIF item selection
+    $(document).on('click', '.cif-item', function (e) {
+      e.preventDefault();
+      const item = $(this);
 
-      // Set the values in the modal
-      $('#modal_cif').val(cif);
-      $('#tanggal').val(new Date().toISOString().split('T')[0]);
-      $('#pokok').val(debit);
-      $('#margin').val(kredit);
-      $('#simpanan').val(simpanan);
-      $('#minggu_ke').val(mingguKe);
-      $('#nomor_bukti').val(nomorBukti);
-      $('#no_anggota').val(rekening);
+      // Populate form fields
+      $('#cif').val(item.data('cif'));
+      $('#no_anggota').val(item.data('no-anggota'));
+      $('#nama').val(item.data('nama'));
+      $('#pokok').val(item.data('plafond'));
+      $('#margin').val(item.data('saldo-margin'));
+      $('#minggu_ke').val(item.data('run-tenor'));
+      $('#simpanan').val(item.data('simpanan'));
 
-      $('#prosesModal').modal('show');
+      // Clear the list
+      $('#cifList').empty();
+    });
+
+    // Close cifList when clicking outside
+    $(document).on('click', function (e) {
+      if (!$(e.target).closest('#cif, #cifList').length) {
+        $('#cifList').empty();
+      }
     });
 
     // Handle form submission
-    $('#submitProses').on('click', function () {
-      // Get all form data
+    $('#hapusBukuForm').on('submit', function (e) {
+      e.preventDefault();
+
       const formData = {
         _token: '{{ csrf_token() }}',
         nomor_bukti: $('#nomor_bukti').val(),
         tanggal: $('#tanggal').val(),
-        cif: $('#modal_cif').val(),
+        cif: $('#cif').val(),
         pokok: $('#pokok').val(),
         margin: $('#margin').val(),
         minggu_ke: $('#minggu_ke').val(),
@@ -170,56 +241,148 @@
         no_anggota: $('#no_anggota').val(),
         userUnit: $('#userUnit').val(),
         userId: $('#userId').val(),
-        userDate: $('#userDate').val()
+        userDate: $('#userDate').val(),
+        nama: $('#nama').val()
       };
 
-      // Validate form
-      if (!$('#formProses')[0].checkValidity()) {
-        $('#formProses')[0].reportValidity();
-        return;
-      }
-
-      // Send request to process
       $.ajax({
-        url: "{{ route('hapus_buku.jurnal') }}",
+        url: "{{ route('hapus_buku.add_transaction') }}",
         method: 'POST',
         data: formData,
         success: function (response) {
-          $('#prosesModal').modal('hide');
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: 'Data telah berhasil diproses',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#3085d6'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              resetPage();
-            }
-          });
-        },
-        error: function (xhr, status, error) {
-          let errorMessage = 'Terjadi kesalahan saat memproses data.';
-          if (xhr.responseJSON && xhr.responseJSON.message) {
-            errorMessage = xhr.responseJSON.message;
+          if (response.success) {
+            // Add row to table
+            addRowToTable(formData);
+            // Reset form except nomor_bukti
+            $('#hapusBukuForm')[0].reset();
+            // Generate new nomor_bukti
+            generateNomorBukti();
+            // Show success message
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil!',
+              text: 'Data berhasil ditambahkan'
+            });
           }
-
+        },
+        error: function (xhr) {
           Swal.fire({
             icon: 'error',
             title: 'Gagal!',
-            text: errorMessage,
-            confirmButtonText: 'Tutup',
-            confirmButtonColor: '#d33'
+            text: xhr.responseJSON.message || 'Terjadi kesalahan'
           });
         }
       });
     });
 
-    function resetPage() {
-      $('#searchForm')[0].reset();
-      $('#formProses')[0].reset();
-      $('#tableBody').empty().append('<tr id="emptyState"><td colspan="7">Belum ada data</td></tr>');
+    // Handle delete button click
+    $(document).on('click', '.btn-delete', function () {
+      const nomor_bukti = $(this).data('nomor-bukti');
+      const row = $(this).closest('tr');
+
+      Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "Data akan dihapus dari daftar",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: "{{ route('hapus_buku.delete_transaction') }}",
+            method: 'POST',
+            data: {
+              _token: '{{ csrf_token() }}',
+              nomor_bukti: nomor_bukti
+            },
+            success: function (response) {
+              if (response.success) {
+                row.remove();
+                if ($('#tableBody tr').length === 0) {
+                  $('#tableBody').html('<tr id="emptyState"><td colspan="8">Belum ada data</td></tr>');
+                }
+                Swal.fire('Terhapus!', 'Data berhasil dihapus', 'success');
+              }
+            },
+            error: function (xhr) {
+              Swal.fire('Gagal!', xhr.responseJSON.message || 'Terjadi kesalahan', 'error');
+            }
+          });
+        }
+      });
+    });
+
+    // Handle selesai button click
+    $('#btnSelesai').on('click', function () {
+      const rows = $('#tableBody tr:not(#emptyState)');
+      if (rows.length === 0) {
+        Swal.fire('Peringatan!', 'Tidak ada data untuk diproses', 'warning');
+        return;
+      }
+
+      Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: "Semua data akan diproses",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, proses!',
+        cancelButtonText: 'Batal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const data = [];
+          rows.each(function () {
+            data.push($(this).data('record'));
+          });
+
+          $.ajax({
+            url: "{{ route('hapus_buku.process_all') }}",
+            method: 'POST',
+            data: {
+              _token: '{{ csrf_token() }}',
+              records: data
+            },
+            success: function (response) {
+              if (response.success) {
+                $('#tableBody').html('<tr id="emptyState"><td colspan="8">Belum ada data</td></tr>');
+                Swal.fire('Berhasil!', 'Semua data telah diproses', 'success');
+              }
+            },
+            error: function (xhr) {
+              Swal.fire('Gagal!', xhr.responseJSON.message || 'Terjadi kesalahan', 'error');
+            }
+          });
+        }
+      });
+    });
+
+    function addRowToTable(data) {
+      const rowCount = $('#tableBody tr:not(#emptyState)').length + 1;
+      const row = `
+      <tr data-record='${JSON.stringify(data)}'>
+        <td>${rowCount}</td>
+        <td>${data.nomor_bukti}</td>
+        <td>${data.cif}</td>
+        <td>${data.nama}</td>
+        <td>${data.pokok}</td>
+        <td>${data.margin}</td>
+        <td>${data.jenis_wo}</td>
+        <td>
+          <button type="button" class="btn btn-danger btn-sm btn-delete" data-nomor-bukti="${data.nomor_bukti}">
+            Hapus
+          </button>
+        </td>
+      </tr>
+    `;
+
+      if ($('#emptyState').length) {
+        $('#tableBody').empty();
+      }
+      $('#tableBody').append(row);
     }
   });
 </script>
