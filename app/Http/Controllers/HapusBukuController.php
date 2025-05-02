@@ -42,17 +42,14 @@ class HapusBukuController extends Controller
             if ($data->isNotEmpty()) {
                 // Get simpanan data for each record
                 $data = $data->map(function ($item) {
-                    // Get latest simpanan record
-                    $simpananData = DB::table('simpanan')
+                    $simpananTotals = DB::table('simpanan')
                         ->where('cif', $item->cif)
-                        ->orderBy('created_at', 'desc')
-                        ->select('kredit', 'debet')
+                        ->selectRaw('COALESCE(SUM(kredit),0) as total_kredit, COALESCE(SUM(debet),0) as total_debet')
                         ->first();
 
-                    // Calculate simpanan as kredit - debet
-                    $kredit = $simpananData->kredit ?? 0;
-                    $debet = $simpananData->debet ?? 0;
-                    $item->simpanan = $kredit - $debet;
+                    $totalKredit = $simpananTotals->total_kredit ?? 0;
+                    $totalDebet = $simpananTotals->total_debet ?? 0;
+                    $item->simpanan = $totalKredit - $totalDebet;
 
                     $item->label = "{$item->cif} - {$item->nama}";
                     $item->value = $item->cif;
