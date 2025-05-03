@@ -208,7 +208,7 @@ class MenuSeeder extends Seeder
             'name' => 'Hapus Buku',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
-            'url' => '/dashboard-v3',
+            'url' => '/realisasi/hapus-buku',
             'left' => 'null',
             'order' => 18,
 
@@ -233,7 +233,7 @@ class MenuSeeder extends Seeder
 
         ]);
 
-      Menu::create([
+        Menu::create([
             'name' => 'View Data',
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $pemeliharaan_data->id,
@@ -262,7 +262,7 @@ class MenuSeeder extends Seeder
             'order' => 21,
         ]);
 
-       $Transaksi = Menu::create([
+        $Transaksi = Menu::create([
             'name' => 'Transaksi',
             'icon' => 'nav-icon fas fa-money-bill', //
             'parent_id' => null,
@@ -272,16 +272,16 @@ class MenuSeeder extends Seeder
 
         ]);
 
-         Menu::create([
+        Menu::create([
             'name' => 'Setoran 5%',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/setoran-lima-persen',
             'left' => 'null',
             'order' => 22,
-          ]);
+        ]);
 
-          $Restrukturisasi = Menu::create([
+        $Restrukturisasi = Menu::create([
             'name' => 'Restrukturisasi',
             'icon' => 'nav-icon fa-exchange-alt', //
             'parent_id' => null,
@@ -291,13 +291,13 @@ class MenuSeeder extends Seeder
 
         ]);
 
-         Menu::create([
+        Menu::create([
             'name' => 'Kemampuan Bayar',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Restrukturisasi->id,
             'url' => '/rest-kemampuan-bayar',
             'left' => 'null',
             'order' => 23,
-          ]);
+        ]);
     }
 }
