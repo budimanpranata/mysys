@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rek_loan', function (Blueprint $table) {
-            $table->integer('ref')->autoIncrement();
+            $table->biginteger('ref')->autoIncrement();
             $table->dateTime('tgl_realisasi');
             $table->string('unit', 8);
             $table->string('no_anggota', 20)->nullable();
