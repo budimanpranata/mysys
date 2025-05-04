@@ -199,7 +199,7 @@ class MenuSeeder extends Seeder
             'name' => 'Tagihan Kelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Realisasi->id,
-            'url' => '/dashboard-v3',
+            'url' => '/realisasi/tagihan-kelompok',
             'left' => 'null',
             'order' => 17,
 

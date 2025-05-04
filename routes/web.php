@@ -24,6 +24,7 @@ use App\Http\Controllers\PemeliharaanKelompok;
 use App\Http\Controllers\ViewDataController;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\PembatalanWakalahController;
+use App\Http\Controllers\RealisasiTagihanKelompokController;
 use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
@@ -132,11 +133,18 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/rest-kemampuan-bayar/getData', [RestKemampuanBayarController::class, 'getData']);
     Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
 
+
+    // realisasi tagihan kelompok
+    Route::get('/realisasi/tagihan-kelompok', [RealisasiTagihanKelompokController::class, 'index']);
+    Route::post('/realisasi/tagihan-kelompok/get-kelompok', [RealisasiTagihanKelompokController::class, 'getKelompok'])->name('realisasi.tagihanKelompok.getKelompok');
+    Route::post('/realisasi/tagihan-kelompok/process', [RealisasiTagihanKelompokController::class, 'processRealisasi'])->name('realisasi.tagihanKelompok.process');
+
     //Realisasi Musyarokah
     Route::get('/realisasi-musyarakah', [RealisasiMusyarokahController::class, 'index']);
     Route::get('/realisasi-musyarakah-get-kelompok', [RealisasiMusyarokahController::class, 'getSetKelompok']);
     Route::get('/realisasi-musyarakah/getData', [RealisasiMusyarokahController::class, 'getData']);
     Route::post('/proses-realisasi-musyarakah', [RealisasiMusyarokahController::class, 'realisasiMusyarokah']);
+
 
 });
 
