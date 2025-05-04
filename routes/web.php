@@ -27,6 +27,8 @@ use App\Http\Controllers\PembatalanWakalahController;
 use App\Http\Controllers\RealisasiTagihanKelompokController;
 use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
+use App\Http\Controllers\RealisasiMusyarokahController;
+use App\Http\Controllers\HapusBukuController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -104,8 +106,14 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/pemeliharaan-kelompok/get-anggota', [PemeliharaanKelompok::class, 'getAnggota'])->name('pemeliharaan-kelompok.getAnggota');
     Route::resource('pemeliharaan-kelompok', PemeliharaanKelompok::class);
 
+    Route::get('/realisasi/hapus-buku', [HapusBukuController::class, 'index'])->name('hapus_buku');
+    Route::get('/realisasi/hapus-buku/search-cif', [HapusBukuController::class, 'searchCif'])->name('hapus_buku.search_cif');
+    Route::post('/realisasi/hapus-buku/add-transaction', [HapusBukuController::class, 'addTransaction'])->name('hapus_buku.add_transaction');
+    Route::post('/realisasi/hapus-buku/delete-transaction', [HapusBukuController::class, 'deleteTransaction'])->name('hapus_buku.delete_transaction');
+    Route::post('/realisasi/hapus-buku/process-all', [HapusBukuController::class, 'processAll'])->name('hapus_buku.process_all');
 
-  // DOMpdf
+
+    // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
     Route::get('/pdf/generate/{feature}/{kelompok}/{date}', [PDFController::class, 'generateLaRisywahPdf'])->name('pdf.generateLaRisywah');
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateApprovalPdf'])->name('pdf.generateApproval');
@@ -125,10 +133,18 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/rest-kemampuan-bayar/getData', [RestKemampuanBayarController::class, 'getData']);
     Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
 
+
     // realisasi tagihan kelompok
     Route::get('/realisasi/tagihan-kelompok', [RealisasiTagihanKelompokController::class, 'index']);
     Route::post('/realisasi/tagihan-kelompok/get-kelompok', [RealisasiTagihanKelompokController::class, 'getKelompok'])->name('realisasi.tagihanKelompok.getKelompok');
     Route::post('/realisasi/tagihan-kelompok/process', [RealisasiTagihanKelompokController::class, 'processRealisasi'])->name('realisasi.tagihanKelompok.process');
+
+    //Realisasi Musyarokah
+    Route::get('/realisasi-musyarakah', [RealisasiMusyarokahController::class, 'index']);
+    Route::get('/realisasi-musyarakah-get-kelompok', [RealisasiMusyarokahController::class, 'getSetKelompok']);
+    Route::get('/realisasi-musyarakah/getData', [RealisasiMusyarokahController::class, 'getData']);
+    Route::post('/proses-realisasi-musyarakah', [RealisasiMusyarokahController::class, 'realisasiMusyarokah']);
+
 
 });
 
