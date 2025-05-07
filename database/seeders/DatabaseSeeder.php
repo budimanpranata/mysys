@@ -49,6 +49,7 @@ class DatabaseSeeder extends Seeder
             RekLoanSeeder::class,
             RekomendasiSeeder::class,
             CoaSeeder::class,
+            PembiayaanWoSeeder::class,
         ]);
 
 

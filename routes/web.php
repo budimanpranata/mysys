@@ -126,8 +126,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
 
     // input transaksi
-    Route::get('/transaksi/input-transkasi', [InputTransaksiController::class, 'index']);
+    Route::get('/transaksi/input-transaksi', [InputTransaksiController::class, 'index']);
     Route::get('/transaksi/input-transaksi/get-cif/{cif}', [InputTransaksiController::class, 'getByCif']);
+    // Route::post('/transaksi/input-transaksi/{cif}', [InputTransaksiController::class, 'store']);
+    Route::post('/transaksi/input-transaksi', [InputTransaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('/transaksi/input-transaksi/history/{cif}', [InputTransaksiController::class, 'getHistory']);
 
 });
 

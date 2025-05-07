@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('keterangan_transaksi');
             $table->bigInteger('debet');
             $table->bigInteger('kredit');
-            $table->string('tanggal_posting', 15);
+            $table->dateTime('tanggal_posting');
             $table->text('keterangan_posting');
             $table->string('id_admin', 6);
             $table->timestamps();
