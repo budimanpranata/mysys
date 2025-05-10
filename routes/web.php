@@ -19,6 +19,7 @@ use App\Http\Controllers\KelompokController;
 use App\Http\Controllers\PDFController;
 use App\Http\Controllers\CetakCsWoController;
 use App\Http\Controllers\CetakApprovalController;
+use App\Http\Controllers\InputTransaksiController;
 use App\Http\Controllers\PembiayaanController;
 use App\Http\Controllers\PemeliharaanKelompok;
 use App\Http\Controllers\ViewDataController;
@@ -133,6 +134,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/rest-kemampuan-bayar/getData', [RestKemampuanBayarController::class, 'getData']);
     Route::post('/proses-rest-kemampuan-bayar', [RestKemampuanBayarController::class, 'realisasiRestKemampuanBayar']);
 
+
+    // input transaksi
+    Route::get('/transaksi/input-transaksi', [InputTransaksiController::class, 'index']);
+    Route::get('/transaksi/input-transaksi/get-cif/{cif}', [InputTransaksiController::class, 'getByCif']);
+    Route::post('/transaksi/input-transaksi', [InputTransaksiController::class, 'store'])->name('transaksi.store');
+    Route::get('/transaksi/input-transaksi/history/{cif}', [InputTransaksiController::class, 'getHistory']);
 
     // realisasi tagihan kelompok
     Route::get('/realisasi/tagihan-kelompok', [RealisasiTagihanKelompokController::class, 'index']);
