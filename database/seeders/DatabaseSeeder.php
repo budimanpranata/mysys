@@ -50,6 +50,8 @@ class DatabaseSeeder extends Seeder
             RekomendasiSeeder::class,
             CoaSeeder::class,
             PembiayaanWoSeeder::class,
+            paramLiburSeder::class,
+
         ]);
 
 
