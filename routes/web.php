@@ -29,6 +29,7 @@ use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
+use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -112,6 +113,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/realisasi/hapus-buku/delete-transaction', [HapusBukuController::class, 'deleteTransaction'])->name('hapus_buku.delete_transaction');
     Route::post('/realisasi/hapus-buku/process-all', [HapusBukuController::class, 'processAll'])->name('hapus_buku.process_all');
 
+    Route::get('/restrukturisasi/jatuh-tempo', [RestrukturisasiJatuhTempoController::class, 'index'])->name('jatuh_tempo');
+    Route::post('/restrukturisasi/jatuh-tempo/search', [RestrukturisasiJatuhTempoController::class, 'searchKelompok'])->name('jatuh_tempo.searchKelompok');
+    Route::post('/restrukturisasi/jatuh-tempo/restrukturisasi', [RestrukturisasiJatuhTempoController::class, 'restrukturisasi'])->name('jatuh_tempo.restrukturisasi');
 
     // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');

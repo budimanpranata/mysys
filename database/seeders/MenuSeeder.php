@@ -299,5 +299,14 @@ class MenuSeeder extends Seeder
             'left' => 'null',
             'order' => 23,
         ]);
+
+        Menu::create([
+            'name' => 'Jatuh Tempo',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Restrukturisasi->id,
+            'url' => '/restrukturisasi/jatuh-tempo',
+            'left' => 'null',
+            'order' => 24,
+        ]);
     }
 }
