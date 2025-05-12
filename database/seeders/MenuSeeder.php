@@ -307,7 +307,17 @@ class MenuSeeder extends Seeder
             'parent_id' => $Restrukturisasi->id,
             'url' => '/rest-kemampuan-bayar',
             'left' => 'null',
-            'order' => 26,
+            'order' => 23,
+        ]);
+
+        Menu::create([
+            'name' => 'Jatuh Tempo',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Restrukturisasi->id,
+            'url' => '/restrukturisasi/jatuh-tempo',
+            'left' => 'null',
+            'order' => 24,
+     
           ]);
 
     }
