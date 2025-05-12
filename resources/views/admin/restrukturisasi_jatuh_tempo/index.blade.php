@@ -29,6 +29,7 @@
               placeholder="Masukkan kode kelompok">
           </div>
           <input type="hidden" name="unit" id="userUnit" value="{{ auth()->user()->unit }}">
+          <input type="hidden" name="param_tanggal" id="param_tanggal" value="{{ auth()->user()->param_tanggal }}">
           <div class="col-md-2">
             <button type="submit" class="btn btn-primary">Cari</button>
           </div>
@@ -167,7 +168,8 @@
               _token: "{{ csrf_token() }}",
               cifs: selectedCifs,
               unit: $('#userUnit').val(),
-              kode_kelompok: $('#kode_kelompok').val()
+              kode_kelompok: $('#kode_kelompok').val(),
+              param_tanggal: $('#param_tanggal').val()
             },
             success: function (response) {
               Swal.fire({

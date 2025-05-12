@@ -37,60 +37,72 @@ class RestrukturisasiJatuhTempoController extends Controller
             'cifs' => 'required|array',
             'unit' => 'required',
             'kode_kelompok' => 'required',
+            'param_tanggal' => 'required',
         ]);
 
-        $tanggalLibur = DB::table('param_tgl')->pluck('param_tgl')->toArray();
-
         foreach ($request->cifs as $cif) {
-            $akad = DB::table('pembiayaan')->where('cif', $cif)->first();
+            $akad = DB::table('pembiayaan')->where('cif', $cif)->where('unit', $request->unit)->first();
             if (!$akad)
                 continue;
-            $pembayaranKe = (int) $akad->ke;
-            $tenor = (int) $akad->tenor;
-            $newTenor = $pembayaranKe + $tenor;
 
-            // totalkan sisa jumlah bayar sebelum di spread
-            $deletedRows = DB::table('pembiayaan_detail')
+            // validasi maturity date
+            $now = now();
+            if ($now->lt(\Carbon\Carbon::parse($akad->maturity_date))) {
+                return response()->json(['error' => 'Restrukturisasi hanya dapat dilakukan setelah maturity date.'], 400);
+            }
+
+            // query ke table tunggakan
+            $tunggakanRecords = DB::table('tunggakan')
                 ->where('cif', $cif)
-                ->whereRaw('CAST(cicilan AS UNSIGNED) > ?', [$pembayaranKe]) // jaddiin unsigned int biar bisa dibandingin secara numerik bukan lexic
+                ->where('unit', $request->unit)
                 ->get();
-            $sisaPembayaran = $deletedRows->sum('jumlah_bayar');
+            $totalKredit = $tunggakanRecords->sum('kredit');
+            $totalDebet = $tunggakanRecords->sum('debet');
+            $totalToBePaid = $totalKredit - $totalDebet;
 
-            // delete semua cicilan yang lebih besar dari apa yang sudah di bayarkan
-            DB::table('pembiayaan_detail')
+            $angsuran = (int) $akad->angsuran;
+            $newTenor = intdiv($totalToBePaid, $angsuran);
+            if ($totalToBePaid % $angsuran !== 0) {
+                $newTenor += 1; // Add one more installment for the remainder
+            }
+            if ($newTenor <= 0) {
+                $newTenor = 1; // gaboleh minus ato 0 (karna di pakai sebagai denominator)
+            }
+
+            // delete semua record tunggakan
+            DB::table('tunggakan')->where('cif', $cif)->where('unit', $request->unit)->delete();
+
+            // spread total pembayaran
+            $jumlahLunas = $totalToBePaid;
+
+            $lastPayment = DB::table('pembiayaan_detail')
                 ->where('cif', $cif)
-                ->whereRaw('CAST(cicilan AS UNSIGNED) > ?', [$pembayaranKe]) // jaddiin unsigned int biar bisa dibandingin secara numerik bukan lexic
-                ->delete();
-
-            // sperad total pembiayaan berdasarkan jumlah tenor
-            $angsuranBaru = $newTenor > 0 ? floor($sisaPembayaran / $tenor) : 0;
-            $sisaBagi = $newTenor > 0 ? $sisaPembayaran - ($angsuranBaru * $tenor) : 0;
-
-            // ambil tanggal jatuh tempo yang trakhir
-            $lastDetail = DB::table('pembiayaan_detail')
-                ->where('cif', $cif)
-                ->whereRaw('CAST(cicilan AS UNSIGNED) = ?', [$pembayaranKe]) // jaddiin unsigned int biar bisa dibandingin secara numerik bukan lexic
+                ->where('unit', $request->unit)
                 ->orderByDesc('tgl_jatuh_tempo')
                 ->first();
-            $startDate = $lastDetail ? \Carbon\Carbon::parse($lastDetail->tgl_jatuh_tempo)->addDays(7) : \Carbon\Carbon::now()->addDays(7);
+            $pembayaranKe = $lastPayment ? (int) $lastPayment->cicilan : 0; // buat dapetin cicilan ke berapanya
+            $startDate = $lastPayment ? \Carbon\Carbon::parse($lastPayment->tgl_jatuh_tempo)->addDays(7) : \Carbon\Carbon::now()->addDays(7);
 
-            // logic yang sama di realisasi murabahah dalam proses jurnalnya
+            // sisanya sama kyk yang di realisasi murabahah
+            $tanggalLibur = DB::table('param_tgl')->pluck('param_tgl')->toArray();
             $adjustedTglJatuhTempo = [];
-            for ($i = 0; $i < $tenor; $i++) {
+            for ($i = 0; $i < $newTenor; $i++) {
                 $date = $startDate->copy()->addDays($i * 7);
                 $formattedDate = $date->format('Y-m-d');
-                // Adjust for holidays
                 while (in_array($formattedDate, $tanggalLibur)) {
                     $date->addDays(7);
                     $formattedDate = $date->format('Y-m-d');
                 }
                 $adjustedTglJatuhTempo[] = $date->format('Y-m-d H:i:s');
             }
-
-            // insert cicilan yang udah di spread
-            for ($i = 0; $i < $tenor; $i++) {
+            for ($i = 0; $i < $newTenor; $i++) {
                 $cicilan = $pembayaranKe + 1 + $i;
-                $jumlah_bayar = $angsuranBaru + ($i == 0 ? $sisaBagi : 0);
+                // For all but the last installment, use angsuran; for the last, use the remainder
+                if ($i < $newTenor - 1) {
+                    $jumlah_bayar = $angsuran;
+                } else {
+                    $jumlah_bayar = $jumlahLunas - ($angsuran * ($newTenor - 1));
+                }
                 DB::table('pembiayaan_detail')->insert([
                     'id' => null,
                     'id_pinjam' => $akad->no_anggota,
@@ -109,6 +121,25 @@ class RestrukturisasiJatuhTempoController extends Controller
                     'updated_at' => now()
                 ]);
             }
+
+            // record buat auditting
+            DB::table('history_rest')->insert([
+                'tgl_rest' => now()->format('Y-m-d'),
+                'code_kel' => $akad->code_kel,
+                'cif' => $akad->cif,
+                'plafond' => $akad->plafond,
+                'pokok' => $akad->pokok,
+                'margin' => $akad->saldo_margin,
+                'angsuran' => $akad->angsuran,
+                'tenor' => $newTenor,
+                'jenis_rest' => 'jatuh tempo',
+                'status' => 'REST JATPO',
+                'angsuran_baru' => $angsuran,
+                'tenor_baru' => $newTenor,
+                'jatpo_baru' => isset($adjustedTglJatuhTempo[$newTenor - 1]) ? \Carbon\Carbon::parse($adjustedTglJatuhTempo[$newTenor - 1])->format('Y-m-d H:i:s') : null,
+                'tgl_jatpo' => $akad->maturity_date ? \Carbon\Carbon::parse($akad->maturity_date)->format('Y-m-d H:i:s') : null,
+                'tgl_akad_baru' => $request->param_tanggal ? \Carbon\Carbon::parse($request->param_tanggal)->format('Y-m-d H:i:s') : null,
+            ]);
         }
         return response()->json(['message' => 'Restrukturisasi berhasil dilakukan.']);
     }
