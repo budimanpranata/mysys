@@ -130,7 +130,7 @@ class pembiayaan extends Seeder
                 'gol' => '1',
                 'deal_produk' => NULL,
                 'persen_margin' => 0.0075, // 0,75% dalam desimal
-                
+
 
             ]
 
