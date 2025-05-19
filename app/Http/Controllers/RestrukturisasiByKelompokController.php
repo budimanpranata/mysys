@@ -78,12 +78,14 @@ class RestrukturisasiByKelompokController extends Controller
             'tenor' => 'required|integer',
             'param_tanggal' => 'required',
         ]);
+
         $kode_kelompok = $request->kode_kelompok;
         $unit = $request->unit;
         $jenis_rest = $request->jenis_rest;
         $dari_simpanan = $request->dari_simpanan;
         $tenor = (int) $request->tenor;
         $param_tanggal = $request->param_tanggal;
+
         $pembiayaanList = DB::table('pembiayaan')
             ->where('code_kel', $kode_kelompok)
             ->where('unit', $unit)
@@ -91,28 +93,53 @@ class RestrukturisasiByKelompokController extends Controller
         if ($pembiayaanList->isEmpty()) {
             return response()->json(['message' => 'Tidak ada anggota pada kelompok ini.'], 400);
         }
+
         DB::beginTransaction();
         try {
             foreach ($pembiayaanList as $akad) {
                 // Calculate angsuran baru
-                $plafond = (float) $akad->plafond;
+                $os = (float) $akad->os;
                 $saldo_margin = (float) $akad->saldo_margin;
                 $cif = $akad->cif;
+                $pokok = $os - $saldo_margin;
+                $total_restrukturisasi = 0;
+                $saldo_simpanan = 0;
+                $pokok_sesudah_simpanan = null;
+                $simpanan_dipakai = false;
+
                 if ($jenis_rest === 'Pokok') {
-                    $total_restrukturisasi = $plafond;
+                    $total_restrukturisasi = $pokok;
+                    if ($dari_simpanan === 'Ya') {
+                        $simpanan = DB::table('simpanan')
+                            ->where('cif', $cif)
+                            ->selectRaw('COALESCE(SUM(kredit),0) as total_kredit, COALESCE(SUM(debet),0) as total_debet')
+                            ->first();
+                        $saldo_simpanan = ($simpanan->total_kredit ?? 0) - ($simpanan->total_debet ?? 0);
+                        if ($saldo_simpanan > 0) {
+                            $total_restrukturisasi = max(0, $total_restrukturisasi - $saldo_simpanan);
+                            $pokok_sesudah_simpanan = max(0, $pokok - $saldo_simpanan);
+                            $simpanan_dipakai = true;
+                        }
+                    }
                 } else { // Pokok+Margin
-                    $total_restrukturisasi = $plafond + $saldo_margin;
+                    $pokok_asli = $pokok;
+                    if ($dari_simpanan === 'Ya') {
+                        $simpanan = DB::table('simpanan')
+                            ->where('cif', $cif)
+                            ->selectRaw('COALESCE(SUM(kredit),0) as total_kredit, COALESCE(SUM(debet),0) as total_debet')
+                            ->first();
+                        $saldo_simpanan = ($simpanan->total_kredit ?? 0) - ($simpanan->total_debet ?? 0);
+                        if ($saldo_simpanan > 0) {
+                            $pokok = max(0, $pokok - $saldo_simpanan);
+                            $pokok_sesudah_simpanan = $pokok;
+                            $simpanan_dipakai = true;
+                        }
+                    }
+                    $total_restrukturisasi = $pokok + $saldo_margin;
                 }
-                // If dari_simpanan == Ya, subtract simpanan saldo
-                if ($dari_simpanan === 'Ya') {
-                    $simpanan = DB::table('simpanan')
-                        ->where('cif', $cif)
-                        ->selectRaw('COALESCE(SUM(kredit),0) as total_kredit, COALESCE(SUM(debet),0) as total_debet')
-                        ->first();
-                    $saldo_simpanan = ($simpanan->total_kredit ?? 0) - ($simpanan->total_debet ?? 0);
-                    $total_restrukturisasi = max(0, $total_restrukturisasi - $saldo_simpanan);
-                }
+
                 $angsuran_baru = $tenor > 0 ? $total_restrukturisasi / $tenor : 0;
+
                 // Get last payment info
                 $lastPayment = DB::table('pembiayaan_detail')
                     ->where('cif', $cif)
@@ -120,6 +147,7 @@ class RestrukturisasiByKelompokController extends Controller
                     ->orderByDesc('tgl_jatuh_tempo')
                     ->first();
                 $pembayaranKe = $lastPayment ? (int) $lastPayment->cicilan : 0;
+
                 $startDate = $lastPayment ? \Carbon\Carbon::parse($lastPayment->tgl_jatuh_tempo)->addDays(7) : \Carbon\Carbon::now()->addDays(7);
                 $tanggalLibur = DB::table('param_tgl')->pluck('param_tgl')->toArray();
                 $adjustedTglJatuhTempo = [];
@@ -132,19 +160,31 @@ class RestrukturisasiByKelompokController extends Controller
                     }
                     $adjustedTglJatuhTempo[] = $date->format('Y-m-d H:i:s');
                 }
+
+                // Update pembiayaan.os if simpanan dipakai
+                if ($simpanan_dipakai && $pokok_sesudah_simpanan !== null) {
+                    DB::table('pembiayaan')
+                        ->where('cif', $cif)
+                        ->where('unit', $unit)
+                        ->update(['os' => $pokok_sesudah_simpanan]);
+                }
+
                 for ($i = 0; $i < $tenor; $i++) {
                     $cicilan = $pembayaranKe + 1 + $i;
                     $jumlah_bayar = $angsuran_baru;
                     if ($i == $tenor - 1) {
                         // Last installment, adjust for rounding
-                        $total = ($jenis_rest === 'Pokok') ? $plafond : ($plafond + $saldo_margin);
-                        if ($dari_simpanan === 'Ya') {
-                            $simpanan = DB::table('simpanan')
-                                ->where('cif', $cif)
-                                ->selectRaw('COALESCE(SUM(kredit),0) as total_kredit, COALESCE(SUM(debet),0) as total_debet')
-                                ->first();
-                            $saldo_simpanan = ($simpanan->total_kredit ?? 0) - ($simpanan->total_debet ?? 0);
-                            $total = max(0, $total - $saldo_simpanan);
+                        if ($jenis_rest === 'Pokok') {
+                            $total = $os - $saldo_margin;
+                            if ($dari_simpanan === 'Ya' && $saldo_simpanan > 0) {
+                                $total = max(0, $total - $saldo_simpanan);
+                            }
+                        } else {
+                            $total = $pokok_asli + $saldo_margin;
+                            if ($dari_simpanan === 'Ya' && $saldo_simpanan > 0) {
+                                $total = max(0, $total - $saldo_simpanan);
+                                $total += $saldo_margin;
+                            }
                         }
                         $jumlah_bayar = $total - ($angsuran_baru * ($tenor - 1));
                     }
@@ -166,6 +206,8 @@ class RestrukturisasiByKelompokController extends Controller
                         'updated_at' => now()
                     ]);
                 }
+                // Delete tunggakan for this cif
+                DB::table('tunggakan')->where('cif', $cif)->delete();
                 // Insert to history_rest
                 DB::table('history_rest')->insert([
                     'tgl_rest' => now()->format('Y-m-d'),
