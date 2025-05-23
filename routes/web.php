@@ -89,20 +89,19 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/cetak/kartu-angsuran/pdf', [CetakKartuAngsuranController::class, 'cetakPDF'])->name('cetakkartuAngsuran.pdf');
 
     Route::get('/anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
-    Route::get('/get-kelompok-data', [AnggotaController::class, 'getKelompokData']);
-    Route::post('/cari-ktp', [AnggotaController::class, 'cariKtp']);
+    Route::get('anggota/get-kelompok-data', [AnggotaController::class, 'getKelompokData']);
+    Route::post('anggota/cari-ktp', [AnggotaController::class, 'cariKtp']);
     Route::get('/anggota/export', [AnggotaController::class, 'export'])->name('anggota.export');
-    Route::get('anggota/data', [AnggotaController::class, 'data'])->name('anggota.data');
     Route::resource('anggota', AnggotaController::class);
-    Route::get('/get-kelompok/{cao}', [AnggotaController::class, 'getKelompokByCao']);
+    Route::get('anggota/get-kelompok/{cao}', [AnggotaController::class, 'getKelompokByCao']);
 
     Route::get('/get-anggota/{cif}', [KelompokController::class, 'getAnggotaByCif']);
     Route::get('/pembiayaan', [PembiayaanController::class, 'index'])->name('pembiayaan.index');
     Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
     Route::post('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
 
-    Route::get('/view-data/data', [ViewDataController::class, 'data'])->name('viewData.data');
-    Route::resource('view-data', ViewDataController::class);
+    Route::get('pemeliharaan/view-data/data', [ViewDataController::class, 'data'])->name('viewData.data');
+    Route::resource('pemeliharaan/view-data', ViewDataController::class);
 
     Route::get('/pemeliharaan-kelompok/data', [PemeliharaanKelompok::class, 'data'])->name('pemeliharaan-kelompok.data');
     Route::get('/pemeliharaan-kelompok/get-anggota', [PemeliharaanKelompok::class, 'getAnggota'])->name('pemeliharaan-kelompok.getAnggota');

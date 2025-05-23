@@ -237,7 +237,7 @@ class MenuSeeder extends Seeder
             'name' => 'View Data',
             'icon' => 'far fa-circle nav-ico',
             'parent_id' => $pemeliharaan_data->id,
-            'url' => '/view-data',
+            'url' => '/pemeliharaan/view-data',
             'left' => 'null',
             'order' => 19,
 
