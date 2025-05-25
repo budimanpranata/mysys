@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Menu;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class RestrukturisasiByKelompokController extends Controller
 {
@@ -77,6 +78,7 @@ class RestrukturisasiByKelompokController extends Controller
             'dari_simpanan' => 'required',
             'tenor' => 'required|integer',
             'param_tanggal' => 'required',
+            'id_admin' => 'required',
         ]);
 
         $kode_kelompok = $request->kode_kelompok;
@@ -85,7 +87,7 @@ class RestrukturisasiByKelompokController extends Controller
         $dari_simpanan = $request->dari_simpanan;
         $tenor = (int) $request->tenor;
         $param_tanggal = $request->param_tanggal;
-
+        $id_admin = $request->id_admin;
         $pembiayaanList = DB::table('pembiayaan')
             ->where('code_kel', $kode_kelompok)
             ->where('unit', $unit)
@@ -168,6 +170,132 @@ class RestrukturisasiByKelompokController extends Controller
                         ->where('unit', $unit)
                         ->update(['os' => $pokok_sesudah_simpanan]);
                 }
+
+                // Insert transaksi for restrukturisasi (before pembiayaan_detail insertion)
+                $keterangan_transaksi = (strtolower($jenis_rest) === 'pokok+margin' || strtolower($jenis_rest) === 'pokok margin')
+                    ? 'Restrukturisasi Pokok Margin AN ' . $akad->nama
+                    : 'Restrukturisasi Pokok AN ' . $akad->nama;
+                $transaksiData = [];
+                if (strtolower($jenis_rest) === 'pokok+margin' || strtolower($jenis_rest) === 'pokok margin') {
+                    $transaksiData = [
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1411000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => $pokok + $saldo_margin,
+                            'kredit' => 0,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ],
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1421000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => 0,
+                            'kredit' => $saldo_margin,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ],
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1423000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => $saldo_margin,
+                            'kredit' => 0,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ],
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1413000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => 0,
+                            'kredit' => $pokok + $saldo_margin,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ]
+                    ];
+                } else {
+                    $transaksiData = [
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1411000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => $pokok,
+                            'kredit' => 0,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ],
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1421000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => 0,
+                            'kredit' => 0,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ],
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1423000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => $saldo_margin,
+                            'kredit' => 0,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ],
+                        [
+                            'id_transaksi' => null,
+                            'unit' => $unit,
+                            'kode_transaksi' => 'BS-' . $unit . '-' . Str::random(7),
+                            'kode_rekening' => '1413000',
+                            'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($param_tanggal)),
+                            'jenis_transaksi' => 'bukti SYSTEM',
+                            'keterangan_transaksi' => $keterangan_transaksi,
+                            'debet' => 0,
+                            'kredit' => $pokok + $saldo_margin,
+                            'tanggal_posting' => date('Y-m-d'),
+                            'keterangan_posting' => '',
+                            'id_admin' => $id_admin
+                        ]
+                    ];
+                }
+                DB::table('tabel_transaksi')->insert($transaksiData);
 
                 for ($i = 0; $i < $tenor; $i++) {
                     $cicilan = $pembayaranKe + 1 + $i;

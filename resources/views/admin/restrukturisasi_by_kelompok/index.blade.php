@@ -45,6 +45,7 @@
     <div class="card-body">
       <form id="searchForm">
         @csrf
+
         <div class="form-group mb-3 kelompok-container">
           <label for="kode_kelompok">Kode Kelompok</label>
           <input type="text" class="form-control" id="kode_kelompok" name="kode_kelompok" autocomplete="off"
@@ -69,11 +70,15 @@
           <label for="tenor">Tenor</label>
           <input type="number" class="form-control" id="tenor" name="tenor" min="1" required>
         </div>
+
         <input type="hidden" name="unit" id="userUnit" value="{{ auth()->user()->unit }}">
         <input type="hidden" name="param_tanggal" id="param_tanggal" value="{{ auth()->user()->param_tanggal }}">
+        <input type="hidden" name="id_admin" id="IdAdmin" value="{{ auth()->user()->role_id }}">
+
         <div class="form-group mb-3">
           <button type="submit" class="btn btn-primary">Cari</button>
         </div>
+
       </form>
     </div>
   </div>
@@ -211,6 +216,7 @@
       let kodeKelompok = row.data('kode-kelompok');
       let userUnit = $('#userUnit').val();
       let paramTanggal = $('#param_tanggal').val();
+      let idAdmin = $('#IdAdmin').val();
       let jenisRest = $('#jenis_rest').val();
       let dariSimpanan = $('#dari_simpanan').val();
       let tenor = $('#tenor').val();
@@ -231,6 +237,7 @@
               kode_kelompok: kodeKelompok,
               unit: userUnit,
               param_tanggal: paramTanggal,
+              id_admin: idAdmin,
               jenis_rest: jenisRest,
               dari_simpanan: dariSimpanan,
               tenor: tenor
