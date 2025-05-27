@@ -31,6 +31,7 @@ use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
+use App\Http\Controllers\RestrukturisasiByKelompokController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -117,6 +118,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/restrukturisasi/jatuh-tempo', [RestrukturisasiJatuhTempoController::class, 'index'])->name('jatuh_tempo');
     Route::post('/restrukturisasi/jatuh-tempo/search', [RestrukturisasiJatuhTempoController::class, 'searchKelompok'])->name('jatuh_tempo.searchKelompok');
     Route::post('/restrukturisasi/jatuh-tempo/restrukturisasi', [RestrukturisasiJatuhTempoController::class, 'restrukturisasi'])->name('jatuh_tempo.restrukturisasi');
+
+    Route::get('/restrukturisasi/by-kelompok', [RestrukturisasiByKelompokController::class, 'index'])->name('rest_kelompok');
+    Route::get('/restrukturisasi/by-kelompok/suggest-kelompok', [RestrukturisasiByKelompokController::class, 'suggestKelompok'])->name('rest_kelompok.suggest_kelompok');
+    Route::post('/restrukturisasi/by-kelompok/search', [RestrukturisasiByKelompokController::class, 'searchKelompok'])->name('rest_kelompok.searchKelompok');
+    Route::post('/restrukturisasi/by-kelompok/restrukturisasi', [RestrukturisasiByKelompokController::class, 'restrukturisasi'])->name('rest_kelompok.restrukturisasi');
 
     // DOMpdf
     Route::get('/pdf/generate/{feature}/{date}', [PDFController::class, 'generateMusyarakahPdf'])->name('pdf.generateMusyarakah');
