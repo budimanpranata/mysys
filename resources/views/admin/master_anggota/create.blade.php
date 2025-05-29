@@ -82,7 +82,7 @@
 
                 if (selectedCode) {
                     $.ajax({
-                        url: '/get-kelompok-data',
+                        url: 'get-kelompok-data',
                         type: 'GET',
                         data: { code_kel: selectedCodeString },
                         success: function(response) {
@@ -121,7 +121,7 @@
 
             try {
                 // Kirim request ke controller Laravel
-                const response = await fetch('/cari-ktp', {
+                const response = await fetch('cari-ktp', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -185,7 +185,7 @@
 
         function getKelompokByCao(cao) {
             if (cao) {
-                fetch(`/get-kelompok/${cao}`)
+                fetch(`get-kelompok/${cao}`)
                     .then(response => response.json())
                     .then(data => {
                         let kelompokSelect = document.getElementById('kode_kel');
