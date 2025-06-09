@@ -1,8 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/admin" class="brand-link">
-        <img src="#" alt="" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">MySys</span>
+    <a href="#" class="brand-link">
+        <img src="{{ asset('assets/img/logo-ni-white.png') }}" alt="" class="brand-image" style="opacity: .8">
+        <span class="brand-text font-weight-light">KSPPS Nur Insani</span>
     </a>
 
     <!-- Sidebar -->
