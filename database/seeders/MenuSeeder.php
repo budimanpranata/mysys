@@ -290,6 +290,15 @@ class MenuSeeder extends Seeder
             'order' => 24,
         ]);
 
+        Menu::create([
+            'name' => 'Setoran Perkelompok',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => 'transaksi/Setoran-Perkelompok',
+            'left' => 'null',
+            'order' => 24,
+        ]);
+
 
         $Restrukturisasi = Menu::create([
             'name' => 'Restrukturisasi',
