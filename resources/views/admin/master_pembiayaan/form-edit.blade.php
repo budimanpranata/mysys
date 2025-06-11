@@ -42,7 +42,7 @@
                   <div class="input-group">
                     <input type="text" class="form-control" name="ktp" id="ktp" value="{{ $pembiayaan->ktp }}">
                     <div class="input-group-append">
-                      <button type="button" class="btn btn-primary" id="searchKtp">
+                      <button type="button" class="btn btn-primary" id="searchKtp" onclick="cariKtp()">
                         <i class="fas fa-search"></i>
                       </button>
                     </div>
@@ -348,6 +348,10 @@
                     placeholder="Masukkan Keterangan Usaha" required>
                   <span class="help-block with-errors text-danger"></span>
                 </div>
+              </div>
+
+              <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
+                <label class="col-sm-4 col-form-label mx-auto">DOKUMEN ANGGOTA</label>
               </div>
 
               <div class="form-group row" id="resultContainer"></div>
