@@ -171,8 +171,15 @@
   }
 
   function openImageModal(imageUrl) {
-    // Set sumber gambar di modal
-    document.getElementById('modalImage').src = imageUrl;
+    Swal.fire({
+      title: 'Gambar Dokumen',
+      html: '<img src="' + imageUrl + '" width="100%" alt="Gambar">',
+      confirmButtonText: 'Tutup',
+      customClass: {
+        popup: 'swal-wide',
+        container: 'swal-lg'
+      }
+    });
   }
 </script>
 @endpush

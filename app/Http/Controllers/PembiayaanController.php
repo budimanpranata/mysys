@@ -182,6 +182,7 @@ class PembiayaanController extends Controller
 
             $paramRecord = DB::table('param_biaya')
                 ->where('pla', $validated['disetujui'])
+                ->where('jw', $validated['tenor'])
                 ->select('pla', 'margin', 'tab')
                 ->first();
 
@@ -200,14 +201,14 @@ class PembiayaanController extends Controller
             $angsuran = $ijaroh + $pokokAmount;
             $bulatAmount = $paramRecord->tab + $angsuran;
 
-            $wakalahDate = new \DateTime($validated['tgl_wakalah']);
+            $wakalahDate = Carbon::parse($validated['tgl_wakalah']);
             if ($wakalahDate->format('N') == 5) { // hari ke-5
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Friday is not a collection date'
+                    'message' => 'Jumat bukan hari pengumpulan'
                 ], 400);
             }
-            $dayOfWeek = $wakalahDate->format('l');
+            $dayOfWeek = $wakalahDate->locale('id')->isoFormat('dddd');
 
             $birthDate = new \DateTime($validated['tgl_lahir']);
             $today = new \DateTime();
