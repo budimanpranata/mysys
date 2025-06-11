@@ -16,6 +16,12 @@
 
 @section('content')
 
+<style>
+  .swal-wide {
+    width: 850px;
+  }
+</style>
+
 @include('admin.master_pembiayaan.form-edit')
 
 @push('scripts')
@@ -177,7 +183,6 @@
       confirmButtonText: 'Tutup',
       customClass: {
         popup: 'swal-wide',
-        container: 'swal-lg'
       }
     });
   }
