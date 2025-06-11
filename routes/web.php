@@ -97,9 +97,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('anggota/get-kelompok/{cao}', [AnggotaController::class, 'getKelompokByCao']);
 
     Route::get('/get-anggota/{cif}', [KelompokController::class, 'getAnggotaByCif']);
+
     Route::get('/pembiayaan', [PembiayaanController::class, 'index'])->name('pembiayaan.index');
     Route::get('/pembiayaan/data', [PembiayaanController::class, 'data'])->name('pembiayaan.data');
-    Route::post('/pembiayaan/add', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
+    Route::post('/pembiayaan/add/{cif}', [PembiayaanController::class, 'addPembiayaan'])->name('pembiayaan.add');
+    Route::get('/pembiayaan/edit/{cif}', [PembiayaanController::class, 'edit'])->name('pembiayaan.edit');
 
     Route::get('pemeliharaan/view-data/data', [ViewDataController::class, 'data'])->name('viewData.data');
     Route::resource('pemeliharaan/view-data', ViewDataController::class);

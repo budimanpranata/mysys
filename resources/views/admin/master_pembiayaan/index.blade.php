@@ -7,7 +7,7 @@
   </div>
   <div class="col-sm-6">
     <ol class="breadcrumb float-sm-right">
-      <li class="breadcrumb-item"><a href="#">Dahsboard</a></li>
+      <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
       <li class="breadcrumb-item active">{{ $title }}</li>
     </ol>
   </div>
@@ -22,154 +22,109 @@
         <h3 class="card-title">{{ $title }}</h3>
       </div>
       <div class="card-body">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Kelompok</th>
-              <th>Kode Kel</th>
-              <th>No Anggota</th>
-              <th>CIF</th>
-              <th>Nama</th>
-              <th>Plafond</th>
-              <th>OS</th>
-              <th>Tenor</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-        </table>
+        <!-- Search Form -->
+        <form id="search-form" class="mb-4">
+          <div class="form-group">
+            <label>Kode Kelompok <span class="text-danger">*</span></label>
+            <div class="row">
+              <div class="col-sm-4">
+                <input type="text" class="form-control" id="kode_kelompok" name="kode_kelompok"
+                  placeholder="Masukkan Kode Kelompok" required>
+              </div>
+              <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary">Cari</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Results Table -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Kelompok</th>
+                <th>Kode Kel</th>
+                <th>No Anggota</th>
+                <th>CIF</th>
+                <th>Nama</th>
+                <th>Plafond</th>
+                <th>OS</th>
+                <th>Tenor</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="results-body">
+              <tr>
+                <td colspan="10" class="text-center">Belum ada data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-@include('admin.master_pembiayaan.form-add')
-
+@push('scripts')
 <script>
-  let table;
-
   $(function () {
-    table = $('.table').DataTable({
-      responsive: true,
-      processing: true,
-      serverSide: true,
-      autoWidth: false,
-      ajax: {
-        url: "{{ route('pembiayaan.data') }}"
-      },
-      columns: [
-        { data: 'DT_RowIndex', searchable: false, sortable: false },
-        { data: 'nama_kelompok' },
-        { data: 'kode_kel' },
-        { data: 'no_anggota' },
-        { data: 'cif' },
-        { data: 'nama_anggota' },
-        { data: 'plafond' },
-        { data: 'os' },
-        { data: 'tenor' },
-        { data: 'aksi', searchable: false, sortable: false },
-      ]
-    });
+    $('#search-form').on('submit', function (e) {
+      e.preventDefault();
+      const kodeKelompok = $('#kode_kelompok').val();
 
-    $('#add-form').validator().on('submit', function (e) {
-      if (!e.preventDefault()) {
-        let formData = {
-          _token: "{{ csrf_token() }}",
-          unit: $('#unit').val(),
-          produk: $('#produk').val(),
-          no_rek: $('#no_rek').val(),
-          cif: $('#cif').val(),
-          pengajuan: $('#pengajuan').val(),
-          tenor: $('#tenor').val(),
-          disetujui: $('#disetujui').val(),
-          tgl_wakalah: $('#tgl_wakalah').val(),
-          tgl_akad: $('#tgl_akad').val(),
-          bidang_usaha: $('#bidang_usaha').val(),
-          keterangan_usaha: $('#keterangan_usaha').val(),
-          id: "{{ Auth::user()->role_id }}",
-          param_tanggal: "{{ Auth::user()->param_tanggal }}",
-          cao: $('#cao').val(),
-          code_kel: $('#code_kel').val(),
-          nama: $('#nama').val(),
-          tgl_lahir: $('#tgl_lahir').val(),
-          suffix: $('#suffix').val(),
-        };
-
-        $.ajax({
-          url: $('#add-form form').attr('action'),
-          type: 'POST',
-          data: formData,
-          success: function (response) {
-            if (response.status === 'warning') {
-              // Handle warning response
-              Swal.fire({
-                title: 'Perhatian!',
-                text: response.message,
-                icon: 'warning',
-                confirmButtonText: 'OK'
-              }).then(() => {
-                $('#add-form').modal('hide');
-
-                table.ajax.reload();
-              });
-            } else {
-              // Handle success response
-              Swal.fire({
-                title: 'Data berhasil disimpan!',
-                icon: 'success',
-                confirmButtonText: 'OK'
-              }).then(() => {
-                $('#add-form').modal('hide');
-
-                table.ajax.reload();
-              });
-            }
-          },
-          error: function (xhr) {
-            // Parse the error response to get the message
-            let errorMessage = 'Tidak dapat menyimpan data!';
-
-            try {
-              const response = JSON.parse(xhr.responseText);
-              if (response.message) {
-                errorMessage = response.message;
-              }
-            } catch (e) {
-              console.error('Error parsing response:', e);
-            }
-
-            // Display error message
-            Swal.fire({
-              title: 'Error!',
-              text: errorMessage,
-              icon: 'error',
-              confirmButtonText: 'OK'
-            });
-          }
+      if (!kodeKelompok) {
+        Swal.fire({
+          title: 'Peringatan!',
+          text: 'Kode Kelompok harus diisi!',
+          icon: 'warning',
+          confirmButtonText: 'OK'
         });
+        return;
       }
+
+      // Show loading state
+      $('#results-body').html('<tr><td colspan="10" class="text-center">Loading...</td></tr>');
+
+      // Fetch data
+      $.ajax({
+        url: "{{ route('pembiayaan.data') }}",
+        type: 'GET',
+        data: { kode_kelompok: kodeKelompok },
+        success: function (response) {
+          if (response.status === 'success' && response.data && response.data.length > 0) {
+            let html = '';
+            response.data.forEach((item, index) => {
+              html += `
+              <tr>
+                <td>${index + 1}</td>
+                <td>${item.nama_kelompok}</td>
+                <td>${item.kode_kel}</td>
+                <td>${item.no_anggota}</td>
+                <td>${item.anggota_cif}</td>
+                <td>${item.nama_anggota}</td>
+                <td>${item.plafond}</td>
+                <td>${item.os}</td>
+                <td>${item.tenor}</td>
+                <td>
+                  <a href="{{ route('pembiayaan.edit', '') }}/${item.anggota_cif}" class="btn btn-sm btn-primary">Edit</a>
+                </td>
+              </tr>
+            `;
+            });
+            $('#results-body').html(html);
+          } else {
+            $('#results-body').html('<tr><td colspan="10" class="text-center">Tidak ada data ditemukan</td></tr>');
+          }
+        },
+        error: function (xhr) {
+          $('#results-body').html('<tr><td colspan="10" class="text-center text-danger">Terjadi kesalahan saat mengambil data</td></tr>');
+          console.error('Error:', xhr);
+        }
+      });
     });
   });
-
-  function addForm(url, cif, no_anggota, unit, cao, code_kel, nama, tgl_lahir, suffix) {
-    $('#add-form').modal('show');
-    $('#add-form .modal-title').text('Pengajuan Pembiayaan');
-
-    $('#add-form form')[0].reset();
-    $('#add-form form').attr('action', url);
-    $('#add-form [name=_method]').val('post');
-
-    // autofill field (readonly/hidden)
-    $('#cif').val(cif);
-    $('#no_rek').val(no_anggota);
-    $('#unit').val(unit);
-    $('#cao').val(cao);
-    $('#code_kel').val(code_kel);
-    $('#nama').val(nama);
-    $('#tgl_lahir').val(tgl_lahir);
-    $('#suffix').val(suffix);
-
-    $('#modal-form [name=produk]').focus();
-  }
 </script>
+@endpush
 @endsection
