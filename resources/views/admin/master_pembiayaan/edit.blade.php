@@ -16,6 +16,12 @@
 
 @section('content')
 
+<style>
+  .swal-wide {
+    width: 850px;
+  }
+</style>
+
 @include('admin.master_pembiayaan.form-edit')
 
 @push('scripts')
@@ -171,8 +177,14 @@
   }
 
   function openImageModal(imageUrl) {
-    // Set sumber gambar di modal
-    document.getElementById('modalImage').src = imageUrl;
+    Swal.fire({
+      title: 'Gambar Dokumen',
+      html: '<img src="' + imageUrl + '" width="100%" alt="Gambar">',
+      confirmButtonText: 'Tutup',
+      customClass: {
+        popup: 'swal-wide',
+      }
+    });
   }
 </script>
 @endpush
