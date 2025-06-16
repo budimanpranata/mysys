@@ -17,9 +17,18 @@ class PembiayaanController extends Controller
         return view('admin.master_pembiayaan.index', compact('title', 'menus'));
     }
 
-    public function data()
+    public function data(Request $request)
     {
         try {
+            $kodeKelompok = $request->get('kode_kelompok');
+
+            if (!$kodeKelompok) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Kode Kelompok is required'
+                ], 400);
+            }
+
             $anggota = DB::table('anggota')
                 ->leftJoin('kelompok', 'anggota.kode_kel', '=', 'kelompok.code_kel')
                 ->leftJoin('pembiayaan', 'anggota.cif', '=', 'pembiayaan.cif')
@@ -30,6 +39,7 @@ class PembiayaanController extends Controller
                         ->whereColumn('temp_akad_mus.cif', 'anggota.cif')
                         ->whereColumn('temp_akad_mus.unit', 'anggota.unit');
                 })
+                ->where('kelompok.code_kel', $kodeKelompok)
                 ->select(
                     'kelompok.nama_kel as nama_kelompok',
                     'anggota.kode_kel as kode_kel',
@@ -47,53 +57,77 @@ class PembiayaanController extends Controller
                 ->latest('anggota.no')
                 ->get();
 
-            return datatables()
-                ->of($anggota)
-                ->addIndexColumn()
-                ->addColumn('nama_kelompok', function ($anggota) {
-                    return $anggota->nama_kelompok;
-                })
-                ->addColumn('kode_kel', function ($anggota) {
-                    return $anggota->kode_kel;
-                })
-                ->addColumn('no_anggota', function ($anggota) {
-                    return $anggota->no_anggota;
-                })
-                ->addColumn('cif', function ($anggota) {
-                    return $anggota->anggota_cif;
-                })
-                ->addColumn('nama_anggota', function ($anggota) {
-                    return $anggota->nama_anggota;
-                })
-                ->addColumn('plafond', function ($anggota) {
-                    return $anggota->plafond;
-                })
-                ->addColumn('os', function ($anggota) {
-                    return $anggota->os;
-                })
-                ->addColumn('tenor', function ($anggota) {
-                    return $anggota->tenor;
-                })
-                ->addColumn('aksi', function ($anggota) {
-                    $url = route('pembiayaan.add');
-                    $cif = $anggota->anggota_cif;
-                    $cao = $anggota->anggota_cao;
-                    $noAnggota = $anggota->no_anggota;
-                    $unitAnggota = $anggota->unit_anggota;
-                    $code_kel = $anggota->kode_kel;
-                    $nama = $anggota->nama_anggota;
-                    $tgl_lahir = $anggota->tanggal_lahir;
-                    $suffix = $anggota->suffix;
+            return response()->json([
+                'status' => 'success',
+                'data' => $anggota
+            ]);
 
-                    return '<button onclick="addForm(`' . $url . '`, `' . $cif . '`, `' . $noAnggota . '`, `' . $unitAnggota . '`, `' . $cao . '`, `' . $code_kel . '`, `' . $nama . '`, `' . $tgl_lahir . '`, `' . $suffix . '`)" 
-                    class="btn btn-sm btn-primary">Edit</button>';
-                })
-                ->rawColumns(['aksi'])
-                ->make(true);
         } catch (\Exception $e) {
-            \Log::error('DataTables Error: ' . $e->getMessage());
-            return response()->json(['error' => 'Something went wrong!'], 500);
+            \Log::error('Data Error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong!'
+            ], 500);
         }
+    }
+
+    public function edit($cif)
+    {
+        $title = 'Edit Pembiayaan';
+        $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
+
+        $pembiayaan = DB::table('anggota')
+            ->leftJoin('kelompok', 'anggota.kode_kel', '=', 'kelompok.code_kel')
+            ->leftJoin('pembiayaan', 'anggota.cif', '=', 'pembiayaan.cif')
+            ->leftJoin('anggota_details', 'anggota.no', '=', 'anggota_details.no_anggota')
+            ->where('anggota.cif', $cif)
+            ->select(
+                'kelompok.nama_kel as nama_kelompok',
+                'anggota.kode_kel as kode_kel',
+                'anggota.no as no_anggota',
+                'anggota.unit as unit_anggota',
+                'anggota.cif as anggota_cif',
+                'anggota.cao as anggota_cao',
+                'anggota.nama as nama_anggota',
+                'anggota.tgl_lahir as tanggal_lahir',
+                'anggota.ktp as ktp',
+                'anggota.alamat as alamat',
+                'anggota.rtrw as rtrw',
+                'anggota.desa as desa',
+                'anggota.kecamatan as kecamatan',
+                'anggota.kota as kota',
+                'anggota.kode_pos as kode_pos',
+                'anggota.no_hp as no_hp',
+                'anggota.hp_pasangan as hp_pasangan',
+                'anggota.status_menikah as status_menikah',
+                'anggota.agama as agama',
+                'anggota.pendidikan as pendidikan',
+                'anggota.kewarganegaraan as kewarganegaraan',
+                'anggota.waris as waris',
+                'anggota.pekerjaan_pasangan as pekerjaan_pasangan',
+                'anggota.ibu_kandung as ibu_kandung',
+                'anggota.tempat_lahir as tempat_lahir',
+                'anggota_details.alamat_domisili as alamat_domisili',
+                'anggota_details.rtrw_domisili as rtrw_domisili',
+                'anggota_details.desa_domisili as desa_domisili',
+                'anggota_details.kecamatan_domisili as kecamatan_domisili',
+                'anggota_details.kota_domisili as kota_domisili',
+                'anggota_details.kode_pos_domisili as kode_pos_domisili',
+                'pembiayaan.suffix as suffix',
+                'pembiayaan.plafond',
+                'pembiayaan.os',
+                'pembiayaan.tenor',
+                'pembiayaan.no_anggota',
+                'pembiayaan.suffix'
+            )
+            ->first();
+
+        if (!$pembiayaan) {
+            return redirect()->route('pembiayaan.index')
+                ->with('error', 'Data pembiayaan tidak ditemukan');
+        }
+
+        return view('admin.master_pembiayaan.edit', compact('title', 'menus', 'pembiayaan'));
     }
 
     public function addPembiayaan(Request $request)
@@ -101,7 +135,7 @@ class PembiayaanController extends Controller
         try {
             $validated = $request->validate([
                 'unit' => 'required|string',
-                'produk' => 'required|integer',
+                'jenis_pembiayaan' => 'required|integer', // tipe produk
                 'no_rek' => 'required|string',
                 'cif' => 'required|string',
                 'pengajuan' => 'required|integer',
@@ -114,7 +148,7 @@ class PembiayaanController extends Controller
                 'id' => 'required|string',
                 'param_tanggal' => 'required|date',
                 'cao' => 'required|string',
-                'code_kel' => 'required|string',
+                'kode_kel' => 'required|string',
                 'nama' => 'required|string',
                 'tgl_lahir' => 'required|date',
                 'suffix' => 'required|string'
@@ -148,6 +182,7 @@ class PembiayaanController extends Controller
 
             $paramRecord = DB::table('param_biaya')
                 ->where('pla', $validated['disetujui'])
+                ->where('jw', $validated['tenor'])
                 ->select('pla', 'margin', 'tab')
                 ->first();
 
@@ -166,14 +201,14 @@ class PembiayaanController extends Controller
             $angsuran = $ijaroh + $pokokAmount;
             $bulatAmount = $paramRecord->tab + $angsuran;
 
-            $wakalahDate = new \DateTime($validated['tgl_wakalah']);
+            $wakalahDate = Carbon::parse($validated['tgl_wakalah']);
             if ($wakalahDate->format('N') == 5) { // hari ke-5
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Friday is not a collection date'
+                    'message' => 'Jumat bukan hari pengumpulan'
                 ], 400);
             }
-            $dayOfWeek = $wakalahDate->format('l');
+            $dayOfWeek = $wakalahDate->locale('id')->isoFormat('dddd');
 
             $birthDate = new \DateTime($validated['tgl_lahir']);
             $today = new \DateTime();
@@ -215,7 +250,7 @@ class PembiayaanController extends Controller
             // Use one database operation for insert
             DB::table('temp_akad_mus')->insert([
                 'buss_date' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
-                'code_kel' => $validated['code_kel'],
+                'code_kel' => $validated['kode_kel'],
                 'no_anggota' => $validated['no_rek'],
                 'cif' => $validated['cif'],
                 'nama' => $validated['nama'],
@@ -248,7 +283,7 @@ class PembiayaanController extends Controller
                 'status_usia' => $statusUsia,
                 'status_app' => 'APPROVE',
                 'gol' => '1',
-                'deal_produk' => $validated['produk'],
+                'deal_produk' => $validated['jenis_pembiayaan'],
                 'persen_margin' => $persenMargin,
                 'created_at' => now(),
                 'updated_at' => now(),
