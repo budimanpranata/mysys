@@ -24,6 +24,19 @@
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 36px;
         }
+        .anggota-check {
+        transform: scale(1.2);
+        }
+        #proses-terpilih {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
     </style>
 
     <div class="row">
@@ -31,7 +44,7 @@
             <div class="card card-primary">
                 <div class="card-body">
                     <div class="form-group row">
-                        <label for="code_kel" class="col-sm-2 col-form-label">Kode Kelompok</label>
+                        <label for="code_kel" class="col-sm-2 col-form-label">Cari Kelompok</label>
                         <div class="col-sm-6">
                             <select class="form-control select2-ajax" id="code_kel" style="width: 100%;">
                                 <!-- Opsi akan di-load via AJAX -->
@@ -51,20 +64,25 @@
             <!-- Tabel Hasil Pencarian -->
             <div class="card">
                 <div class="card-body">
-                    <div id="result">
-                        <table class="table table-bordered mt-3">
+                    <div id="result" class="table-responsive">
+                        <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>UNIT</th>
-                                    <th>KELOMPOK</th>
-                                    <th>NOA</th>
-                                    <th>NAMA AO</th>
-                                    <th>SETORAN</th>
-                                    <th>TGL</th>
-                                    <th>AKSI</th>
+                                    <th width="50px">No</th>
+                                    <th width="50px">Pilih</th>
+                                    <th>CIF</th>
+                                    <th>Nama</th>
+                                    <th>Kelompok</th>
+                                    <th>Pembiayaan</th>
+                                    <th>Angsuran</th>
+                                    <th>Setoran</th>
+                                    <th>Nyata Setor</th>
+                                    <th>Debet</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                <!-- Data akan dimuat di sini -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -106,10 +124,8 @@
 
         $(document).ready(function () {
             $('#filterButton').click(function () {
-                // Ambil nilai input
                 var code_kel = $('#code_kel').val();
                 
-                // Validasi input
                 if (code_kel === '') {
                     Swal.fire({
                         title: 'Peringatan!',
@@ -120,17 +136,12 @@
                     return;
                 }
                 
-                // Tampilkan loading
                 Swal.fire({
                     title: 'Memproses...',
-                    text: 'Silakan tunggu',
                     allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
+                    didOpen: () => Swal.showLoading()
                 });
                 
-                // AJAX request
                 $.ajax({
                     url: "{{ route('setoranBedaHari.filter') }}",
                     method: "POST",
@@ -150,33 +161,90 @@
                             }).format(angka);
                         }
                         
-                        if (response.anggota && response.anggota.length > 0) {                            
-                            // Data anggota
+                        if (response.anggota && response.anggota.length > 0) {
+                            // Inisialisasi total
+                            var totalOS = 0;
+                            var totalAngsuran = 0;
+                            var totalBulat = 0;
+                            
+                            // Data anggota dengan checkbox
                             $.each(response.anggota, function(index, anggota) {
+                                totalOS += parseFloat(anggota.os) || 0;
+                                totalAngsuran += parseFloat(anggota.angsuran) || 0;
+                                totalBulat += parseFloat(anggota.bulat) || 0;
+                                
                                 tbody.append(`
                                     <tr>
                                         <td>${index + 1}</td>
-                                        <td>${anggota.no}</td>
+                                        <td>
+                                            <input type="checkbox" class="anggota-check" 
+                                                data-id="${anggota.no}" checked>
+                                        </td>
+                                        <td>${anggota.cif}</td>
                                         <td>${anggota.nama}</td>
-                                        <td>${anggota.alamat}</td>
+                                        <td>${anggota.kode_kel}</td>
+                                        <td>${anggota.os}</td>
                                         <td class="text-right">${formatRupiah(anggota.angsuran)}</td>
-                                        <td class="text-right">${formatRupiah(anggota.saldo)}</td>
-                                        <td>${anggota.ke}/${anggota.run_tenor}</td>
+                                        <td class="text-right">${formatRupiah(anggota.bulat)}</td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm setoran-input" 
+                                                value="0"
+                                                data-id="${anggota.no}"
+                                                style="width: 100px;">
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm debet-input" 
+                                                value="1"
+                                                data-id="${anggota.no}"
+                                                style="width: 50px;">
+                                        </td>
                                     </tr>
                                 `);
                             });
 
-                            // SweetAlert jika data ditemukan
-                            Swal.fire({
-                                title: 'Data Ditemukan!',
-                                text: 'Data kelompok berhasil dimuat.',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
+                            // Tambahkan baris total
+                            tbody.append(`
+                                <tr style="font-weight: bold; background-color: #f5f5f5;">
+                                    <td colspan="5" class="text-center">TOTAL</td>
+                                    <td class="text-right">${formatRupiah(totalOS)}</td>
+                                    <td class="text-right">${formatRupiah(totalAngsuran)}</td>
+                                    <td class="text-right">${formatRupiah(totalBulat)}</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            `);
+
+                            // Tambahkan tombol aksi di bawah tabel
+                            $('.table-responsive').after(`
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="select-all" checked>
+                                            <label class="form-check-label" for="select-all">
+                                                Semua
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <button id="proses-terpilih" class="btn btn-primary">
+                                            <i class="fas fa-check-circle"></i> Proses
+                                        </button>
+                                    </div>
+                                </div>
+                            `);
+
+                            // Select all functionality
+                            $('#select-all').change(function() {
+                                $('.anggota-check').prop('checked', $(this).prop('checked'));
+                            });
+
+                            // Proses yang dipilih
+                            $('#proses-terpilih').click(function() {
+                                prosesAnggotaTerpilih(code_kel);
                             });
                             
                         } else {
-                            $('#kelompok-info').hide();
-                            tbody.append('<tr><td colspan="8" class="text-center">Tidak ada data anggota</td></tr>');
+                            tbody.append('<tr><td colspan="9" class="text-center">Tidak ada data anggota</td></tr>');
                         }
                     },
                     error: function (xhr) {
@@ -191,6 +259,52 @@
                     }
                 });
             });
+
+            function prosesAnggotaTerpilih(code_kel) {
+                const pilihAnggota = [];
+                const inputNyataSetor = {};
+                const inputDebet = {};
+                
+                $('.anggota-check:checked').each(function() {
+                    const id = $(this).data('id');
+                    const setoran = $(`.setoran-input[data-id="${id}"]`).val();
+                    const debet = $(`.debet-input[data-id="${id}"]`).val();
+
+                    
+                    pilihAnggota.push(id);
+                    inputNyataSetor[id] = parseFloat(setoran) || 0;
+                    inputDebet[id] = parseInt(debet) || 1;
+                });
+                
+                $.ajax({
+                    url: `/transaksi/setoran-beda-hari/proses/${code_kel}`, // Gunakan parameter
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        pilih_anggota: pilihAnggota,
+                        input_nyata_setor: inputNyataSetor,
+                        input_debet: inputDebet
+                    },
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.reload(); // Reload halaman setelah sukses
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: xhr.responseJSON?.message || 'Gagal memproses data',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
         });
         
     </script>
