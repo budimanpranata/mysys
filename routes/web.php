@@ -32,6 +32,7 @@ use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
+use App\Http\Controllers\SetoranBedaHariController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -162,6 +163,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/realisasi-musyarakah-get-kelompok', [RealisasiMusyarokahController::class, 'getSetKelompok']);
     Route::get('/realisasi-musyarakah/getData', [RealisasiMusyarokahController::class, 'getData']);
     Route::post('/proses-realisasi-musyarakah', [RealisasiMusyarokahController::class, 'realisasiMusyarokah']);
+
+    // Transaksi Setoran Beda Hari
+    Route::get('/transaksi/setoran-beda-hari', [SetoranBedaHariController::class, 'index']);
+    Route::post('/transaksi/setoran-beda-hari/filter', [SetoranBedaHariController::class, 'filter'])->name('setoranBedaHari.filter');
+    // Route::post('/transaksi/setoran-beda-hari/proses', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
+    Route::post('/transaksi/setoran-beda-hari/proses/{code_kel}', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
+    Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
 
 
 });
