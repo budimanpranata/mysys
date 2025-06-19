@@ -201,14 +201,9 @@
                         }
                         
                         if (response.anggota && response.anggota.length > 0) {
-                            // Inisialisasi total
-                            var totalWajib = 0;
-                            var totalPokok = 0;
                             
                             // Data anggota dengan checkbox
                             $.each(response.anggota, function(index, anggota) {
-                                totalWajib += parseFloat(anggota.wajib) || 0;
-                                totalPokok += parseFloat(anggota.pokok) || 0;
                                 
                                 tbody.append(`
                                     <tr>
@@ -222,8 +217,8 @@
                                         <td>${anggota.kode_kel}</td>
                                         <td>${jenisPemindahan}</td>
                                         <td>${jenisSimpanan}</td>
-                                        <td class="text-right">${formatRupiah(anggota.pokok)}</td>
                                         <td class="text-right">${formatRupiah(anggota.wajib)}</td>
+                                        <td class="text-right">${formatRupiah(anggota.pokok)}</td>
                                         <td>
                                             <input type="number" class="form-control form-control-sm setoran-input" 
                                                 value="0"
@@ -233,15 +228,6 @@
                                     </tr>
                                 `);
                             });
-                            // Tambahkan baris total
-                            tbody.append(`
-                                <tr style="font-weight: bold; background-color: #f5f5f5;">
-                                    <td colspan="7" class="text-center">TOTAL</td>
-                                    <td class="text-right">${formatRupiah(totalWajib)}</td>
-                                    <td class="text-right">${formatRupiah(totalPokok)}</td>
-                                    <td></td>
-                                </tr>
-                            `);
                             // Tambahkan tombol aksi di bawah tabel
                             $('.table-responsive').after(`
                                 <div class="row mt-3">

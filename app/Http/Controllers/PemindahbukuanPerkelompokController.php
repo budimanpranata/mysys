@@ -108,15 +108,13 @@ class PemindahbukuanPerkelompokController extends Controller
                 )
                 ->get();
 
-            $anggotaDilewati = [];
-
             // Proses update untuk setiap anggota yang dipilih
             foreach ($pb as $item) {
                 $nominalPB[$item->no_anggota] ?? $item->bulat;
                 $jenisPemindahan = request()->input('jenis_pemindahan');
                 $jenisSimpanan = request()->input('jenis_simpanan');
 
-
+                
                 $unit = $item->unit;
                 $kodeTransaksi = 'BU/' . $unit . strtoupper(Str::random(8));
                 $tgl_system = now()->format('Y-m-d H:i:s');
@@ -124,9 +122,14 @@ class PemindahbukuanPerkelompokController extends Controller
                 $ket = 'Setoran PB an ' . $item->nama;
                 $timestamp = date('YmdHis');
                 $reff = $unit . $timestamp . strtoupper(Str::random(2));
-
+                
                 $nominal = isset($nominalPB[$item->no_anggota]) ? floatval($nominalPB[$item->no_anggota]) : 0;
-
+                
+                if ($nominal <= 0) {
+                    $anggotaDilewati[] = $item->no_anggota;
+                    continue;
+                }
+                
                 // Cek kondisi untuk debet pokok
                 if ($jenisPemindahan === 'debet' && $jenisSimpanan === 'pokok') {
                     simpanan::create([
