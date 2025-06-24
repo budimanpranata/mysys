@@ -44,6 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('table_master');
+        Schema::dropIfExists('tabel_master');
     }
 };
