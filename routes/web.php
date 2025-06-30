@@ -184,8 +184,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/pelunasan-kelompok', [PelunasanKelompokController::class, 'index']);
     Route::get('/transaksi/pelunasan-kelompok/cari-kelompok', [PelunasanKelompokController::class, 'cari'])->name('pelunasanKelompok.cariKelompok');
     Route::post('/transaksi/pelunasan-kelompok/filter', [PelunasanKelompokController::class, 'filter'])->name('pelunasanKelompok.filter');
-
-
+    Route::post('/transaksi/pelunasan-kelompok/proses/{code_kel}', [PelunasanKelompokController::class, 'proses'])->name('pelunasanKelompok.proses');
 
 });
 

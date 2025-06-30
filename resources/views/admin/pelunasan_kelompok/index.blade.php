@@ -72,9 +72,9 @@
                                     <th width="50px">Pilih</th>
                                     <th>Norek</th>
                                     <th>Nama</th>
+                                    <th>Tgl Jatuh Tempo</th>
                                     <th>Plafond</th>
                                     <th>Angsuran</th>
-                                    <th>Tgl Jatuh Tempo</th>
                                     <th>Saldo OS</th>
                                     <th>Saldo Rek</th>
                                     <th>Unit</th>
@@ -162,15 +162,17 @@
                         
                         if (response.anggota && response.anggota.length > 0) {
                             // Inisialisasi total
+                            var totalPlafond = 0;
                             var totalOS = 0;
                             var totalAngsuran = 0;
-                            var totalBulat = 0;
+                            var totalSaldoRek = 0;
                             
                             // Data anggota dengan checkbox
                             $.each(response.anggota, function(index, anggota) {
+                                totalPlafond += parseFloat(anggota.plafond) || 0;
                                 totalOS += parseFloat(anggota.os) || 0;
                                 totalAngsuran += parseFloat(anggota.angsuran) || 0;
-                                totalBulat += parseFloat(anggota.bulat) || 0;
+                                totalSaldoRek += parseFloat(anggota.saldo_rek) || 0;
                                 
                                 tbody.append(`
                                     <tr>
@@ -181,11 +183,11 @@
                                         </td>
                                         <td>${anggota.norek}</td>
                                         <td>${anggota.nama}</td>
-                                        <td>${anggota.plafond}</td>
-                                        <td>${anggota.angsuran}</td>
-                                        <td>${anggota.os}</td>
                                         <td>${anggota.tgl_jatuh_tempo}</td>
-                                        <td>${anggota.saldo_rek}</td>
+                                        <td class="text-right">${formatRupiah(anggota.plafond)}</td>
+                                        <td class="text-right">${formatRupiah(anggota.angsuran)}</td>
+                                        <td class="text-right">${formatRupiah(anggota.os)}</td>
+                                        <td class="text-right">${formatRupiah(anggota.saldo_rek)}</td>
                                         <td>${anggota.unit}</td>
                                     </tr>
                                 `);
@@ -194,10 +196,10 @@
                             tbody.append(`
                                 <tr style="font-weight: bold; background-color: #f5f5f5;">
                                     <td colspan="5" class="text-center">TOTAL</td>
-                                    <td class="text-right">${formatRupiah(totalOS)}</td>
+                                    <td class="text-right">${formatRupiah(totalPlafond)}</td>
                                     <td class="text-right">${formatRupiah(totalAngsuran)}</td>
-                                    <td class="text-right">${formatRupiah(totalBulat)}</td>
-                                    <td></td>
+                                    <td class="text-right">${formatRupiah(totalOS)}</td>
+                                    <td class="text-right">${formatRupiah(totalSaldoRek)}</td>
                                     <td></td>
                                 </tr>
                             `);
@@ -229,7 +231,7 @@
                             });
                             
                         } else {
-                            tbody.append('<tr><td colspan="9" class="text-center">Tidak ada data anggota</td></tr>');
+                            tbody.append('<tr><td colspan="10" class="text-center">Tidak ada data anggota</td></tr>');
                         }
                     },
                     error: function (xhr) {
@@ -244,29 +246,23 @@
                     }
                 });
             });
+            
             function prosesAnggotaTerpilih(code_kel) {
                 const pilihAnggota = [];
-                const inputNyataSetor = {};
-                const inputDebet = {};
                 
                 $('.anggota-check:checked').each(function() {
                     const id = $(this).data('id');
-                    const setoran = $(`.setoran-input[data-id="${id}"]`).val();
-                    const debet = $(`.debet-input[data-id="${id}"]`).val();
                     
                     pilihAnggota.push(id);
-                    inputNyataSetor[id] = parseFloat(setoran) || 0;
-                    inputDebet[id] = parseInt(debet) || 1;
+
                 });
                 
                 $.ajax({
-                    url: `/transaksi/setoran-perkelompok/proses/${code_kel}`, // Gunakan parameter
+                    url: `/transaksi/pelunasan-kelompok/proses/${code_kel}`, // Gunakan parameter
                     method: "POST",
                     data: {
                         _token: "{{ csrf_token() }}",
                         pilih_anggota: pilihAnggota,
-                        input_nyata_setor: inputNyataSetor,
-                        input_debet: inputDebet
                     },
                     success: function(response) {
                         Swal.fire({
