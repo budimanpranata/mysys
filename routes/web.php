@@ -30,6 +30,7 @@ use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
+use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
@@ -178,8 +179,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/transaksi/setoran-beda-hari/filter', [SetoranBedaHariController::class, 'filter'])->name('setoranBedaHari.filter');
     // Route::post('/transaksi/setoran-beda-hari/proses', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
     Route::post('/transaksi/setoran-beda-hari/proses/{code_kel}', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
-    Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
+    // Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
 
+    Route::get('/jurnal-masuk', [JurnalMasukController::class, 'index']);
 
 
 });
