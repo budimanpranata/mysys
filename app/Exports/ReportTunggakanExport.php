@@ -26,7 +26,14 @@ class ReportTunggakanExport implements FromCollection, WithHeadings
                 'ao.nama_ao',
                 'pembiayaan.cif',
                 'pembiayaan.nama as nama_anggota',
-                DB::raw('COUNT(DISTINCT tunggakan.tgl_tunggak) as ft'),
+                DB::raw("
+                    GREATEST(
+                        COUNT(DISTINCT CASE WHEN tunggakan.kredit > 0 THEN tunggakan.tgl_tunggak END) 
+                        - 
+                        COUNT(DISTINCT CASE WHEN tunggakan.debet > 0 THEN tunggakan.tgl_tunggak END),
+                        0
+                    ) as ft
+                "),
                 DB::raw('COALESCE(SUM(tunggakan.kredit - tunggakan.debet), 0) as total_tunggakan')
             )
             ->groupBy(
