@@ -302,6 +302,16 @@ class MenuSeeder extends Seeder
 
         Menu::create([
 
+            'name' => 'PB Perkelompok',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => 'transaksi/pemindahbukuan-Perkelompok',
+            'left' => 'null',
+            'order' => 26,
+            ]);
+
+        Menu::create([
+
             'name' => 'Setoran Beda Hari',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
