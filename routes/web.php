@@ -30,6 +30,7 @@ use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
+use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
 use App\Http\Controllers\PelunasanController;
 use App\Http\Controllers\PemindahbukuanPerkelompokController;
@@ -37,7 +38,6 @@ use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
 use App\Http\Controllers\SetoranBedaHariController;
-
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -182,6 +182,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     // Route::post('/transaksi/setoran-beda-hari/proses', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
     Route::post('/transaksi/setoran-beda-hari/proses/{code_kel}', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
     // Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
+    Route::get('/report/tunggakan', [ReportTunggakanController::class, 'index']);
+    Route::get('/report/tunggakan/data', [ReportTunggakanController::class, 'data'])->name('reportTunggakan.data');
+    Route::get('/report/tunggakan/export', [ReportTunggakanController::class, 'export'])->name('reportTunggakan.export');
 
     Route::get('/transaksi/pelunasan', [PelunasanController::class, 'index']);
     Route::get('/transaksi/pelunasan/cari-anggota', [PelunasanController::class, 'cari'])->name('pelunasan.cariAnggota');
