@@ -321,6 +321,15 @@ class MenuSeeder extends Seeder
 
         ]);
 
+        Menu::create([
+            'name' => 'Setoran Beda Hari',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/pelunasan-kelompok',
+            'left' => 'null',
+            'order' => 27,
+        ]);
+
 
         $Restrukturisasi = Menu::create([
             'name' => 'Restrukturisasi',
