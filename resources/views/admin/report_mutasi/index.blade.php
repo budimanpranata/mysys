@@ -21,63 +21,52 @@
                 <div class="card-body">
                     <!-- Input Kode Kelompok -->
                     <div class="form-group row">
-                        <label for="code_kel" class="col-sm-2 col-form-label">CIF</label>
+                        <label for="cif" class="col-sm-2 col-form-label">CIF</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="code_kel" placeholder="Masukkan Kode Kelompok">
+                            <input type="text" class="form-control" id="cif" placeholder="Masukkan CIF/Norek">
                         </div>
                     </div>
                     <!-- Input Tanggal Akad -->
                     <div class="form-group row">
-                        <label for="jenis_rest" class="col-sm-2 col-form-label">Jenis Adendum</label>
+                        <label for="jenis_transaksi" class="col-sm-2 col-form-label">Jenis Transaksi</label>
                         <div class="col-sm-6">
-                            {{-- <input type="date" class="form-control" id="jenis_adendum"> --}}
-                            <select class="form-control" id="jenis_rest">
-                                <option value="" hidden>-- pilih jenis adendum --</option>
-                                <option value="1">Restrukturasi</option>
-                                <option value="2">Restrukturasi Angsuran</option>
-                                <option value="3">Restrukturasi Pokok Margin</option>
-                                <option value="4">Restrukturasi Kemampuan Bayar</option>
+                            <select class="form-control" id="jenis_transaksi">
+                                <option value="" hidden>-- pilih jenis Transaksi --</option>
+                                <option value="1">Simpanan</option>
+                                <option value="2">Kartu Angsuran</option>
                             </select>
                         </div>
                     </div>
                     <!-- Tombol Cari -->
                     <div class="form-group row">
                         <div class="col-sm-6 offset-sm-2">
-                            <button id="filterButton" class="btn btn-primary">
+                            <button id="cetak" class="btn btn-primary">
                                 <i class="fas fa-search"></i> Cari
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Tabel Hasil Pencarian -->
-            <div class="card">
-                <div class="card-body">
-                    <div id="result">
-                        <table class="table table-bordered mt-3">
-                            <thead>
-                                <tr>
-                                    <th>NO</th>
-                                    <th>TANGGAL AKAD</th>
-                                    <th>CIF</th>
-                                    <th>NIK</th>
-                                    <th>NAMA ANGGOTA</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                    <!-- Tombol Cetak PDF -->
-                    <div class="mt-3 text-right">
-                        <button id="cetakButton" class="btn btn-danger">
-                            <i class="fas fa-print"></i> Cetak PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 @endsection
+
 @push('scripts')
-    
+    <script>
+        $(document).ready(function () {
+            $('#cetak').click(function () {
+                var cif = $('#cif').val();
+                var jenis = $('#jenis_transaksi').val();
+
+                if (!cif || !jenis) {
+                    alert('CIF dan jenis transaksi wajib diisi!');
+                    return;
+                }
+
+                // Redirect ke route cetak pdf
+                let url = `/report/mutasi/cetak-pdf?cif=${cif}&jenis=${jenis}`;
+                window.open(url, '_blank'); // buka di tab baru
+            });
+        });
+    </script>
 @endpush

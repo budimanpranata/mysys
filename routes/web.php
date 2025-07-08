@@ -182,6 +182,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     // Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
 
     Route::get('/report/mutasi', [ReportMutasiController::class, 'index']);
+    Route::get('/report/mutasi/cetak-pdf', [ReportMutasiController::class, 'cetakPdf']);
 
 
 
