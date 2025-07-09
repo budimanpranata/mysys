@@ -19,6 +19,20 @@ class ReportMutasiController extends Controller
         return view('admin.report_mutasi.index', compact('title', 'menus'));
     }
 
+    public function getCif(Request $request)
+    {
+        $cari = $request->input('cari');
+        
+        $results = DB::table('pembiayaan')
+            ->select('cif', 'nama')
+            ->where('cif', 'like', '%'.$cari.'%')
+            ->orWhere('no_anggota', 'like', '%'.$cari.'%')
+            ->limit(10)
+            ->get();
+
+        return response()->json($results);
+    }
+
     public function cetakPdf(Request $request)
     {
         $cif = $request->query('cif');

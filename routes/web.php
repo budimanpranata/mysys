@@ -183,6 +183,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/report/mutasi', [ReportMutasiController::class, 'index']);
     Route::get('/report/mutasi/cetak-pdf', [ReportMutasiController::class, 'cetakPdf']);
+    Route::get('/report/mutasi/get-cif', [ReportMutasiController::class, 'getCif'])->name('reportMutasi.getCif');
 
 
 
