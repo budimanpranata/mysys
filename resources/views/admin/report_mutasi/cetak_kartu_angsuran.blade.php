@@ -110,7 +110,7 @@
                 @endphp
                 <tr>
                     <td>{{ $no++ }}</td>
-                    <td style="text-align: left">{{ date('d-m-Y', strtotime($kartuAngsuran->buss_date)) }}</td>
+                    <td style="text-align: left">{{ date('d-m-Y', strtotime($kartuAngsuran->tgl_bayar)) }}</td>
                     <td>{{ $kartuAngsuran->keterangan }}</td>
                     <td>{{ $kartuAngsuran->kode_transaksi }}</td>
                     <td style="text-align: right">{{ number_format($debet, 0, ',', '.') }}</td>
