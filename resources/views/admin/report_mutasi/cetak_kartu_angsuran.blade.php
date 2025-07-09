@@ -92,7 +92,6 @@
                 <th>Tanggal</th>
                 <th>Kode Transaksi</th>
                 <th>Keterangan</th>
-                <th>Tipe</th>
                 <th>Debet</th>
                 <th>Kredit</th>
                 <th>Saldo</th>
@@ -112,9 +111,8 @@
                 <tr>
                     <td>{{ $no++ }}</td>
                     <td style="text-align: left">{{ date('d-m-Y', strtotime($kartuAngsuran->buss_date)) }}</td>
+                    <td>{{ $kartuAngsuran->keterangan }}</td>
                     <td>{{ $kartuAngsuran->kode_transaksi }}</td>
-                    <td>{{ $kartuAngsuran->ket }}</td>
-                    <td style="text-align: center">{{ $kartuAngsuran->type }}</td>
                     <td style="text-align: right">{{ number_format($debet, 0, ',', '.') }}</td>
                     <td style="text-align: right">{{ number_format($kredit, 0, ',', '.') }}</td>
                     <td style="text-align: right">{{ number_format($saldo, 0, ',', '.') }}</td>

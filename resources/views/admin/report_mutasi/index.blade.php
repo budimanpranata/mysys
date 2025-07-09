@@ -59,7 +59,12 @@
                 var jenis = $('#jenis_transaksi').val();
 
                 if (!cif || !jenis) {
-                    alert('CIF dan jenis transaksi wajib diisi!');
+                    Swal.fire({
+                        title: 'Peringatan!',
+                        text: 'CIF dan jenis transaksi harus diisi!',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
                     return;
                 }
 
