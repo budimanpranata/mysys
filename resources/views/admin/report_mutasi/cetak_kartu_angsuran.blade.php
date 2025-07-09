@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0px;
         }
         .header {
             text-align: center;
@@ -33,7 +33,7 @@
         }
         .data-table th, .data-table td {
             border: 1px solid black;
-            padding: 5px;
+            padding: 2px;
             /* text-align: center; */
         }
         .data-table th {
@@ -45,10 +45,10 @@
 
     
     <div class="header">
-        <img src="{{ asset('/img/logo-web-kspps-ni-black.png') }}" alt="Logo Koperasi" class="logo">
+        <img src="{{ asset('assets/img/logo-web-kspps-ni-black.png') }}" alt="(Logo Koperasi)" class="logo">
         <p>
             KOPERASI SIMPAN PINJAM SYARIAH NUR INSANI<br>
-            <h3>DAFTAR MUTASI SIMPANAN ANGGOTA</h3>
+            <h3>DAFTAR MUTASI KARTU ANGGOTA</h3>
         </p>
     </div>
 
@@ -56,7 +56,7 @@
         <table class="info-table">
             <tr>
                 <td>Nomor Rekening</td>
-                <td>: {{ $anggota->norek ?? '-' }}</td>
+                <td>: {{ $anggota->no_anggota ?? '-' }}</td>
             </tr>
             <tr>
                 <td>Nama</td>
@@ -68,7 +68,7 @@
             </tr>
             <tr>
                 <td>Tanggal Akad</td>
-                <td>: {{ date('d M Y', strtotime($anggota->tgl_join ?? '-')) }}</td>
+                <td>: {{ date('d M Y', strtotime($anggota->tgl_akad ?? '-')) }}</td>
             </tr>
             <tr>
                 <td>Jangka Waktu</td>
@@ -81,14 +81,6 @@
             <tr>
                 <td>Sisa Pembiayaan</td>
                 <td>: {{ number_format($anggota->os) ?? '0' }}</td>
-            </tr>
-            <tr>
-                <td>Simpanan Pokok</td>
-                <td>: {{ number_format($anggota->pokok) ?? '0' }}</td>
-            </tr>
-            <tr>
-                <td>Simpanan Wajib</td>
-                <td colspan="3">: {{ number_format($anggota->bulat) ?? '0' }}</td>
             </tr>
         </table>
     </div>
@@ -107,7 +99,27 @@
             </tr>
         </thead>
         <tbody>
-
+            @php
+                $no = 1;
+                $saldo = 0;
+            @endphp
+            @foreach ($mutasiKartuAngsuran as $kartuAngsuran)
+                @php
+                    $debet = $kartuAngsuran->debet ?? 0;
+                    $kredit = $kartuAngsuran->kredit ?? 0;
+                    $saldo += ($kredit - $debet);
+                @endphp
+                <tr>
+                    <td>{{ $no++ }}</td>
+                    <td style="text-align: left">{{ date('d-m-Y', strtotime($kartuAngsuran->buss_date)) }}</td>
+                    <td>{{ $kartuAngsuran->kode_transaksi }}</td>
+                    <td>{{ $kartuAngsuran->ket }}</td>
+                    <td style="text-align: center">{{ $kartuAngsuran->type }}</td>
+                    <td style="text-align: right">{{ number_format($debet, 0, ',', '.') }}</td>
+                    <td style="text-align: right">{{ number_format($kredit, 0, ',', '.') }}</td>
+                    <td style="text-align: right">{{ number_format($saldo, 0, ',', '.') }}</td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 
