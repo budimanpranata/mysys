@@ -29,22 +29,13 @@
         <div class="col-md-12">
             <div class="card card-primary">
                 <div class="card-body">
-                    <!-- Input Kode Kelompok -->
-                    {{-- <div class="form-group row">
-                        <label for="cif" class="col-sm-2 col-form-label">CIF</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="cif" placeholder="Masukkan CIF/Norek">
-                        </div>
-                    </div> --}}
                     <div class="form-group row">
                         <label for="cif" class="col-sm-2 col-form-label">Cari CIF</label>
                         <div class="col-sm-6">
                             <select class="form-control select2-ajax" id="cif" style="width: 100%;">
-                                <!-- Opsi akan di-load via AJAX -->
                             </select>
                         </div>
                     </div>
-                    <!-- Input Tanggal Akad -->
                     <div class="form-group row">
                         <label for="jenis_transaksi" class="col-sm-2 col-form-label">Jenis Transaksi</label>
                         <div class="col-sm-6">
@@ -55,7 +46,6 @@
                             </select>
                         </div>
                     </div>
-                    <!-- Tombol Cari -->
                     <div class="form-group row">
                         <div class="col-sm-6 offset-sm-2">
                             <button id="cetak" class="btn btn-primary">
