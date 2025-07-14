@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_zakat', 13);
             $table->date('tanggal');
-            $table->string('nama_account');
+            $table->string('nama_account', 80);
             $table->bigInteger('jumlah');
             $table->timestamps();
         });
