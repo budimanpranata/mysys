@@ -42,7 +42,9 @@
                             <select class="form-control" id="jenis_transaksi">
                                 <option value="" hidden>-- pilih jenis Transaksi --</option>
                                 <option value="1">Simpanan</option>
+                                <option value="">Pembiayaan</option>
                                 <option value="2">Kartu Angsuran</option>
+                                <option value="">Rencana Angsuran</option>
                             </select>
                         </div>
                     </div>
