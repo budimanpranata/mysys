@@ -31,11 +31,14 @@ use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\ReportMutasiController;
+use App\Http\Controllers\ReportTunggakanController;
+use App\Http\Controllers\PelunasanKelompokController;
+use App\Http\Controllers\PelunasanController;
+use App\Http\Controllers\PemindahbukuanPerkelompokController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
 use App\Http\Controllers\SetoranBedaHariController;
-
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -171,7 +174,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/setoran-perkelompok', [SetoranPerkelompokController::class, 'index']);
     Route::post('/transaksi/setoran-perkelompok/filter', [SetoranPerkelompokController::class, 'filter'])->name('setoranPerkelompok.filter');
     Route::post('/transaksi/setoran-perkelompok/proses/{code_kel}', [SetoranPerkelompokController::class, 'proses'])->name('setoranPerkelompok.proses');
-    Route::get('/transaksi/setoran-perkelompok/cari-kelompok', [SetoranPerkelompokController::class, 'cari'])->name('cari.kelompok');
+    // Route::get('/transaksi/setoran-perkelompok/cari-kelompok', [SetoranPerkelompokController::class, 'cari'])->name('cari.kelompok');
 
 
     // Transaksi Setoran Beda Hari
@@ -184,9 +187,27 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/mutasi', [ReportMutasiController::class, 'index']);
     Route::get('/report/mutasi/cetak-pdf', [ReportMutasiController::class, 'cetakPdf']);
     Route::get('/report/mutasi/get-cif', [ReportMutasiController::class, 'getCif'])->name('reportMutasi.getCif');
+    Route::get('/report/tunggakan', [ReportTunggakanController::class, 'index']);
+    Route::get('/report/tunggakan/data', [ReportTunggakanController::class, 'data'])->name('reportTunggakan.data');
+    Route::get('/report/tunggakan/export', [ReportTunggakanController::class, 'export'])->name('reportTunggakan.export');
+
+    Route::get('/transaksi/pelunasan', [PelunasanController::class, 'index']);
+    Route::get('/transaksi/pelunasan/cari-anggota', [PelunasanController::class, 'cari'])->name('pelunasan.cariAnggota');
+    Route::get('/pelunasan/get-anggota', [PelunasanController::class, 'getAnggota'])->name('pelunasan.getAnggota');
+    Route::post('/transaksi/pelunasan/proses', [PelunasanController::class, 'proses'])->name('pelunasan.proses');
 
 
+    // PB Perkelompok
+    Route::get('/transaksi/pemindahbukuan-perkelompok', [PemindahbukuanPerkelompokController::class, 'index']);
+    Route::get('/transaksi/pemindahbukuan-perkelompok/cari-kelompok', [PemindahbukuanPerkelompokController::class, 'cari'])->name('pemindahbukuanPerkelompok.cariKelompok');
+    Route::post('/transaksi/pemindahbukuan-perkelompok/filter', [PemindahbukuanPerkelompokController::class, 'filter'])->name('pemindahbukuanPerkelompok.filter');
+    Route::post('/transaksi/pemindahbukuan-perkelompok/proses/{code_kel}', [PemindahbukuanPerkelompokController::class, 'proses'])->name('pemindahbukuanPerkelompok.proses');
 
+
+    Route::get('/transaksi/pelunasan-kelompok', [PelunasanKelompokController::class, 'index']);
+    Route::get('/transaksi/pelunasan-kelompok/cari-kelompok', [PelunasanKelompokController::class, 'cari'])->name('pelunasanKelompok.cariKelompok');
+    Route::post('/transaksi/pelunasan-kelompok/filter', [PelunasanKelompokController::class, 'filter'])->name('pelunasanKelompok.filter');
+    Route::post('/transaksi/pelunasan-kelompok/proses/{code_kel}', [PelunasanKelompokController::class, 'proses'])->name('pelunasanKelompok.proses');
 
 });
 
