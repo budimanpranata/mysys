@@ -181,7 +181,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/transaksi/setoran-beda-hari/proses/{code_kel}', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
     // Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
 
-    Route::get('/jurnal-masuk', [JurnalMasukController::class, 'index']);
+    Route::get('/transaksi/jurnal-masuk', [JurnalMasukController::class, 'index']);
+    Route::get('/transaksi/jurnal-masuk/get-coa', [JurnalMasukController::class, 'getCoa'])->name('jurnalMasuk.getCoa');
+    Route::post('/transaksi/jurnal-masuk/simpan', [JurnalMasukController::class, 'simpan'])->name('jurnalMasuk.simpan');
+
+
 
 
 });
