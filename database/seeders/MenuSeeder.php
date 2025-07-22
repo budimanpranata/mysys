@@ -302,6 +302,16 @@ class MenuSeeder extends Seeder
 
         Menu::create([
 
+            'name' => 'PB Perkelompok',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => 'transaksi/pemindahbukuan-Perkelompok',
+            'left' => 'null',
+            'order' => 26,
+            ]);
+
+        Menu::create([
+
             'name' => 'Setoran Beda Hari',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
@@ -311,6 +321,25 @@ class MenuSeeder extends Seeder
 
         ]);
 
+        Menu::create([
+            'name' => 'Setoran Beda Hari',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/pelunasan-kelompok',
+            'left' => 'null',
+            'order' => 27,
+        ]);
+
+        Menu::create([
+
+            'name' => 'Jurnal Keluar',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/jurnal-keluar',           
+            'left' => 'null',
+            'order' => 28,
+        ]);
+
 
         $Restrukturisasi = Menu::create([
             'name' => 'Restrukturisasi',
@@ -318,7 +347,7 @@ class MenuSeeder extends Seeder
             'parent_id' => null,
             'url' => null,
             'left' => 'right fas fa-angle-left',
-            'order' => 27,
+            'order' => 29,
 
         ]);
 
@@ -328,7 +357,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $Restrukturisasi->id,
             'url' => '/rest-kemampuan-bayar',
             'left' => 'null',
-            'order' => 28,
+            'order' => 30,
         ]);
 
         Menu::create([
@@ -337,7 +366,7 @@ class MenuSeeder extends Seeder
             'parent_id' => $Restrukturisasi->id,
             'url' => '/restrukturisasi/jatuh-tempo',
             'left' => 'null',
-            'order' => 29,
+            'order' => 31,
         ]);
 
         Menu::create([
@@ -346,7 +375,25 @@ class MenuSeeder extends Seeder
             'parent_id' => $Restrukturisasi->id,
             'url' => '/restrukturisasi/by-kelompok',
             'left' => 'null',
-            'order' => 30,
+            'order' => 32,
+        ]);
+
+        $report = Menu::create([
+            'name' => 'Report',
+            'icon' => 'nav-icon fa-file-alt', //
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 33,
+        ]);
+
+        Menu::create([
+            'name' => 'Report Tunggakan',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/tunggakan',
+            'left' => 'null',
+            'order' => 34,
         ]);
 
         $transaksiJurnal = Menu::create([

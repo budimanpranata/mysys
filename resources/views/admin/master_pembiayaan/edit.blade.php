@@ -131,7 +131,7 @@
 
       // Tampilkan hasil pencarian
       resultContainer.innerHTML = `
-        <div class="col-sm-11">
+        <div class="col-5"
           <div class="card mb-3">
             <div class="card-header">KTP</div>
             <div class="card-body">
@@ -147,7 +147,7 @@
           </div>
         </div>
 
-        <div class="col-sm-11">
+        <div class="col-5">
           <div class="card mb-3">
             <div class="card-header">Kartu Keluarga</div>
             <div class="card-body">
@@ -159,6 +159,38 @@
                 data-bs-toggle="modal" 
                 data-bs-target="#imageModal"
                 onclick="openImageModal('http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].kk}')">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-5">
+          <div class="card mb-3">
+            <div class="card-header">KTP Penjamin</div>
+            <div class="card-body">
+              <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].penjamin}" 
+                width="580px" 
+                alt="Gambar KK" 
+                class="img-thumbnail" 
+                style="cursor: pointer;" 
+                data-bs-toggle="modal" 
+                data-bs-target="#imageModal"
+                onclick="openImageModal('http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].penjamin}')">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-5">
+          <div class="card mb-3">
+            <div class="card-header">Foto Usaha</div>
+            <div class="card-body">
+              <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].usaha}" 
+                width="580px" 
+                alt="Gambar KK" 
+                class="img-thumbnail" 
+                style="cursor: pointer;" 
+                data-bs-toggle="modal" 
+                data-bs-target="#imageModal"
+                onclick="openImageModal('http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].usaha}')">
             </div>
           </div>
         </div>

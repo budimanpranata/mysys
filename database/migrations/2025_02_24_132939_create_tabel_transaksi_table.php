@@ -24,6 +24,7 @@ return new class extends Migration
             $table->dateTime('tanggal_posting');
             $table->text('keterangan_posting');
             $table->string('id_admin', 6);
+            $table->integer('code_arus_kas');
             $table->timestamps();
         });
     }
