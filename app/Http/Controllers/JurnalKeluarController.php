@@ -38,6 +38,12 @@ class JurnalKeluarController extends Controller
     {
         $data = $request->input('transaksi');
 
+        $kodeUnit = Auth::user()->unit;
+
+        $kodeGL = DB::table('branch')
+            ->where('kode_branch', $kodeUnit)
+            ->value('GL');
+
         DB::beginTransaction();
         try {
             foreach ($data as $item) {
@@ -62,10 +68,10 @@ class JurnalKeluarController extends Controller
                     DB::table('tabel_transaksi')->insert([
                         'unit' => Auth::user()->unit,
                         'kode_transaksi' => $item['kode_transaksi'],
-                        'kode_rekening' => '9999999', // <- REKENING LAWAN DEFAULT, ganti sesuai kebutuhan
+                        'kode_rekening' => $kodeGL, // <- REKENING LAWAN DEFAULT, ganti sesuai kebutuhan
                         'tanggal_transaksi' => $item['tanggal_transaksi'],
-                        'jenis_transaksi' => 'Jurnal UMUM',
-                        'keterangan_transaksi' => '[Auto Kredit] ' . $item['keterangan_transaksi'],
+                        'jenis_transaksi' => 'Jurnal Keluar',
+                        'keterangan_transaksi' => $item['keterangan_transaksi'],
                         'debet' => 0,
                         'kredit' => $item['jumlah'],
                         'tanggal_posting' => $item['tanggal_transaksi'],

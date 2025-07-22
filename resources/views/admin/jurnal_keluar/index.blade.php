@@ -216,13 +216,13 @@
             }
 
             // Default kode rekening (tanpa prefix)
-            let kodeRekeningDebet = rekeningUnitLogin;
-            let kodeRekeningKredit = kodeRekeningTujuan;
+            let kodeRekeningDebet = kodeRekeningTujuan;
+            let kodeRekeningKredit = rekeningUnitLogin;
 
             // Jika jenis transaksi adalah 'Setor ke KP', tambahkan prefix '1010-'
             if (jenis_transaksi === '1010') {
-                kodeRekeningDebet = '1010-' + rekeningUnitLogin;
-                kodeRekeningKredit = '1010-' + kodeRekeningTujuan;
+                kodeRekeningDebet = '1010-' + kodeRekeningTujuan;
+                kodeRekeningKredit = '1010-' + rekeningUnitLogin;
             }
 
             // Bersihkan dulu (reset)
@@ -247,7 +247,8 @@
                     tanggal_transaksi: tanggal,
                     keterangan_transaksi: keterangan,
                     jumlah: jumlah,
-                    jenis: 'debet'
+                    jenis: 'debet',
+                    jenis_transaksi: $('#jenis_transaksi').val()
                 });
 
                 entries.push({
@@ -256,7 +257,8 @@
                     tanggal_transaksi: tanggal,
                     keterangan_transaksi: keterangan,
                     jumlah: jumlah,
-                    jenis: 'kredit'
+                    jenis: 'kredit',
+                    jenis_transaksi: $('#jenis_transaksi').val()
                 });
 
                 // Optional: akun penampung
@@ -266,7 +268,8 @@
                     tanggal_transaksi: tanggal,
                     keterangan_transaksi: keterangan,
                     jumlah: jumlah,
-                    jenis: 'debet'
+                    jenis: 'debet',
+                    jenis_transaksi: $('#jenis_transaksi').val()
                 });
             }
 
