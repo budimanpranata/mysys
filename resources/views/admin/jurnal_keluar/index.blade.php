@@ -98,9 +98,9 @@
                             <label for="jumlah" class="col-sm-2 col-form-label">Jumlah (Rp)</label>
                             <div class="col-sm-6">
                                 <input type="number" name="jumlah" class="form-control" id="jumlah">
-                                <small id="preview-jumlah" class="form-text text-muted mt-1">
+                                <span id="preview-jumlah" class="form-text text-muted mt-1">
                                     Rp 0
-                                </small>
+                                </span>
                             </div>
                         </div>
 
