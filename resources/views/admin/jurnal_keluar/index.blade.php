@@ -168,6 +168,15 @@
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(angka);
         }
 
+        $('#jumlah').on('input', function () {
+            const value = parseFloat($(this).val());
+            if (!isNaN(value)) {
+                $('#preview-jumlah').text(formatRupiah(value));
+            } else {
+                $('#preview-jumlah').text('Rp 0');
+            }
+        });
+
         function updateTabelTransaksi() {
             let totalDebet = 0;
             let totalKredit = 0;
@@ -177,19 +186,20 @@
             transaksiList.forEach((item, index) => {
                 const row = `
                     <tr>
-                        <td>${item.kodeRekening}</td>
-                        <td>${item.keterangan}</td>
-                        <td>${item.tanggal}</td>
-                        <td>${item.jenis_transaksi === 'debet' ? formatRupiah(item.jumlah) : '-'}</td>
-                        <td>${item.jenis_transaksi === 'kredit' ? formatRupiah(item.jumlah) : '-'}</td>
+                        <td>${item.kode_rekening}</td>
+                        <td>${item.keterangan_transaksi}</td>
+                        <td>${item.tanggal_transaksi}</td>
+                        <td>${item.jenis === 'debet' ? formatRupiah(item.jumlah) : '-'}</td>
+                        <td>${item.jenis === 'kredit' ? formatRupiah(item.jumlah) : '-'}</td>
                         <td><button type="button" class="btn btn-danger btn-sm btn-hapus" data-index="${index}">Hapus</button></td>
                     </tr>
                 `;
 
                 $('#data-transaksi-body').append(row);
 
-                if (item.jenis_transaksi === 'debet') totalDebet += item.jumlah;
-                else totalKredit += item.jumlah;
+                if (item.jenis === 'debet') totalDebet += item.jumlah;
+                else if (item.jenis === 'kredit') totalKredit += item.jumlah;
+
             });
 
             $('#total-debet').text(formatRupiah(totalDebet));
@@ -197,11 +207,11 @@
         }
 
         $('#btn-tambah').on('click', function () {
-            const kodeRekeningTujuan = $('#coa').val(); // Rekening dari select
-            const keterangan = $('#keterangan_transaksi').val();
-            const tanggal = $('#tanggal_transaksi').val();
-            const jenis_transaksi = $('#jenis_transaksi').val();
-            const jumlah = parseFloat($('#jumlah').val());
+            let kodeRekeningTujuan = $('#coa').val();
+            let keterangan = $('#keterangan_transaksi').val();
+            let tanggal = $('#tanggal_transaksi').val();
+            let jenis_transaksi = $('#jenis_transaksi').val();
+            let jumlah = parseFloat($('#jumlah').val());
 
             if (!kodeRekeningTujuan || !keterangan || !tanggal || !jenis_transaksi || isNaN(jumlah)) {
                 alert('Lengkapi semua data terlebih dahulu.');
@@ -218,31 +228,53 @@
                 kodeRekeningKredit = '1010-' + kodeRekeningTujuan;
             }
 
-            // Push ke transaksiList dua baris jurnal
-            transaksiList.push({
-                kodeRekening: kodeRekeningDebet, // Debit
-                keterangan,
-                tanggal,
-                jenis_transaksi: 'debet',
-                jumlah
-            });
+            // Bersihkan dulu (reset)
+            let entries = [];
 
-            transaksiList.push({
-                kodeRekening: kodeRekeningKredit, // Kredit
-                keterangan,
-                tanggal,
-                jenis_transaksi: 'kredit',
-                jumlah
-            });
+            if (jenis_transaksi === 'lainnya') {
+                // Hanya push 1 baris debet (nanti lawannya di backend)
+                entries.push({
+                    kode_transaksi: $('#kode_transaksi').val(),
+                    kode_rekening: kodeRekeningDebet,
+                    tanggal_transaksi: tanggal,
+                    keterangan_transaksi: keterangan,
+                    jumlah: jumlah,
+                    jenis: 'debet',
+                    jenis_transaksi: $('#jenis_transaksi').val()
+                });
+            } else {
+                // Push dua baris debet-kredit
+                entries.push({
+                    kode_transaksi: $('#kode_transaksi').val(),
+                    kode_rekening: kodeRekeningDebet,
+                    tanggal_transaksi: tanggal,
+                    keterangan_transaksi: keterangan,
+                    jumlah: jumlah,
+                    jenis: 'debet'
+                });
 
-            transaksiList.push({
-                kodeRekening: '2500000',
-                keterangan,
-                tanggal,
-                jenis_transaksi: 'debet',
-                jumlah
-            });
+                entries.push({
+                    kode_transaksi: $('#kode_transaksi').val(),
+                    kode_rekening: kodeRekeningKredit,
+                    tanggal_transaksi: tanggal,
+                    keterangan_transaksi: keterangan,
+                    jumlah: jumlah,
+                    jenis: 'kredit'
+                });
 
+                // Optional: akun penampung
+                entries.push({
+                    kode_transaksi: $('#kode_transaksi').val(),
+                    kode_rekening: '2500000',
+                    tanggal_transaksi: tanggal,
+                    keterangan_transaksi: keterangan,
+                    jumlah: jumlah,
+                    jenis: 'debet'
+                });
+            }
+
+            // Masukkan semua entry ke transaksiList
+            transaksiList.push(...entries);
             updateTabelTransaksi();
 
             // Reset input
@@ -257,6 +289,32 @@
             transaksiList.splice(index, 1);
             updateTabelTransaksi();
         });
+
+        $('#btn-simpan').on('click', function () {
+            if (transaksiList.length === 0) {
+                alert('Belum ada data yang ditambahkan.');
+                return;
+            }
+
+            $.ajax({
+                url: "{{ route('jurnalKeluar.store') }}",
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    transaksi: transaksiList
+                },
+                success: function (response) {
+                    Swal.fire('Berhasil!', 'Data berhasil disimpan.', 'success').then(() => {
+                        window.location.reload();
+                    });
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    Swal.fire('Gagal!', 'Terjadi kesalahan saat menyimpan data.', 'error');
+                }
+            });
+        });
+
 
 
     });

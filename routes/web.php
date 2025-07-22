@@ -211,7 +211,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/transaksi/pelunasan-kelompok/proses/{code_kel}', [PelunasanKelompokController::class, 'proses'])->name('pelunasanKelompok.proses');
 
     Route::get('/transaksi/jurnal-keluar', [JurnalKeluarController::class, 'index']);
-    Route::get('/transaksi/jurnal-keluar/get-coa', [JurnalKeluarController::class, 'getCoa'])->name('jurnalKeluar.getCoa');
+    Route::post('/transaksi/jurnal-keluar/store', [JurnalKeluarController::class, 'store'])->name('jurnalKeluar.store');
 
 });
 
