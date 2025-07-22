@@ -30,6 +30,7 @@ use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
+use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
 use App\Http\Controllers\ReportMutasiController;
 use App\Http\Controllers\ReportTunggakanController;
@@ -216,10 +217,14 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/transaksi/pelunasan-kelompok/filter', [PelunasanKelompokController::class, 'filter'])->name('pelunasanKelompok.filter');
     Route::post('/transaksi/pelunasan-kelompok/proses/{code_kel}', [PelunasanKelompokController::class, 'proses'])->name('pelunasanKelompok.proses');
 
+    Route::get('/transaksi/jurnal-keluar', [JurnalKeluarController::class, 'index']);
+    Route::post('/transaksi/jurnal-keluar/store', [JurnalKeluarController::class, 'store'])->name('jurnalKeluar.store');
+
     Route::get('/transaksi/jurnal-umum', [JurnalUmumController::class, 'index']);
     Route::get('/transaksi/jurnal-umum/get-coa', [JurnalUmumController::class, 'getCoa'])->name('jurnalUmum.getCoa');
     Route::post('/transaksi/jurnal-umum/', [JurnalUmumController::class, 'simpan'])->name('jurnalUmum.simpan');
     Route::post('/transaksi/jurnal-umum/cetak', [JurnalUmumController::class, 'cetak'])->name('jurnalUmum.cetak');
+
 
 
 });
