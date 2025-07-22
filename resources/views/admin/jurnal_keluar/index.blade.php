@@ -292,7 +292,7 @@
 
         $('#btn-simpan').on('click', function () {
             if (transaksiList.length === 0) {
-                alert('Belum ada data yang ditambahkan.');
+                Swal.fire('Gagal!', 'Belum ada data yang ditambahkan.', 'error');
                 return;
             }
 
