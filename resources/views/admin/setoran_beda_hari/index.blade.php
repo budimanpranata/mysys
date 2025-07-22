@@ -99,7 +99,7 @@
                 placeholder: 'Cari Kode Kelompok...',
                 // minimumInputLength: 3, // Minimal karakter untuk mulai pencarian
                 ajax: {
-                    url: "{{ route('cari.kelompok') }}", // Route untuk cari kelompok
+                    url: "{{ route('setoranBedaHari.getKelompok') }}", // Route untuk cari kelompok
                     dataType: 'json',
                     delay: 250,
                     data: function(params) {
