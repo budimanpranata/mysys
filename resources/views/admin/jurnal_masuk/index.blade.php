@@ -62,7 +62,7 @@
                         <div class="form-group row">
                             <label for="tanggal_transaksi" class="col-sm-2 col-form-label">Tanggal</label>
                             <div class="col-sm-6">
-                                <input type="date" class="form-control" id="tanggal_transaksi">
+                                <input type="date" class="form-control" value="{{ $paramTanggal }}" id="tanggal_transaksi">
                             </div>
                         </div>
 
@@ -92,9 +92,9 @@
                             <label for="kredit" class="col-sm-2 col-form-label">Jumlah (Rp)</label>
                             <div class="col-sm-6">
                                 <input type="number" name="kredit" class="form-control" id="kredit">
-                                <small id="preview-kredit" class="form-text text-muted mt-1">
+                                <span id="preview-kredit" class="form-text text-muted mt-1">
                                     Rp 0
-                                </small>
+                                </span>
                             </div>
                         </div>
 
@@ -147,9 +147,6 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-
-            const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-            document.getElementById('tanggal_transaksi').value = today;
             
             // Inisialisasi Select2 dengan AJAX
             $('.select2-ajax').select2({
@@ -161,7 +158,7 @@
                     delay: 250,
                     data: function(params) {
                         return {
-                            cari: params.term // Parameter search
+                            cari: params.term
                         };
                     },
                     processResults: function(data) {

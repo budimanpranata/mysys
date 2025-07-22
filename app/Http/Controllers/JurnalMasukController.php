@@ -15,11 +15,13 @@ class JurnalMasukController extends Controller
         $title = 'Jurnal Masuk';
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
 
+        $paramTanggal = Auth::user()->param_tanggal;
+
         $kodeUnit = Auth::user()->unit;
         $random = strtoupper(Str::random(7));
         $kodeTransaksi = 'KM/' . $kodeUnit . $random;
 
-        return view('admin.jurnal_masuk.index', compact('menus', 'title', 'kodeTransaksi'));
+        return view('admin.jurnal_masuk.index', compact('menus', 'title', 'kodeTransaksi', 'paramTanggal'));
     }
 
     public function getCoa(Request $request)
@@ -40,6 +42,12 @@ class JurnalMasukController extends Controller
     {
         $data = $request->input('transaksi');
 
+        $kodeUnit = Auth::user()->unit;
+
+        $kodeGL = DB::table('branch')
+            ->where('kode_branch', $kodeUnit)
+            ->value('GL');
+
         try {
             DB::beginTransaction();
 
@@ -53,6 +61,23 @@ class JurnalMasukController extends Controller
                     'keterangan_transaksi' => $item['keterangan_transaksi'],
                     'debet' => 0,
                     'kredit' => $item['kredit'],
+                    'tanggal_posting' => $item['tanggal_transaksi'],
+                    'keterangan_posting' => 'Post',
+                    'id_admin' => Auth::user()->id,
+                    'arus_kas' => Auth::user()->unit,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+
+                DB::table('tabel_transaksi')->insert([
+                    'unit' => Auth::user()->unit,
+                    'kode_transaksi' => $item['kode_transaksi'],
+                    'kode_rekening' => $kodeGL,
+                    'tanggal_transaksi' => $item['tanggal_transaksi'],
+                    'jenis_transaksi' => $item['jenis_transaksi'],
+                    'keterangan_transaksi' => $item['keterangan_transaksi'],
+                    'debet' => $item['kredit'],
+                    'kredit' => 0,
                     'tanggal_posting' => $item['tanggal_transaksi'],
                     'keterangan_posting' => 'Post',
                     'id_admin' => Auth::user()->id,
