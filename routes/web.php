@@ -174,23 +174,29 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/setoran-perkelompok', [SetoranPerkelompokController::class, 'index']);
     Route::post('/transaksi/setoran-perkelompok/filter', [SetoranPerkelompokController::class, 'filter'])->name('setoranPerkelompok.filter');
     Route::post('/transaksi/setoran-perkelompok/proses/{code_kel}', [SetoranPerkelompokController::class, 'proses'])->name('setoranPerkelompok.proses');
-    // Route::get('/transaksi/setoran-perkelompok/cari-kelompok', [SetoranPerkelompokController::class, 'cari'])->name('cari.kelompok');
+    Route::get('/transaksi/setoran-perkelompok/cari-kelompok', [SetoranPerkelompokController::class, 'cari'])->name('setoranPerkelompok.getKelompok');
 
 
     // Transaksi Setoran Beda Hari
     Route::get('/transaksi/setoran-beda-hari', [SetoranBedaHariController::class, 'index']);
     Route::post('/transaksi/setoran-beda-hari/filter', [SetoranBedaHariController::class, 'filter'])->name('setoranBedaHari.filter');
-    // Route::post('/transaksi/setoran-beda-hari/proses', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
     Route::post('/transaksi/setoran-beda-hari/proses/{code_kel}', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
+
+    Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('setoranBedaHari.getKelompok');
+
+    // report tunggakan
+
     // Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
 
     Route::get('/report/mutasi', [ReportMutasiController::class, 'index']);
     Route::get('/report/mutasi/cetak-pdf', [ReportMutasiController::class, 'cetakPdf']);
     Route::get('/report/mutasi/get-cif', [ReportMutasiController::class, 'getCif'])->name('reportMutasi.getCif');
+
     Route::get('/report/tunggakan', [ReportTunggakanController::class, 'index']);
     Route::get('/report/tunggakan/data', [ReportTunggakanController::class, 'data'])->name('reportTunggakan.data');
     Route::get('/report/tunggakan/export', [ReportTunggakanController::class, 'export'])->name('reportTunggakan.export');
 
+    
     Route::get('/transaksi/pelunasan', [PelunasanController::class, 'index']);
     Route::get('/transaksi/pelunasan/cari-anggota', [PelunasanController::class, 'cari'])->name('pelunasan.cariAnggota');
     Route::get('/pelunasan/get-anggota', [PelunasanController::class, 'getAnggota'])->name('pelunasan.getAnggota');
