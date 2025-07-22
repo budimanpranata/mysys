@@ -68,14 +68,14 @@ class JurnalKeluarController extends Controller
                     DB::table('tabel_transaksi')->insert([
                         'unit' => Auth::user()->unit,
                         'kode_transaksi' => $item['kode_transaksi'],
-                        'kode_rekening' => $kodeGL, // <- REKENING LAWAN DEFAULT, ganti sesuai kebutuhan
+                        'kode_rekening' => $kodeGL,
                         'tanggal_transaksi' => $item['tanggal_transaksi'],
                         'jenis_transaksi' => 'Jurnal Keluar',
                         'keterangan_transaksi' => $item['keterangan_transaksi'],
                         'debet' => 0,
                         'kredit' => $item['jumlah'],
                         'tanggal_posting' => $item['tanggal_transaksi'],
-                        'keterangan_posting' => 'Post Auto',
+                        'keterangan_posting' => 'Post',
                         'id_admin' => Auth::user()->id,
                         'arus_kas' => Auth::user()->unit,
                         'created_at' => now(),
