@@ -30,6 +30,7 @@ use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
+use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
 use App\Http\Controllers\ReportMutasiController;
@@ -184,6 +185,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/transaksi/setoran-beda-hari/filter', [SetoranBedaHariController::class, 'filter'])->name('setoranBedaHari.filter');
     Route::post('/transaksi/setoran-beda-hari/proses/{code_kel}', [SetoranBedaHariController::class, 'proses'])->name('setoranBedaHari.proses');
 
+    // Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('cari.kelompok');
+
+    Route::get('/transaksi/jurnal-masuk', [JurnalMasukController::class, 'index']);
+    Route::get('/transaksi/jurnal-masuk/get-coa', [JurnalMasukController::class, 'getCoa'])->name('jurnalMasuk.getCoa');
+    Route::post('/transaksi/jurnal-masuk/simpan', [JurnalMasukController::class, 'simpan'])->name('jurnalMasuk.simpan');
+
+
     Route::get('/transaksi/setoran-beda-hari/cari-kelompok', [SetoranBedaHariController::class, 'cari'])->name('setoranBedaHari.getKelompok');
 
     // report tunggakan
@@ -224,6 +232,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/jurnal-umum/get-coa', [JurnalUmumController::class, 'getCoa'])->name('jurnalUmum.getCoa');
     Route::post('/transaksi/jurnal-umum/', [JurnalUmumController::class, 'simpan'])->name('jurnalUmum.simpan');
     Route::post('/transaksi/jurnal-umum/cetak', [JurnalUmumController::class, 'cetak'])->name('jurnalUmum.cetak');
+
 
 
 

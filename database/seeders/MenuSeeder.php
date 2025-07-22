@@ -396,5 +396,23 @@ class MenuSeeder extends Seeder
             'order' => 34,
         ]);
 
+        $transaksiJurnal = Menu::create([
+            'name' => 'Transaksi Jurnal',
+            'icon' => 'nav-icon fas fa-money-bill-wave-alt',
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 36,
+        ]);
+
+        Menu::create([
+            'name' => 'Jurnal Masuk',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $transaksiJurnal->id,
+            'url' => '/jurnal-masuk',
+            'left' => 'null',
+            'order' => 31,
+        ]);
+
     }
 }
