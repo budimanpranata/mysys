@@ -30,6 +30,7 @@ use App\Http\Controllers\SetoranLimaPersenController;
 use App\Http\Controllers\RestKemampuanBayarController;
 use App\Http\Controllers\RealisasiMusyarokahController;
 use App\Http\Controllers\HapusBukuController;
+use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\ReportMutasiController;
 use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
@@ -208,6 +209,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/pelunasan-kelompok/cari-kelompok', [PelunasanKelompokController::class, 'cari'])->name('pelunasanKelompok.cariKelompok');
     Route::post('/transaksi/pelunasan-kelompok/filter', [PelunasanKelompokController::class, 'filter'])->name('pelunasanKelompok.filter');
     Route::post('/transaksi/pelunasan-kelompok/proses/{code_kel}', [PelunasanKelompokController::class, 'proses'])->name('pelunasanKelompok.proses');
+
+    Route::get('/transaksi/jurnal-keluar', [JurnalKeluarController::class, 'index']);
+    Route::get('/transaksi/jurnal-keluar/get-coa', [JurnalKeluarController::class, 'getCoa'])->name('jurnalKeluar.getCoa');
 
 });
 
