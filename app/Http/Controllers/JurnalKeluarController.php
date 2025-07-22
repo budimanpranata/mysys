@@ -15,6 +15,8 @@ class JurnalKeluarController extends Controller
         $title = 'Jurnal Keluar';
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
 
+        $paramTanggal = Auth::user()->param_tanggal;
+
         $kodeUnit = Auth::user()->unit;
         $random = strtoupper(Str::random(7));
         $kodeTransaksi = 'KK/' . $kodeUnit . $random;
@@ -23,7 +25,13 @@ class JurnalKeluarController extends Controller
             ->where('kode_branch', $kodeUnit)
             ->value('GL');
 
-        return view('admin.jurnal_keluar.index', compact('menus', 'title', 'kodeTransaksi', 'kodeGL'));
+        return view('admin.jurnal_keluar.index', compact(
+            'menus',
+            'title',
+            'kodeTransaksi',
+            'kodeGL',
+            'paramTanggal'
+        ));
     }
 
     public function store(Request $request)

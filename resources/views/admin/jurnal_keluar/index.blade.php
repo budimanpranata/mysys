@@ -57,7 +57,7 @@
                         <div class="form-group row">
                             <label for="tanggal_transaksi" class="col-sm-2 col-form-label">Tanggal</label>
                             <div class="col-sm-6">
-                                <input type="date" class="form-control" id="tanggal_transaksi">
+                                <input type="date" class="form-control" value="{{ $paramTanggal }}" id="tanggal_transaksi">
                             </div>
                         </div>
 
@@ -158,9 +158,6 @@
 
         // const rekeningUnitLogin = "{{ auth()->user()->unit }}";
         const rekeningUnitLogin = "{{ $kodeGL }}";
-
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('tanggal_transaksi').value = today;
 
         let transaksiList = [];
 
