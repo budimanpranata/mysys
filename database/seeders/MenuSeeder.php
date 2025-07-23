@@ -414,5 +414,23 @@ class MenuSeeder extends Seeder
             'order' => 31,
         ]);
 
+        $new_report = Menu::create([
+            'name' => 'New Report',
+            'icon' => 'nav-icon fa-file-alt', //
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 38,
+        ]);
+
+        Menu::create([
+            'name' => 'List Jurnal',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $new_report->id,
+            'url' => '/new-report/list-jurnal',
+            'left' => 'null',
+            'order' => 39,
+        ]);
+
     }
 }
