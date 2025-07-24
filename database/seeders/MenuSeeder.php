@@ -414,5 +414,14 @@ class MenuSeeder extends Seeder
             'order' => 31,
         ]);
 
+        Menu::create([
+            'name' => 'Mutasi Kas',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => 'report/mutasi-kas',
+            'left' => 'null',
+            'order' => 39,
+        ]);
+
     }
 }
