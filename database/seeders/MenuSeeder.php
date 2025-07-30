@@ -414,5 +414,20 @@ class MenuSeeder extends Seeder
             'order' => 31,
         ]);
 
+
+
+
+
+
+
+        Menu::create([
+            'name' => 'Report Nominative Simpanan',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/nominative-simpanan',
+            'left' => 'null',
+            'order' => 40,
+        ]);
+
     }
 }

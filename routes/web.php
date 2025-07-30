@@ -38,6 +38,7 @@ use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
 use App\Http\Controllers\PelunasanController;
 use App\Http\Controllers\PemindahbukuanPerkelompokController;
+use App\Http\Controllers\ReportNominativeSimpananController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
@@ -232,6 +233,18 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/jurnal-umum/get-coa', [JurnalUmumController::class, 'getCoa'])->name('jurnalUmum.getCoa');
     Route::post('/transaksi/jurnal-umum/', [JurnalUmumController::class, 'simpan'])->name('jurnalUmum.simpan');
     Route::post('/transaksi/jurnal-umum/cetak', [JurnalUmumController::class, 'cetak'])->name('jurnalUmum.cetak');
+
+
+
+
+
+
+    Route::get('/report/nominative-simpanan', [ReportNominativeSimpananController::class, 'index']);
+    Route::post('/report/nominative-simpanan/get-data', [ReportNominativeSimpananController::class, 'getData'])->name('nominativeSimpanan.getData');
+    Route::get('/report/nominative-simpanan/export', [ReportNominativeSimpananController::class, 'export'])->name('nominativeSimpanan.export');
+
+
+
 
 
 
