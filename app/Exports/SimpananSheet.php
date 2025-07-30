@@ -12,7 +12,7 @@ class SimpananSheet implements FromCollection, WithTitle
     /**
     * @return \Illuminate\Support\Collection
     */
-     public function collection()
+    public function collection()
     {
         return DB::table('simpanan')
             ->select('unit', 'norek', 'debet', 'kredit', 'buss_date')
