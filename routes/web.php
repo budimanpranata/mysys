@@ -33,6 +33,7 @@ use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
+use App\Http\Controllers\ListJurnalController;
 use App\Http\Controllers\ReportMutasiController;
 use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
@@ -232,6 +233,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/jurnal-umum/get-coa', [JurnalUmumController::class, 'getCoa'])->name('jurnalUmum.getCoa');
     Route::post('/transaksi/jurnal-umum/', [JurnalUmumController::class, 'simpan'])->name('jurnalUmum.simpan');
     Route::post('/transaksi/jurnal-umum/cetak', [JurnalUmumController::class, 'cetak'])->name('jurnalUmum.cetak');
+
+
+    // list jurnal
+    Route::get('/new-report/list-jurnal', [ListJurnalController::class, 'index']);
+    Route::post('/new-report/list-jurnal/get-transaksi', [ListJurnalController::class, 'getTransaksi'])->name('listJurnal.getTransaksi');
+    Route::get('/new-report/list-jurnal/export-excel', [ListJurnalController::class, 'export']);
 
 
 
