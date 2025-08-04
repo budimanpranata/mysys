@@ -33,6 +33,7 @@ use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
+use App\Http\Controllers\MutasiKasController;
 use App\Http\Controllers\ListJurnalController;
 use App\Http\Controllers\ReportMutasiController;
 use App\Http\Controllers\ReportTunggakanController;
@@ -240,6 +241,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/new-report/list-jurnal/get-transaksi', [ListJurnalController::class, 'getTransaksi'])->name('listJurnal.getTransaksi');
     Route::get('/new-report/list-jurnal/export-excel', [ListJurnalController::class, 'export']);
 
+
+
+
+
+
+    Route::get('/report/mutasi-kas', [MutasiKasController::class, 'index']);
+    Route::post('/report/mutasi-kas/get-transaksi', [MutasiKasController::class, 'getTransaksi'])->name('mutasiKas.getTransaksi');
 
 
 
