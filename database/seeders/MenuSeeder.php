@@ -414,5 +414,24 @@ class MenuSeeder extends Seeder
             'order' => 31,
         ]);
 
+
+
+
+
+
+
+
+
+
+
+        Menu::create([
+            'name' => 'Report Nominative Pembiayaan',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/nominative-pembiayaan',
+            'left' => 'null',
+            'order' => 41,
+        ]);
+
     }
 }
