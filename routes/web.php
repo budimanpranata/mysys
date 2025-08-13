@@ -40,6 +40,7 @@ use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
 use App\Http\Controllers\PelunasanController;
 use App\Http\Controllers\PemindahbukuanPerkelompokController;
+use App\Http\Controllers\ReportNominativePembiayaanController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
@@ -248,6 +249,19 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/report/mutasi-kas', [MutasiKasController::class, 'index']);
     Route::post('/report/mutasi-kas/get-transaksi', [MutasiKasController::class, 'getTransaksi'])->name('mutasiKas.getTransaksi');
+
+
+
+
+
+
+
+
+
+
+        Route::get('/report/nominative-pembiayaan', [ReportNominativePembiayaanController::class, 'index']);
+    Route::post('/report/nominative-pembiayaan/get-data', [ReportNominativePembiayaanController::class, 'getData'])->name('nominativePembiayaan.getData');
+    Route::get('/report/nominative-pembiayaan/export', [ReportNominativePembiayaanController::class, 'export'])->name('nominativePembiayaan.export');
 
 
 
