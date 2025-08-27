@@ -81,7 +81,6 @@
                                     <th>UNIT</th>
                                     <th>TOTAL NOA</th>
                                     <th>TOTAL SALDO</th>
-                                    <th>CETAK NOMINATIVE</th>
                                     <th>EXPORT</th>
                                 </tr>
                             </thead>
@@ -119,11 +118,16 @@
                                 <td>${item.unit}</td>
                                 <td>${item.total_noa}</td>
                                 <td>${parseInt(item.total_saldo).toLocaleString('id-ID')}</td>
-                                <td><a href="#">Cetak</a></td>
                                 <td>
-                                    <a href="{{ route('nominativeSimpanan.export') }}" class="btn btn-success">Export</a>
+                                    <form action="{{ route('nominativeSimpanan.export') }}" method="GET">
+                                        <input type="hidden" name="status_nominative" value="${status}">
+                                        <input type="hidden" name="bulan" value="${bulan}">
+                                        <input type="hidden" name="tahun" value="${tahun}">
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            <i class="fas fa-file-export"></i> 
+                                        Export</button>
+                                    </form>
                                 </td>
-
                             </tr>`;
                         });
                     } else {

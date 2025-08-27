@@ -10,12 +10,24 @@ class SimpananExport implements WithMultipleSheets
     /**
     * @return \Illuminate\Support\Collection
     */
+    
+    protected $status;
+    protected $bulan;
+    protected $tahun;
+
+    public function __construct($status, $bulan, $tahun)
+    {
+        $this->status = $status;
+        $this->bulan = $bulan;
+        $this->tahun = $tahun;
+    }
+
     public function sheets(): array
     {
         return [
-            new SimpananSheet(),
-            new SimpananWajibSheet(),
-            new SimpananPokokSheet(),
+            new SimpananSheet($this->status, $this->bulan, $this->tahun),
+            new SimpananWajibSheet($this->status, $this->bulan, $this->tahun),
+            new SimpananPokokSheet($this->status, $this->bulan, $this->tahun),
         ];
     }
 }

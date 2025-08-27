@@ -25,10 +25,6 @@ class ReportNominativeSimpananController extends Controller
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
 
-        // $query = DB::table('simpanan')
-        //     ->select('unit', DB::raw('COUNT(*) as total_noa'), DB::raw('SUM(kredit) as total_saldo'))
-        //     ->groupBy('unit');
-
         $query = DB::table('simpanan')
         ->select(
             'unit',
@@ -69,8 +65,12 @@ class ReportNominativeSimpananController extends Controller
         return response()->json(['data' => $data]);
     }
 
-        public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new SimpananExport, 'LaporanSimpanan.xlsx');
+        $status = $request->input('status_nominative');
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun');
+
+        return Excel::download(new SimpananExport($status, $bulan, $tahun), 'simpanan.xlsx');
     }
 }
