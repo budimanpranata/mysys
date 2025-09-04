@@ -36,24 +36,22 @@ class SimpananSheet implements FromCollection, WithTitle, WithHeadings, WithStyl
 
     public function collection()
     {
-        // mapping nama bulan ke angka
         $bulanAngka = match (strtolower($this->bulan)) {
-            'januari'   => '01',
-            'februari'  => '02',
-            'maret'     => '03',
-            'april'     => '04',
-            'mei'       => '05',
-            'juni'      => '06',
-            'juli'      => '07',
-            'agustus'   => '08',
+            'januari' => '01',
+            'februari' => '02',
+            'maret' => '03',
+            'april' => '04',
+            'mei' => '05',
+            'juni' => '06',
+            'juli' => '07',
+            'agustus' => '08',
             'september' => '09',
-            'oktober'   => '10',
-            'november'  => '11',
-            'desember'  => '12',
+            'oktober' => '10',
+            'november' => '11',
+            'desember' => '12',
             default     => Carbon::now()->format('m'),
         };
 
-        // tentukan tahun, default tahun ini kalau null
         $tahun = $this->tahun ?? Carbon::now()->year;
 
         // start dan end date berdasarkan pilihan bulan & tahun
