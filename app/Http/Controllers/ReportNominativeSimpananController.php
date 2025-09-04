@@ -29,7 +29,11 @@ class ReportNominativeSimpananController extends Controller
         ->select(
             'unit',
             DB::raw('COUNT(DISTINCT norek) as total_noa'),
-            DB::raw('SUM(kredit) - SUM(debet) as total_saldo')
+            // DB::raw('SUM(kredit) - SUM(debet) as total_saldo')
+            DB::raw('COUNT(DISTINCT norek) as total_noa'),
+            DB::raw('SUM(kredit) as total_kredit'),
+            DB::raw('SUM(debet) as total_debet'),
+            DB::raw('(SUM(kredit) - SUM(debet)) as total_saldo')
         )
         ->groupBy('unit');
 

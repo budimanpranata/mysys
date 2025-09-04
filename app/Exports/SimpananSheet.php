@@ -15,8 +15,8 @@ use Carbon\Carbon;
 class SimpananSheet implements FromCollection, WithTitle, WithHeadings, WithStyles
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     protected $status;
     protected $bulan;
     protected $tahun;
@@ -36,23 +36,40 @@ class SimpananSheet implements FromCollection, WithTitle, WithHeadings, WithStyl
 
     public function collection()
     {
-        $startDate = Carbon::now()->startOfMonth()->toDateString(); // bulan ini awal
-        $endDate   = Carbon::now()->endOfMonth()->toDateString();   // bulan ini akhir
+        // mapping nama bulan ke angka
+        $bulanAngka = match (strtolower($this->bulan)) {
+            'januari'   => '01',
+            'februari'  => '02',
+            'maret'     => '03',
+            'april'     => '04',
+            'mei'       => '05',
+            'juni'      => '06',
+            'juli'      => '07',
+            'agustus'   => '08',
+            'september' => '09',
+            'oktober'   => '10',
+            'november'  => '11',
+            'desember'  => '12',
+            default     => Carbon::now()->format('m'),
+        };
+
+        // tentukan tahun, default tahun ini kalau null
+        $tahun = $this->tahun ?? Carbon::now()->year;
+
+        // start dan end date berdasarkan pilihan bulan & tahun
+        $startDate = Carbon::createFromDate($tahun, $bulanAngka, 1)->startOfMonth()->toDateString();
+        $endDate   = Carbon::createFromDate($tahun, $bulanAngka, 1)->endOfMonth()->toDateString();
 
         // cari rentang bulan lalu
-        $startLastMonth = Carbon::now()->subMonth()->startOfMonth()->toDateString();
-        $endLastMonth   = Carbon::now()->subMonth()->endOfMonth()->toDateString();
+        $startThisMonth = Carbon::now()->startOfMonth()->toDateString();
+        $endThisMonth   = Carbon::now()->endOfMonth()->toDateString();
 
         $saldoAwal = DB::table('simpanan')
             ->selectRaw("
-                SUM(CASE 
-                    WHEN simpanan.buss_date BETWEEN '$startLastMonth' AND '$endLastMonth' 
-                    THEN simpanan.kredit - simpanan.debet 
-                    ELSE 0 
-                END) as saldo_awal
+                SUM(simpanan.kredit - simpanan.debet) as saldo_awal
             ")
+            ->whereNotBetween('simpanan.buss_date', [$startThisMonth, $endThisMonth])
             ->value('saldo_awal');
-
 
         // dd($saldoAwal);
 
@@ -60,7 +77,7 @@ class SimpananSheet implements FromCollection, WithTitle, WithHeadings, WithStyl
             ->leftJoin('anggota', 'simpanan.norek', '=', 'anggota.no')
             ->select([
                 'simpanan.unit',
-                'simpanan.norek as NO_REKENING',
+                'simpanan.norek as no_rekening',
                 'anggota.nama',
                 'anggota.alamat',
 
@@ -87,7 +104,7 @@ class SimpananSheet implements FromCollection, WithTitle, WithHeadings, WithStyl
         if ($this->status === 'current') {
             $query->whereDate('simpanan.buss_date', Carbon::now()->format('Y-m-d'));
         } elseif ($this->status === 'eom') {
-            $bulanAngka = match(strtolower($this->bulan)) {
+            $bulanAngka = match (strtolower($this->bulan)) {
                 'januari' => '01',
                 'februari' => '02',
                 'maret' => '03',
@@ -150,5 +167,4 @@ class SimpananSheet implements FromCollection, WithTitle, WithHeadings, WithStyl
             ]
         ];
     }
-
 }
