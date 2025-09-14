@@ -462,5 +462,14 @@ class MenuSeeder extends Seeder
             'order' => 41,
         ]);
 
+        Menu::create([
+            'name' => 'Ekuitas',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/ekuitas',
+            'left' => 'null',
+            'order' => 42,
+        ]);
+
     }
 }

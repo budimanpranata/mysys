@@ -40,6 +40,7 @@ use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
 use App\Http\Controllers\PelunasanController;
 use App\Http\Controllers\PemindahbukuanPerkelompokController;
+use App\Http\Controllers\ReportEkuitasController;
 use App\Http\Controllers\ReportNominativePembiayaanController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
@@ -262,6 +263,12 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
         Route::get('/report/nominative-pembiayaan', [ReportNominativePembiayaanController::class, 'index']);
     Route::post('/report/nominative-pembiayaan/get-data', [ReportNominativePembiayaanController::class, 'getData'])->name('nominativePembiayaan.getData');
     Route::get('/report/nominative-pembiayaan/export', [ReportNominativePembiayaanController::class, 'export'])->name('nominativePembiayaan.export');
+
+
+    Route::get('/report/ekuitas', [ReportEkuitasController::class, 'index']);
+    // Route::get('/report/ekuitas', [ReportEkuitasController::class, 'ekuitas'])->name('report.ekuitas');
+    Route::get('/report/ekuitas/export', [ReportEkuitasController::class, 'exportEkuitas'])->name('report.ekuitas.export');
+
 
 
 
