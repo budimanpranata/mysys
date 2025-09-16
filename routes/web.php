@@ -33,12 +33,15 @@ use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
+use App\Http\Controllers\MutasiKasController;
+use App\Http\Controllers\ListJurnalController;
 use App\Http\Controllers\ReportMutasiController;
 use App\Http\Controllers\ReportTunggakanController;
 use App\Http\Controllers\PelunasanKelompokController;
 use App\Http\Controllers\PelunasanController;
 use App\Http\Controllers\PemindahbukuanPerkelompokController;
 use App\Http\Controllers\ReportNominativeSimpananController;
+use App\Http\Controllers\ReportNominativePembiayaanController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
@@ -234,6 +237,32 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::post('/transaksi/jurnal-umum/', [JurnalUmumController::class, 'simpan'])->name('jurnalUmum.simpan');
     Route::post('/transaksi/jurnal-umum/cetak', [JurnalUmumController::class, 'cetak'])->name('jurnalUmum.cetak');
 
+
+    // list jurnal
+    Route::get('/new-report/list-jurnal', [ListJurnalController::class, 'index']);
+    Route::post('/new-report/list-jurnal/get-transaksi', [ListJurnalController::class, 'getTransaksi'])->name('listJurnal.getTransaksi');
+    Route::get('/new-report/list-jurnal/export-excel', [ListJurnalController::class, 'export']);
+
+
+
+
+
+
+    Route::get('/report/mutasi-kas', [MutasiKasController::class, 'index']);
+    Route::post('/report/mutasi-kas/get-transaksi', [MutasiKasController::class, 'getTransaksi'])->name('mutasiKas.getTransaksi');
+
+
+
+
+
+
+
+
+
+
+        Route::get('/report/nominative-pembiayaan', [ReportNominativePembiayaanController::class, 'index']);
+    Route::post('/report/nominative-pembiayaan/get-data', [ReportNominativePembiayaanController::class, 'getData'])->name('nominativePembiayaan.getData');
+    Route::get('/report/nominative-pembiayaan/export', [ReportNominativePembiayaanController::class, 'export'])->name('nominativePembiayaan.export');
 
 
 
