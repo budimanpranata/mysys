@@ -445,14 +445,6 @@ class MenuSeeder extends Seeder
 
 
 
-
-
-
-
-
-
-
-
         Menu::create([
             'name' => 'Report Nominative Pembiayaan',
             'icon' => 'far fa-circle nav-icon',
@@ -462,10 +454,14 @@ class MenuSeeder extends Seeder
             'order' => 41,
         ]);
 
-
-
-
-
+        Menu::create([
+            'name' => 'Ekuitas',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/ekuitas',
+            'left' => 'null',
+            'order' => 42,
+            ]);
 
 
         Menu::create([
@@ -474,7 +470,8 @@ class MenuSeeder extends Seeder
             'parent_id' => $report->id,
             'url' => '/report/nominative-simpanan',
             'left' => 'null',
-            'order' => 40,
+            'order' => 43,
+
         ]);
 
     }
