@@ -276,7 +276,7 @@ class MenuSeeder extends Seeder
             'name' => 'Setoran',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => '/transaksi/input_transkasi',
+            'url' => '/transaksi/input-transaksi',
             'left' => 'null',
             'order' => 23,
         ]);
@@ -295,7 +295,7 @@ class MenuSeeder extends Seeder
             'name' => 'Setoran Perkelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => 'transaksi/Setoran-Perkelompok',
+            'url' => '/transaksi/setoran-perkelompok',
             'left' => 'null',
             'order' => 25,
             ]);
@@ -305,7 +305,7 @@ class MenuSeeder extends Seeder
             'name' => 'PB Perkelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => 'transaksi/pemindahbukuan-Perkelompok',
+            'url' => '/transaksi/pemindahbukuan-perkelompok',
             'left' => 'null',
             'order' => 26,
             ]);
@@ -322,7 +322,7 @@ class MenuSeeder extends Seeder
         ]);
 
         Menu::create([
-            'name' => 'Setoran Beda Hari',
+            'name' => 'Pelunasan Kelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/transaksi/pelunasan-kelompok',
@@ -396,34 +396,23 @@ class MenuSeeder extends Seeder
             'order' => 34,
         ]);
 
-        $transaksiJurnal = Menu::create([
-            'name' => 'Transaksi Jurnal',
-            'icon' => 'nav-icon fas fa-money-bill-wave-alt',
-            'parent_id' => null,
-            'url' => null,
-            'left' => 'right fas fa-angle-left',
-            'order' => 36,
-        ]);
-
         Menu::create([
             'name' => 'Jurnal Masuk',
             'icon' => 'far fa-circle nav-icon',
-            'parent_id' => $transaksiJurnal->id,
-            'url' => '/jurnal-masuk',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/jurnal-masuk',
             'left' => 'null',
             'order' => 37,
         ]);
-
 
         Menu::create([
             'name' => 'Mutasi Kas',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $report->id,
-            'url' => 'report/mutasi-kas',
+            'url' => '/report/mutasi-kas',
            'left' => 'null',
             'order' => 38,
         ]);
-
 
         $new_report = Menu::create([
             'name' => 'New Report',
@@ -443,8 +432,6 @@ class MenuSeeder extends Seeder
             'order' => 40,
         ]);
 
-
-
         Menu::create([
             'name' => 'Report Nominative Pembiayaan',
             'icon' => 'far fa-circle nav-icon',
@@ -463,7 +450,6 @@ class MenuSeeder extends Seeder
             'order' => 42,
             ]);
 
-
         Menu::create([
             'name' => 'Report Nominative Simpanan',
             'icon' => 'far fa-circle nav-icon',
@@ -475,7 +461,7 @@ class MenuSeeder extends Seeder
         ]);
 
 
-          $mobcoll = Menu::create([
+        $mobcoll = Menu::create([
             'name' => 'Mobcoll',
             'icon' => 'nav-icon fa-file-alt', //
             'parent_id' => null,
@@ -491,6 +477,15 @@ class MenuSeeder extends Seeder
             'url' => '/pull-data',
             'left' => 'null',
             'order' => 45,
+        ]);
+
+        Menu::create([
+            'name' => 'Jurnal Umum',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/jurnal-umum',
+            'left' => 'null',
+            'order' => 46,
         ]);
 
     }
