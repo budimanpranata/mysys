@@ -276,7 +276,7 @@ class MenuSeeder extends Seeder
             'name' => 'Setoran',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => '/transaksi/input_transkasi',
+            'url' => '/transaksi/input-transaksi',
             'left' => 'null',
             'order' => 23,
         ]);
@@ -295,7 +295,7 @@ class MenuSeeder extends Seeder
             'name' => 'Setoran Perkelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => 'transaksi/Setoran-Perkelompok',
+            'url' => 'transaksi/setoran-perkelompok',
             'left' => 'null',
             'order' => 25,
             ]);
@@ -305,7 +305,7 @@ class MenuSeeder extends Seeder
             'name' => 'PB Perkelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => 'transaksi/pemindahbukuan-Perkelompok',
+            'url' => '/transaksi/pemindahbukuan-perkelompok',
             'left' => 'null',
             'order' => 26,
             ]);
@@ -322,7 +322,7 @@ class MenuSeeder extends Seeder
         ]);
 
         Menu::create([
-            'name' => 'Setoran Beda Hari',
+            'name' => 'Pelunasan Kelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/transaksi/pelunasan-kelompok',
