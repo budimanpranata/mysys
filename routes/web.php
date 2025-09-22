@@ -47,6 +47,7 @@ use App\Http\Controllers\RestrukturisasiJatuhTempoController;
 use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
 use App\Http\Controllers\SetoranBedaHariController;
+use App\Http\Controllers\PullDataController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -178,7 +179,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/realisasi-musyarakah/getData', [RealisasiMusyarokahController::class, 'getData']);
     Route::post('/proses-realisasi-musyarakah', [RealisasiMusyarokahController::class, 'realisasiMusyarokah']);
 
-    // setoran kerkelompok 
+    // setoran kerkelompok
     Route::get('/transaksi/setoran-perkelompok', [SetoranPerkelompokController::class, 'index']);
     Route::post('/transaksi/setoran-perkelompok/filter', [SetoranPerkelompokController::class, 'filter'])->name('setoranPerkelompok.filter');
     Route::post('/transaksi/setoran-perkelompok/proses/{code_kel}', [SetoranPerkelompokController::class, 'proses'])->name('setoranPerkelompok.proses');
@@ -211,7 +212,7 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/tunggakan/data', [ReportTunggakanController::class, 'data'])->name('reportTunggakan.data');
     Route::get('/report/tunggakan/export', [ReportTunggakanController::class, 'export'])->name('reportTunggakan.export');
 
-    
+
     Route::get('/transaksi/pelunasan', [PelunasanController::class, 'index']);
     Route::get('/transaksi/pelunasan/cari-anggota', [PelunasanController::class, 'cari'])->name('pelunasan.cariAnggota');
     Route::get('/pelunasan/get-anggota', [PelunasanController::class, 'getAnggota'])->name('pelunasan.getAnggota');
@@ -278,6 +279,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/nominative-simpanan', [ReportNominativeSimpananController::class, 'index']);
     Route::post('/report/nominative-simpanan/get-data', [ReportNominativeSimpananController::class, 'getData'])->name('nominativeSimpanan.getData');
     Route::get('/report/nominative-simpanan/export', [ReportNominativeSimpananController::class, 'export'])->name('nominativeSimpanan.export');
+
+
+    Route::get('/pull-data', [PullDataController::class, 'index']);
+    Route::post('/pull-data/proses', [PullDataController::class, 'data']);
+    Route::delete('/pull-data/{id}', [PullDataController::class, 'destroy'])->name('pull-data.destroy');
+    Route::get('/pull-data/suggest', [PullDataController::class, 'suggest'])->name('pull-data.suggest');
+    Route::get('/pull-data/list', [PullDataController::class, 'list'])->name('pull-data.list');
 
 
 

@@ -335,7 +335,7 @@ class MenuSeeder extends Seeder
             'name' => 'Jurnal Keluar',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
-            'url' => '/transaksi/jurnal-keluar',           
+            'url' => '/transaksi/jurnal-keluar',
             'left' => 'null',
             'order' => 28,
         ]);
@@ -472,6 +472,25 @@ class MenuSeeder extends Seeder
             'left' => 'null',
             'order' => 43,
 
+        ]);
+
+
+          $mobcoll = Menu::create([
+            'name' => 'Mobcoll',
+            'icon' => 'nav-icon fa-file-alt', //
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 44,
+        ]);
+
+        Menu::create([
+            'name' => 'Pull Data',
+            'icon' => 'far fa-mobile nav-icon',
+            'parent_id' => $mobcoll->id,
+            'url' => '/pull-data',
+            'left' => 'null',
+            'order' => 45,
         ]);
 
     }
