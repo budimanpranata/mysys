@@ -19,15 +19,18 @@
 
     <!-- Modal untuk review gambar -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="imageModalLabel">Review Gambar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body text-center">
-                    <img id="modalImage" src="" alt="Gambar" class="img-fluid">
+                    <img id="modalImage" src="" alt="Gambar" class="img-fluid"
+                        style="cursor: zoom-in; transition: transform 0.3s ease;">
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="rotateImage()">Rotate</button>
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
@@ -41,6 +44,41 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        let zoomed = false;
+        let rotation = 0;
+
+        // fungsi zoom on click
+        document.addEventListener("click", function(e) {
+            const img = document.getElementById("modalImage");
+            if (e.target === img) {
+                zoomed = !zoomed;
+                applyTransform(img);
+                img.style.cursor = zoomed ? "zoom-out" : "zoom-in";
+            }
+        });
+
+        // fungsi reset + tampilkan gambar
+        function openImageModal(imageUrl) {
+            const img = document.getElementById('modalImage');
+            img.src = imageUrl;
+            zoomed = false;
+            rotation = 0;
+            applyTransform(img);
+            img.style.cursor = "zoom-in";
+        }
+
+        // fungsi rotate
+        function rotateImage() {
+            const img = document.getElementById("modalImage");
+            rotation = (rotation + 90) % 360; // tiap klik +90 derajat
+            applyTransform(img);
+        }
+
+        // helper untuk gabungkan scale + rotate
+        function applyTransform(img) {
+            const scale = zoomed ? 2 : 1;
+            img.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+        }
 
         function toggleAlamatDomisili() {
             const checkbox = document.getElementById("sameAddress");
@@ -84,7 +122,9 @@
                     $.ajax({
                         url: 'get-kelompok-data',
                         type: 'GET',
-                        data: { code_kel: selectedCodeString },
+                        data: {
+                            code_kel: selectedCodeString
+                        },
                         success: function(response) {
                             console.log("Response dari Server:", response); // Debug
                             $('#nama_ao').val(response.nama_ao);
@@ -127,7 +167,9 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
-                    body: JSON.stringify({ nik })
+                    body: JSON.stringify({
+                        nik
+                    })
                 });
 
                 if (!response.ok) {
@@ -142,12 +184,12 @@
                         <div class="card mb-3">
                             <div class="card-header">KTP</div>
                             <div class="card-body">
-                                <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].ktp}" 
-                                    width="580px" 
-                                    alt="Gambar KTP" 
-                                    class="img-thumbnail" 
-                                    style="cursor: pointer;" 
-                                    data-bs-toggle="modal" 
+                                <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].ktp}"
+                                    width="580px"
+                                    alt="Gambar KTP"
+                                    class="img-thumbnail"
+                                    style="cursor: pointer;"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#imageModal"
                                     onclick="openImageModal('http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].ktp}')">
                             </div>
@@ -158,12 +200,12 @@
                         <div class="card mb-3">
                             <div class="card-header">Kartu Keluarga</div>
                             <div class="card-body">
-                                <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].kk}" 
-                                    width="580px" 
-                                    alt="Gambar KK" 
-                                    class="img-thumbnail" 
-                                    style="cursor: pointer;" 
-                                    data-bs-toggle="modal" 
+                                <img src="http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].kk}"
+                                    width="580px"
+                                    alt="Gambar KK"
+                                    class="img-thumbnail"
+                                    style="cursor: pointer;"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#imageModal"
                                     onclick="openImageModal('http://rmc.nurinsani.co.id:9373/berkas/${data.data[0].kk}')">
                             </div>
