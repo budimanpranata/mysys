@@ -49,6 +49,7 @@ use App\Http\Controllers\SetoranPerkelompokController;
 use App\Http\Controllers\SetoranBedaHariController;
 use App\Http\Controllers\PullDataController;
 use App\Http\Controllers\ExportMobcolController;
+use App\Http\Controllers\SetoranBankController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -297,6 +298,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/export/pelunasan', [ExportMobcolController::class, 'exportPelunasan'])->name('export.pelunasan');
     Route::get('/export/tunggakan', [ExportMobcolController::class, 'exportTunggakan'])->name('export.tunggakan');
     Route::get('/export/wo', [ExportMobcolController::class, 'exportWo'])->name('export.wo');
+
+    Route::get('/setoran-bank', [SetoranBankController::class, 'index'])->name('setoran-bank.index');
+    Route::get('/setoran-bank/data', [SetoranBankController::class, 'getData'])->name('setoran-bank.data');
 
 
 
