@@ -472,7 +472,7 @@ class MenuSeeder extends Seeder
 
         Menu::create([
             'name' => 'Pull Data',
-            'icon' => 'far fa-mobile nav-icon',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $mobcoll->id,
             'url' => '/pull-data',
             'left' => 'null',
@@ -480,9 +480,17 @@ class MenuSeeder extends Seeder
         ]);
          Menu::create([
             'name' => 'Transaksi CS Mobcol',
-            'icon' => 'far fa-mobile nav-icon',
+            'icon' => 'far fa-circle nav-icon',
             'parent_id' => $mobcoll->id,
             'url' => '/cs_mobcol',
+            'left' => 'null',
+            'order' => 45,
+        ]);
+         Menu::create([
+            'name' => 'Setorann Bank',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $mobcoll->id,
+            'url' => '/setoran-bank',
             'left' => 'null',
             'order' => 45,
         ]);
