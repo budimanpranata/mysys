@@ -58,6 +58,19 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
         ],
+        'cs' => [
+            'driver' => 'mysql',
+            'host' => env('DB_CS_HOST', '185.201.9.210'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_CS_DATABASE', 'mobcol'),
+            'username' => env('DB_CS_USERNAME', 'adminni'),
+            'password' => env('DB_CS_PASSWORD', '147Teriyak'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
 
         'mariadb' => [
             'driver' => 'mariadb',

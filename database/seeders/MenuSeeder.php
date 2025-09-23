@@ -478,6 +478,14 @@ class MenuSeeder extends Seeder
             'left' => 'null',
             'order' => 45,
         ]);
+         Menu::create([
+            'name' => 'Transaksi CS Mobcol',
+            'icon' => 'far fa-mobile nav-icon',
+            'parent_id' => $mobcoll->id,
+            'url' => '/cs_mobcol',
+            'left' => 'null',
+            'order' => 45,
+        ]);
 
         Menu::create([
             'name' => 'Jurnal Umum',
