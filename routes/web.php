@@ -50,6 +50,7 @@ use App\Http\Controllers\SetoranBedaHariController;
 use App\Http\Controllers\PullDataController;
 use App\Http\Controllers\ExportMobcolController;
 use App\Http\Controllers\SetoranBankController;
+use App\Http\Controllers\ReportMobcolController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -301,6 +302,10 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/setoran-bank', [SetoranBankController::class, 'index'])->name('setoran-bank.index');
     Route::get('/setoran-bank/data', [SetoranBankController::class, 'getData'])->name('setoran-bank.data');
+
+    Route::get('/report-mobcol', [ReportMobcolController::class, 'index'])->name('report.index');
+    Route::get('/report-mobcol/export/{type}', [ReportMobcolController::class, 'export'])->name('report.export');
+
 
 
 
