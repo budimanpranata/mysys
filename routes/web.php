@@ -48,6 +48,7 @@ use App\Http\Controllers\RestrukturisasiByKelompokController;
 use App\Http\Controllers\SetoranPerkelompokController;
 use App\Http\Controllers\SetoranBedaHariController;
 use App\Http\Controllers\PullDataController;
+use App\Http\Controllers\ExportMobcolController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -286,6 +287,16 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::delete('/pull-data/{id}', [PullDataController::class, 'destroy'])->name('pull-data.destroy');
     Route::get('/pull-data/suggest', [PullDataController::class, 'suggest'])->name('pull-data.suggest');
     Route::get('/pull-data/list', [PullDataController::class, 'list'])->name('pull-data.list');
+
+    Route::get('/cs_mobcol', [ExportMobcolController::class, 'index']);
+    Route::get('/tagihan/data', [ExportMobcolController::class, 'getData'])->name('csmobcol.data');
+    Route::get('/export/cs', [ExportMobcolController::class, 'exportCs'])->name('export.cs');
+    Route::get('/export/penarikan', [ExportMobcolController::class, 'exportPenarikan'])->name('export.penarikan');
+    Route::get('/export/lebaran', [ExportMobcolController::class, 'exportLebaran'])->name('export.lebaran');
+    Route::get('/export/lima', [ExportMobcolController::class, 'exportLima'])->name('export.lima');
+    Route::get('/export/pelunasan', [ExportMobcolController::class, 'exportPelunasan'])->name('export.pelunasan');
+    Route::get('/export/tunggakan', [ExportMobcolController::class, 'exportTunggakan'])->name('export.tunggakan');
+    Route::get('/export/wo', [ExportMobcolController::class, 'exportWo'])->name('export.wo');
 
 
 
