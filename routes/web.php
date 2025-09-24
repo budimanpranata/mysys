@@ -51,6 +51,7 @@ use App\Http\Controllers\PullDataController;
 use App\Http\Controllers\ExportMobcolController;
 use App\Http\Controllers\SetoranBankController;
 use App\Http\Controllers\ReportMobcolController;
+use App\Http\Controllers\BukuBesarController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -305,6 +306,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/report-mobcol', [ReportMobcolController::class, 'index'])->name('report.index');
     Route::get('/report-mobcol/export/{type}', [ReportMobcolController::class, 'export'])->name('report.export');
+
+    Route::get('/buku-besar', [BukuBesarController::class, 'index'])->name('buku-besar.index');
+    Route::post('/buku-besar/proses', [BukuBesarController::class, 'proses'])->name('buku-besar.proses');
+    Route::get('/buku-besar/download/{no_perkiraan}', [BukuBesarController::class, 'download'])->name('buku-besar.download');
+
+    Route::get('/buku-besar/suggest', [BukuBesarController::class, 'suggest'])->name('buku-besar.suggest');
+
 
 
 
