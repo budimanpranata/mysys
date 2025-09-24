@@ -431,6 +431,14 @@ class MenuSeeder extends Seeder
             'left' => 'null',
             'order' => 40,
         ]);
+         Menu::create([
+            'name' => 'Buku Besar',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $new_report->id,
+            'url' => '/buku-besar',
+            'left' => 'null',
+            'order' => 40,
+        ]);
 
         Menu::create([
             'name' => 'Report Nominative Pembiayaan',
