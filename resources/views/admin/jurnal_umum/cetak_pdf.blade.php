@@ -5,17 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bukti Jurnal</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
-        .header { display: flex; align-items: center; justify-content: space-between; }
-        .logo img { width: 120px; }
-        .title { font-weight: bold; font-size: 16px; text-align: center; margin-top: 10px; }
-        .info { margin-top: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid black; padding: 6px; text-align: center; }
-        th { background: #f2f2f2; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-        .sign-table td { height: 80px; vertical-align: top; }
+        body { 
+            font-family: Arial,sans-serif;
+            margin: 20px;
+            font-size: 12px; 
+        }
+        .header { 
+            display: flex;
+            align-items: center;
+            justify-content: space-between; 
+        }
+        .logo img { 
+            width: 120px; 
+        }
+        .title { 
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .info { 
+            margin-top: 10px;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; }
+        th, td { 
+            border: 1px solid black; 
+            padding: 6px; 
+            text-align: center; 
+        }
+        th { 
+            background: #f2f2f2; 
+        }
+        .text-left { 
+            text-align: left; 
+        }
+        .text-right { 
+            text-align: right; 
+        }
+        .sign-table td { 
+            height: 80px; 
+            vertical-align: top; 
+        }
     </style>
 </head>
 <body>
