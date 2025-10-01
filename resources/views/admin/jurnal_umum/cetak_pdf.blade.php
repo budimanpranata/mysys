@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bukti Jurnal</title>
+    <title>Bukti Jurnal Umum</title>
     <style>
         body { 
             font-family: Arial,sans-serif;
@@ -63,7 +63,7 @@
     <div class="info">
         <p>
             No : {{ $transaksi[0]['kode_transaksi'] ?? '-' }} <br>
-            Tgl : {{ \Carbon\Carbon::parse($transaksi[0]['tanggal_transaksi'])->format('d-m-Y') }}
+            Tanggal : {{ \Carbon\Carbon::parse($transaksi[0]['tanggal_transaksi'])->format('d-m-Y') }}
         </p>
     </div>
 
