@@ -19,8 +19,8 @@ return new class extends Migration
             $table->dateTime('tanggal_transaksi');
             $table->string('jenis_transaksi', 15);
             $table->text('keterangan_transaksi');
-            $table->bigInteger('debet');
-            $table->bigInteger('kredit');
+            $table->decimal('debet', 18, 2)->default(0);
+            $table->decimal('kredit', 18, 2)->default(0);
             $table->dateTime('tanggal_posting');
             $table->text('keterangan_posting');
             $table->string('id_admin', 6);

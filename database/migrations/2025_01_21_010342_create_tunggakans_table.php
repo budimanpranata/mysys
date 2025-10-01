@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('unit', 4);
             $table->string('cif', 16);
             $table->string('code_kel', 10);
-            $table->bigInteger('debet');
+            $table->decimal('debet', 15, 2)->default(0);
             $table->string('type', 14)->nullable();
-            $table->string('kredit', 40)->nullable();
+            $table->decimal('kredit', 15, 2)->default(0);
             $table->string('userid', 8)->nullable();
             $table->string('ket', 75);
             $table->bigIncrements('reff');
