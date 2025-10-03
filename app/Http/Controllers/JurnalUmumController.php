@@ -80,15 +80,21 @@ class JurnalUmumController extends Controller
         }
     }
 
-
     public function cetak(Request $request)
     {
-        $data = $request->input('transaksi');
+        $transaksi = $request->input('transaksi', []);
+
+        // pisahkan debet dan kredit
+        $debet = collect($transaksi)->where('posisi', 'debet')->values()->all();
+        $kredit = collect($transaksi)->where('posisi', 'kredit')->values()->all();
 
         $pdf = Pdf::loadView('admin.jurnal_umum.cetak_pdf', [
-            'transaksi' => $data,
-        ]);
+            'transaksi' => $transaksi,
+            'debet' => $debet,
+            'kredit' => $kredit
+        ])->setPaper('A4', 'portrait');
 
-        return $pdf->stream('jurnal-umum.pdf');
+        return $pdf->stream('bukti-jurnal.pdf');
     }
+
 }

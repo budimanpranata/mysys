@@ -1,109 +1,108 @@
-{{-- @php dd($transaksi); @endphp --}}
-
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bukti Jurnal</title>
+    <title>Bukti Jurnal Umum</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0px;
+        body { 
+            font-family: Arial,sans-serif;
+            margin: 20px;
+            font-size: 12px; 
         }
-
-        .header {
+        .header { 
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-between; 
         }
-
-        .logo img {
-            width: 70px;
-            margin-right: 10px;
+        .logo img { 
+            width: 120px; 
         }
-
-        .title {
+        .title { 
             font-weight: bold;
-            font-size: 18px;
-            color: green;
-        }
-
-        .info {
+            font-size: 16px;
+            text-align: center;
             margin-top: 10px;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .info { 
+            margin-top: 10px;
         }
-
-        th,
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; }
+        th, td { 
+            border: 1px solid black; 
+            padding: 6px; 
+            text-align: center; 
         }
-
-        .no-border {
-            border: none;
+        th { 
+            background: #f2f2f2; 
         }
-
-        .keterangan {
-            margin-top: 20px;
+        .text-left { 
+            text-align: left; 
         }
-
+        .text-right { 
+            text-align: right; 
+        }
+        .sign-table td { 
+            height: 80px; 
+            vertical-align: top; 
+        }
     </style>
 </head>
-
 <body>
-
     <div class="header">
         <div class="logo">
-            <img style="width: 200px" src="assets\img\logo-web-kspps-ni-black.png" alt="Logo">
+            <img src="{{ public_path('assets/img/logo-web-kspps-ni-black.png') }}" alt="Logo">
         </div>
     </div>
+    
+    <div class="title">Bukti Jurnal Umum</div>
 
     <div class="info">
-        <p>No : {{ $transaksi[0]['kode_transaksi'] ?? '-' }}<br>Tgl : {{ \Carbon\Carbon::parse($transaksi[0]['tanggal_transaksi'])->format('d-m-Y') }} </p>
+        <p>
+            No : {{ $transaksi[0]['kode_transaksi'] ?? '-' }} <br>
+            Tanggal : {{ \Carbon\Carbon::parse($transaksi[0]['tanggal_transaksi'])->format('d-m-Y') }}
+        </p>
     </div>
-
-    <h3>DEBET</h3>
 
     <table>
-        <tr>
-            <th style="align-items: center">No.Rek</th>
-            <th>Perkiraan Lawan</th>
-        </tr>
-        <tr>
-            <td>{{ $transaksi[0]['kode_rekening'] }} -  Rp. {{ number_format($transaksi[0]['jumlah'], 0, ',', '.') }}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>{{ $transaksi[0]['kode_rekening'] }} - Selisih kas Kurang Rp. {{ number_format($transaksi[0]['jumlah'], 0, ',', '.') }}</td>
-        </tr>
+        <thead>
+            <tr>
+                <th style="width:25%">Kode Rekening</th>
+                <th style="width:35%">Keterangan</th>
+                <th style="width:20%">Debet</th>
+                <th style="width:20%">Kredit</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($transaksi as $row)
+                <tr>
+                    <td class="text-left">{{ $row['kode_rekening'] }}</td>
+                    <td class="text-left">{{ $row['keterangan_transaksi'] }}</td>
+                    <td class="text-right">{{ $row['posisi']=='debet' ? number_format($row['jumlah'],0,',','.') : '-' }}</td>
+                    <td class="text-right">{{ $row['posisi']=='kredit' ? number_format($row['jumlah'],0,',','.') : '-' }}</td>
+                </tr>
+            @endforeach
+            <tr>
+                <td colspan="2"><strong>TOTAL</strong></td>
+                <td class="text-right"><strong>{{ number_format(collect($transaksi)->where('posisi','debet')->sum('jumlah'),0,',','.') }}</strong></td>
+                <td class="text-right"><strong>{{ number_format(collect($transaksi)->where('posisi','kredit')->sum('jumlah'),0,',','.') }}</strong></td>
+            </tr>
+        </tbody>
     </table>
 
-    <div class="keterangan">
-        <p><strong>Keterangan:</strong> {{ $transaksi[0]['keterangan_transaksi'] }}</p>
-    </div>
-
-    <table style="width: 100%; margin-top: 40px;">
+    <table class="sign-table" style="width:100%; margin-top:30px;">
         <tr>
-            <td style="width: 50%; border: 1px solid black; height: 100px; text-align: center; vertical-align: top;">
-                <strong>Dibuat :</strong><br><br><br>
+            <td style="width:50%; border:1px solid black; text-align:center;">
+                <strong>Dibuat :</strong><br><br><br><br>
             </td>
-            <td style="width: 50%; border: 1px solid black; height: 100px; text-align: center; vertical-align: top;">
-                <strong>Diperiksa :</strong><br><br><br>
+            <td style="width:50%; border:1px solid black; text-align:center;">
+                <strong>Diperiksa :</strong><br><br><br><br>
             </td>
         </tr>
     </table>
-
-
 
 </body>
-
 </html>
