@@ -272,9 +272,8 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
 
     Route::get('/report/ekuitas', [ReportEkuitasController::class, 'index']);
-    // Route::get('/report/ekuitas', [ReportEkuitasController::class, 'ekuitas'])->name('report.ekuitas');
-    Route::get('/report/ekuitas/export', [ReportEkuitasController::class, 'exportEkuitas'])->name('report.ekuitas.export');
-
+    Route::get('/report/ekuitas/export', [ReportEkuitasController::class, 'exportExcel'])->name('report.ekuitas.export');
+    Route::post('/report/ekuitas', [ReportEkuitasController::class, 'getData'])->name('report.ekuitas');
 
 
 
