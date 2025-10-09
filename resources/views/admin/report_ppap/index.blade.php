@@ -23,7 +23,7 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Tanggal Cetak/Export</label>
+                            <label class="col-sm-2 col-form-label">Tanggal Pencarian</label>
                             <div class="col-sm-6">
                                 <input type="date" name="tanggal_cetak" id="tanggal_cetak" class="form-control" value="{{ date('Y-m-d') }}" required>
                             </div>
