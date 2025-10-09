@@ -52,6 +52,7 @@ use App\Http\Controllers\ExportMobcolController;
 use App\Http\Controllers\SetoranBankController;
 use App\Http\Controllers\ReportMobcolController;
 use App\Http\Controllers\BukuBesarController;
+use App\Http\Controllers\ReportPpapController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -264,8 +265,6 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
 
 
-
-
         Route::get('/report/nominative-pembiayaan', [ReportNominativePembiayaanController::class, 'index']);
     Route::post('/report/nominative-pembiayaan/get-data', [ReportNominativePembiayaanController::class, 'getData'])->name('nominativePembiayaan.getData');
     Route::get('/report/nominative-pembiayaan/export', [ReportNominativePembiayaanController::class, 'export'])->name('nominativePembiayaan.export');
@@ -311,6 +310,11 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/buku-besar/download/{no_perkiraan}', [BukuBesarController::class, 'download'])->name('buku-besar.download');
 
     Route::get('/buku-besar/suggest', [BukuBesarController::class, 'suggest'])->name('buku-besar.suggest');
+
+    Route::get('/report/ppap', [ReportPpapController::class, 'index']);
+    Route::post('/report/ppap/cari', [ReportPpapController::class, 'cari'])->name('report.ppap.cari');
+    Route::get('/report/ppap/export/pdf', [ReportPpapController::class, 'exportPdf'])->name('report.ppap.export.pdf');
+    Route::get('/report/ppap/export/excel', [ReportPpapController::class, 'exportExcel'])->name('report.ppap.export.excel');
 
 
 

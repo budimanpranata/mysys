@@ -520,5 +520,14 @@ class MenuSeeder extends Seeder
             'order' => 46,
         ]);
 
+        Menu::create([
+            'name' => 'PPAP',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/ppap',
+            'left' => 'null',
+            'order' => 42,
+        ]);
+
     }
 }
