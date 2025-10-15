@@ -12,8 +12,9 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function dologin(Request $request) {
-        // validasi
+    public function dologin(Request $request)
+    {
+        // Validasi input
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -21,21 +22,28 @@ class AuthController extends Controller
 
         if (auth()->attempt($credentials)) {
 
-            // buat ulang session login
+            // Regenerasi session setelah login
             $request->session()->regenerate();
 
-            if (auth()->user()->role_id === 1) {
-                // jika user admin
+            $role = auth()->user()->role_id;
+
+            if ($role === 1) {
+                // Admin
                 return redirect()->intended('/admin');
-            } else {
-                // jika user al
+            } elseif ($role === 2) {
+                // AL
                 return redirect()->intended('/al');
+            } elseif ($role === 3) {
+                // AH
+                return redirect()->intended('/ah');
+            } else {
+                // KP
+                return redirect()->intended('/kp');
             }
         }
 
-        // jika email atau password salah
-        // kirimkan session error
-        return back()->with('error', 'email atau password salah');
+        // Jika login gagal
+        return back()->with('error', 'Email atau password salah');
     }
 
     public function logout(Request $request) {

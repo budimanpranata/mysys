@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AhController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\CetakAdendumController;
@@ -52,6 +53,7 @@ use App\Http\Controllers\ExportMobcolController;
 use App\Http\Controllers\SetoranBankController;
 use App\Http\Controllers\ReportMobcolController;
 use App\Http\Controllers\BukuBesarController;
+use App\Http\Controllers\KpController;
 use App\Http\Controllers\ReportPpapController;
 
 //  jika user belum login
@@ -62,7 +64,7 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 // untuk Admin AL login
-Route::group(['middleware' => ['auth', 'role:1,2']], function () {
+Route::group(['middleware' => ['auth', 'role:1,2,3,4']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/redirect', [RedirectController::class, 'check']);
 });
@@ -329,6 +331,18 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 // untuk Al
 Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al', [AlController::class, 'index']);
+
+});
+
+// untuk AH
+Route::group(['middleware' => ['auth', 'role:3']], function () {
+    Route::get('/ah', [AhController::class, 'index']);
+
+});
+
+// untuk KP
+Route::group(['middleware' => ['auth', 'role:4']], function () {
+    Route::get('/kp', [KpController::class, 'index']);
 
 });
 

@@ -20,6 +20,7 @@ class MenuSeeder extends Seeder
             'url' => '/admin', // Contoh URL
             'left' => 'null',
             'order' => 0,
+            'role_id' => 1,
         ]);
 
         $masterData = Menu::create([
@@ -29,6 +30,8 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 1,
+            'role_id' => 1,
+
         ]);
 
         // Submenu
@@ -39,6 +42,8 @@ class MenuSeeder extends Seeder
             'url' => '/anggota', // Contoh URL
             'left' => 'null',
             'order' => 1,
+            'role_id' => 1,
+
         ]);
 
         Menu::create([
@@ -48,6 +53,8 @@ class MenuSeeder extends Seeder
             'url' => '/pembiayaan',
             'left' => 'null',
             'order' => 2,
+            'role_id' => 1,
+
         ]);
 
         Menu::create([
@@ -57,6 +64,8 @@ class MenuSeeder extends Seeder
             'url' => '/kelompok',
             'left' => 'null',
             'order' => 3,
+            'role_id' => 1,
+
         ]);
 
         $CetakData = Menu::create([
@@ -66,6 +75,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 4,
+            'role_id' => 1,
         ]);
 
         // Submenu
@@ -76,6 +86,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/approval',
             'left' => 'null',
             'order' => 4,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -85,6 +96,7 @@ class MenuSeeder extends Seeder
             'url' => '/anggota-baru', // Contoh URL
             'left' => 'null',
             'order' => 5,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -94,6 +106,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/murabahah',
             'left' => 'null',
             'order' => 6,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -103,6 +116,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/musyarakah',
             'left' => 'null',
             'order' => 7,
+            'role_id' => 1,
         ]);
         Menu::create([
             'name' => 'Cetak Cs',
@@ -111,7 +125,9 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/cs',
             'left' => 'null',
             'order' => 8,
+            'role_id' => 1,
         ]);
+
         Menu::create([
             'name' => 'Cetak Cs WO',
             'icon' => 'far fa-circle nav-icon',
@@ -119,6 +135,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/cs_wo',
             'left' => 'null',
             'order' => 9,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -128,6 +145,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/simpanan-5-persen',
             'left' => 'null',
             'order' => 10,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -137,6 +155,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/adendum',
             'left' => 'null',
             'order' => 11,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -146,6 +165,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/kartu-angsuran',
             'left' => 'null',
             'order' => 12,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -155,6 +175,7 @@ class MenuSeeder extends Seeder
             'url' => '/cetak/larisywah',
             'left' => 'null',
             'order' => 13,
+            'role_id' => 1,
         ]);
 
         $Realisasi = Menu::create([
@@ -164,7 +185,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 14,
-
+            'role_id' => 1,
         ]);
 
         // Submenu
@@ -175,6 +196,7 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi_wakalah',
             'left' => 'null',
             'order' => 14,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -184,6 +206,7 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi/murabahah',
             'left' => 'null',
             'order' => 15,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -193,6 +216,7 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi/pembatalan-wakalah',
             'left' => 'null',
             'order' => 16,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -202,8 +226,9 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi/tagihan-kelompok',
             'left' => 'null',
             'order' => 17,
-
+            'role_id' => 1,
         ]);
+
         Menu::create([
             'name' => 'Hapus Buku',
             'icon' => 'far fa-circle nav-icon',
@@ -211,7 +236,7 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi/hapus-buku',
             'left' => 'null',
             'order' => 18,
-
+            'role_id' => 1,
         ]);
         Menu::create([
             'name' => 'Realisasi Musyarokah',
@@ -220,7 +245,7 @@ class MenuSeeder extends Seeder
             'url' => '/realisasi-musyarakah',
             'left' => 'null',
             'order' => 18,
-
+            'role_id' => 1,
         ]);
 
         $pemeliharaan_data = Menu::create([
@@ -230,7 +255,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 19,
-
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -240,7 +265,7 @@ class MenuSeeder extends Seeder
             'url' => '/pemeliharaan/view-data',
             'left' => 'null',
             'order' => 19,
-
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -250,7 +275,7 @@ class MenuSeeder extends Seeder
             'url' => '/pemeliharaan-cif',
             'left' => 'null',
             'order' => 20,
-
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -260,6 +285,7 @@ class MenuSeeder extends Seeder
             'url' => '/pemeliharaan-kelompok',
             'left' => 'null',
             'order' => 21,
+            'role_id' => 1,
         ]);
 
         $Transaksi = Menu::create([
@@ -269,7 +295,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 22,
-
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -279,6 +305,7 @@ class MenuSeeder extends Seeder
             'url' => '/transaksi/input-transaksi',
             'left' => 'null',
             'order' => 23,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -288,37 +315,37 @@ class MenuSeeder extends Seeder
             'url' => '/setoran-lima-persen',
             'left' => 'null',
             'order' => 24,
+            'role_id' => 1,
         ]);
 
         Menu::create([
-
             'name' => 'Setoran Perkelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/transaksi/setoran-perkelompok',
             'left' => 'null',
             'order' => 25,
-            ]);
+            'role_id' => 1,
+        ]);
 
         Menu::create([
-
             'name' => 'PB Perkelompok',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/transaksi/pemindahbukuan-perkelompok',
             'left' => 'null',
             'order' => 26,
-            ]);
+            'role_id' => 1,
+        ]);
 
         Menu::create([
-
             'name' => 'Setoran Beda Hari',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/transaksi/setoran-beda-hari',
             'left' => 'null',
             'order' => 26,
-
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -328,16 +355,17 @@ class MenuSeeder extends Seeder
             'url' => '/transaksi/pelunasan-kelompok',
             'left' => 'null',
             'order' => 27,
+            'role_id' => 1,
         ]);
 
         Menu::create([
-
             'name' => 'Jurnal Keluar',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $Transaksi->id,
             'url' => '/transaksi/jurnal-keluar',
             'left' => 'null',
             'order' => 28,
+            'role_id' => 1,
         ]);
 
 
@@ -348,7 +376,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 29,
-
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -358,6 +386,7 @@ class MenuSeeder extends Seeder
             'url' => '/rest-kemampuan-bayar',
             'left' => 'null',
             'order' => 30,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -367,6 +396,7 @@ class MenuSeeder extends Seeder
             'url' => '/restrukturisasi/jatuh-tempo',
             'left' => 'null',
             'order' => 31,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -376,6 +406,7 @@ class MenuSeeder extends Seeder
             'url' => '/restrukturisasi/by-kelompok',
             'left' => 'null',
             'order' => 32,
+            'role_id' => 1,
         ]);
 
         $report = Menu::create([
@@ -385,6 +416,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 33,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -394,6 +426,7 @@ class MenuSeeder extends Seeder
             'url' => '/report/tunggakan',
             'left' => 'null',
             'order' => 34,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -403,6 +436,7 @@ class MenuSeeder extends Seeder
             'url' => '/transaksi/jurnal-masuk',
             'left' => 'null',
             'order' => 37,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -410,8 +444,9 @@ class MenuSeeder extends Seeder
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $report->id,
             'url' => '/report/mutasi-kas',
-           'left' => 'null',
+            'left' => 'null',
             'order' => 38,
+            'role_id' => 1,
         ]);
 
         $new_report = Menu::create([
@@ -421,6 +456,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 39,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -430,14 +466,17 @@ class MenuSeeder extends Seeder
             'url' => '/new-report/list-jurnal',
             'left' => 'null',
             'order' => 40,
+            'role_id' => 1,
         ]);
-         Menu::create([
+
+        Menu::create([
             'name' => 'Buku Besar',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $new_report->id,
             'url' => '/buku-besar',
             'left' => 'null',
             'order' => 40,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -447,6 +486,7 @@ class MenuSeeder extends Seeder
             'url' => '/report/nominative-pembiayaan',
             'left' => 'null',
             'order' => 41,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -456,7 +496,8 @@ class MenuSeeder extends Seeder
             'url' => '/report/ekuitas',
             'left' => 'null',
             'order' => 42,
-            ]);
+            'role_id' => 1,
+        ]);
 
         Menu::create([
             'name' => 'Report Nominative Simpanan',
@@ -465,7 +506,7 @@ class MenuSeeder extends Seeder
             'url' => '/report/nominative-simpanan',
             'left' => 'null',
             'order' => 43,
-
+            'role_id' => 1,
         ]);
 
 
@@ -476,6 +517,7 @@ class MenuSeeder extends Seeder
             'url' => null,
             'left' => 'right fas fa-angle-left',
             'order' => 44,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -485,23 +527,29 @@ class MenuSeeder extends Seeder
             'url' => '/pull-data',
             'left' => 'null',
             'order' => 45,
+            'role_id' => 1,
         ]);
-         Menu::create([
+
+        Menu::create([
             'name' => 'Transaksi CS Mobcol',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $mobcoll->id,
             'url' => '/cs_mobcol',
             'left' => 'null',
             'order' => 45,
+            'role_id' => 1,
         ]);
-         Menu::create([
+
+        Menu::create([
             'name' => 'Setorann Bank',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $mobcoll->id,
             'url' => '/setoran-bank',
             'left' => 'null',
             'order' => 45,
+            'role_id' => 1,
         ]);
+
         Menu::create([
             'name' => 'Report Mobcol',
             'icon' => 'far fa-circle nav-icon',
@@ -509,6 +557,7 @@ class MenuSeeder extends Seeder
             'url' => '/report-mobcol',
             'left' => 'null',
             'order' => 45,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -518,6 +567,7 @@ class MenuSeeder extends Seeder
             'url' => '/transaksi/jurnal-umum',
             'left' => 'null',
             'order' => 46,
+            'role_id' => 1,
         ]);
 
         Menu::create([
@@ -527,6 +577,7 @@ class MenuSeeder extends Seeder
             'url' => '/report/ppap',
             'left' => 'null',
             'order' => 42,
+            'role_id' => 1,
         ]);
 
     }
