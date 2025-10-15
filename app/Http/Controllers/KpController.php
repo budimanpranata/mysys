@@ -12,8 +12,6 @@ class KpController extends Controller
     public function index()
     {
 
-        $role = Auth::user()->role_id;
-
         $menus = Menu::whereIn('role_id', [Auth::user()->role_id])
             ->whereNull('parent_id')
             ->orderBy('order', 'asc')
