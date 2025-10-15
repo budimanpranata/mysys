@@ -11,17 +11,16 @@ class AhController extends Controller
 {
     public function index()
     {
-
-        $menus = Menu::whereIn('role_id', [Auth::user()->role_id])
-            ->whereNull('parent_id')
-            ->orderBy('order', 'asc')
-            ->get();
+        $menus = Menu::where(function ($query) {
+            $query->whereNull('role_id')
+                ->orWhere('role_id', Auth::user()->role_id);
+        })
+        ->orderBy('order', 'asc')
+        ->get();
 
         $pembiayaan = DB::table('pembiayaan')
             ->selectRaw('SUM(os - saldo_margin) as os, COUNT(cif) as noa')
             ->first();
-
-        // dd($menus);
 
         return view('ah.index', compact('menus', 'pembiayaan'));
     
