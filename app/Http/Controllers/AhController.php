@@ -21,7 +21,7 @@ class AhController extends Controller
             ->selectRaw('SUM(os - saldo_margin) as os, COUNT(cif) as noa')
             ->first();
 
-        dd($menus);
+        // dd($menus);
 
         return view('ah.index', compact('menus', 'pembiayaan'));
     
