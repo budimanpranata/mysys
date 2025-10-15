@@ -30,6 +30,22 @@ class UsersTableSeeder extends Seeder
                 'role_id' => '2',
                 'param_tanggal' => '2025-01-15',
                 'unit' => '001'
+            ],
+            [
+                'name' => 'Ah User',
+                'email' => 'ah@ni',
+                'password' => Hash::make('123456'),
+                'role_id' => '3',
+                'param_tanggal' => '2025-01-15',
+                'unit' => '001'
+            ],
+            [
+                'name' => 'Kp User',
+                'email' => 'kp@ni',
+                'password' => Hash::make('123456'),
+                'role_id' => '4',
+                'param_tanggal' => '2025-01-15',
+                'unit' => '001'
             ]
         ]);
     }

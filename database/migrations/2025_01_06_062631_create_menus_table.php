@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('url')->nullable(); // URL menu/submenu
             $table->string('left')->nullable();
             $table->integer('order')->default(0); // Urutan menu
+            $table->integer('role_id')->default(1);
             $table->timestamps();
         });
     }
