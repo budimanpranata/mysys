@@ -24,8 +24,14 @@ class BukuBesarExport implements FromCollection, WithHeadings, WithEvents
     public function collection()
     {
         $saldo = $this->info['saldo_awal'];
-        return new Collection($this->transaksi->map(function ($row) use (&$saldo) {
-            $saldo = $saldo + $row->debet - $row->kredit;
+        $jenis = $this->info['normal'];
+        return new Collection($this->transaksi->map(function ($row) use (&$saldo,$jenis) {
+            if($jenis=='debet'){
+                $saldo = $saldo + $row->debet - $row->kredit ?? 0;
+            } else {
+                $saldo = $saldo - $row->debet + $row->kredit ?? 0;
+            }
+
             return [
                 $row->tanggal_transaksi,
                 $row->kode_transaksi,
