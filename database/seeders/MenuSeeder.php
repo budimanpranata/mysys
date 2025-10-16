@@ -580,5 +580,15 @@ class MenuSeeder extends Seeder
             'role_id' => 1,
         ]);
 
+        Menu::create([
+            'name' => 'Buku Besar',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $new_report->id,
+            'url' => '',
+            'left' => 'null',
+            'order' => 40,
+            'role_id' => 4,
+        ]);
+
     }
 }
