@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\GenericExport;
 use App\Exports\BukuBesarExport;
+use App\Exports\BukuBesarMultiSheetExport;
 
 class BukuBesarController extends Controller
 {
@@ -87,7 +88,10 @@ class BukuBesarController extends Controller
             'nama_rekening'=> $akun->nama_rekening ?? '-',
             'saldo_awal'    => $akun->saldo_awal ?? 0,
             'saldo_akhir'   => $akun->saldo_akhir ?? 0,
+            'normal'    => $akun->normal,
         ];
+
+
 
         // tentukan judul
         $title = "Laporan Buku Besar: {$no_perkiraan}";
@@ -100,7 +104,7 @@ class BukuBesarController extends Controller
         }
 
         return Excel::download(
-            new BukuBesarExport($transactions, $info, $title),
+            new BukuBesarMultiSheetExport($transactions, $info, $title),
             "buku_besar_{$no_perkiraan}.xlsx"
         );
     }
