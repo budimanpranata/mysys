@@ -30,46 +30,43 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
 
     public function collection()
     {
-        $query = DB::table('pembiayaan')
-            ->join('anggota', 'pembiayaan.no_anggota', '=', 'anggota.no')
-            ->join('ao', 'pembiayaan.cao', '=', 'ao.cao')
-            ->leftJoin('kelompok', 'pembiayaan.code_kel', '=', 'kelompok.code_kel')
-            ->leftJoin('tunggakan', 'pembiayaan.no_anggota', '=', 'tunggakan.norek')
-            ->where('pembiayaan.unit', Auth::user()->unit)
-            ->select([
-                DB::raw('MAX(pembiayaan.unit) as unit'),
-                'pembiayaan.no_anggota',
-                DB::raw('MAX(pembiayaan.nama) as nama'),
-                DB::raw('MAX(pembiayaan.code_kel) as code_kel'),
-                DB::raw('MAX(pembiayaan.tgl_murab) as tgl_murab'),
-                DB::raw('MAX(pembiayaan.tenor) as tenor'),
-                DB::raw('MAX(pembiayaan.maturity_date) as maturity_date'),
-                DB::raw('MAX(pembiayaan.plafond) as plafond'),
-                DB::raw('MAX(pembiayaan.os - pembiayaan.saldo_margin) as saldo_pinjaman'),
-                DB::raw('MAX(pembiayaan.os) as os'),
-                DB::raw('MAX(pembiayaan.saldo_margin) as saldo_margin'),
-                DB::raw('MAX(pembiayaan.ke) as ke'),
-                DB::raw("MAX(CASE WHEN tunggakan.type = '01' THEN COALESCE(tunggakan.debet, 0) - COALESCE(tunggakan.kredit, 0) ELSE 0 END) as tunggakan_pokok"),
-                DB::raw("MAX(CASE WHEN tunggakan.type = '02' THEN COALESCE(tunggakan.debet, 0) - COALESCE(tunggakan.kredit, 0) ELSE 0 END) as tunggakan_margin"),
-                DB::raw('MAX(pembiayaan.gol) as gol'),
-                DB::raw('MAX(pembiayaan.cao) as cao'),
-                DB::raw('MAX(ao.nama_ao) as nama_ao'),
-                DB::raw('MAX(kelompok.nama_kel) as nama_kelompok'),
-                DB::raw('MAX(pembiayaan.cif) as cif'),
-                DB::raw('MAX(anggota.alamat) as alamat'),
-                DB::raw('MAX(pembiayaan.nama_usaha) as nama_usaha'),
-                DB::raw('MAX(anggota.ktp) as ktp'),
-                DB::raw('MAX(pembiayaan.status_app) as status'),
-                DB::raw('MAX(ao.cao) as sumber_dana'),
-                DB::raw('MAX(pembiayaan.bulat - pembiayaan.angsuran) as twm'),
-                DB::raw('MAX((pembiayaan.bulat - pembiayaan.angsuran) * pembiayaan.run_tenor) as saldo_twm'),
-                
-            ])
-            ->groupBy('pembiayaan.no_anggota');
-
-        // Tambahkan filter berdasarkan status
         if ($this->status === 'current') {
-            $query->whereDate('pembiayaan.buss_date', Carbon::now()->format('Y-m-d'));
+            // Query untuk data current dari tabel pembiayaan
+            $query = DB::table('pembiayaan')
+                ->join('ao', 'pembiayaan.cao', '=', 'ao.cao')
+                ->leftJoin('kelompok', 'pembiayaan.code_kel', '=', 'kelompok.code_kel')
+                ->leftJoin('tunggakan', 'pembiayaan.no_anggota', '=', 'tunggakan.norek')
+                ->where('pembiayaan.unit', Auth::user()->unit)
+                ->whereDate('pembiayaan.buss_date', Carbon::now()->format('Y-m-d'))
+                ->where('pembiayaan.os', '>', 0)
+                ->select([
+                    DB::raw('MAX(pembiayaan.unit) as unit'),
+                    'pembiayaan.no_anggota',
+                    DB::raw('MAX(pembiayaan.nama) as nama'),
+                    DB::raw('MAX(pembiayaan.code_kel) as code_kel'),
+                    DB::raw('MAX(pembiayaan.tgl_murab) as tgl_murab'),
+                    DB::raw('MAX(pembiayaan.tenor) as tenor'),
+                    DB::raw('MAX(pembiayaan.maturity_date) as maturity_date'),
+                    DB::raw('MAX(pembiayaan.plafond) as plafond'),
+                    DB::raw('MAX(pembiayaan.os - pembiayaan.saldo_margin) as saldo_pinjaman'),
+                    DB::raw('MAX(pembiayaan.os) as os'),
+                    DB::raw('MAX(pembiayaan.saldo_margin) as saldo_margin'),
+                    DB::raw('MAX(pembiayaan.ke) as ke'),
+                    DB::raw("MAX(CASE WHEN tunggakan.type = '01' THEN COALESCE(tunggakan.debet, 0) - COALESCE(tunggakan.kredit, 0) ELSE 0 END) as tunggakan_pokok"),
+                    DB::raw("MAX(CASE WHEN tunggakan.type = '02' THEN COALESCE(tunggakan.debet, 0) - COALESCE(tunggakan.kredit, 0) ELSE 0 END) as tunggakan_margin"),
+                    DB::raw('MAX(pembiayaan.gol) as gol'),
+                    DB::raw('MAX(pembiayaan.cao) as cao'),
+                    DB::raw('MAX(ao.nama_ao) as nama_ao'),
+                    DB::raw('MAX(kelompok.nama_kel) as nama_kelompok'),
+                    DB::raw('MAX(pembiayaan.cif) as cif'),
+                    DB::raw('MAX(pembiayaan.nama_usaha) as nama_usaha'),
+                    DB::raw('MAX(pembiayaan.status_app) as status'),
+                    DB::raw('MAX(ao.cao) as sumber_dana'),
+                    DB::raw('MAX(pembiayaan.bulat - pembiayaan.angsuran) as twm'),
+                    DB::raw('MAX((pembiayaan.bulat - pembiayaan.angsuran) * pembiayaan.run_tenor) as saldo_twm'),
+                ])
+                ->groupBy('pembiayaan.no_anggota');
+                
         } elseif ($this->status === 'eom') {
             $bulanAngka = match(strtolower($this->bulan)) {
                 'januari' => '01',
@@ -86,12 +83,47 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
                 'desember' => '12',
                 default => null,
             };
+        
+            $query = DB::table('data_loan')
+                ->join('ao', 'data_loan.cao', '=', 'ao.cao')
+                ->leftJoin('kelompok', 'data_loan.code_kel', '=', 'kelompok.code_kel')
+                ->leftJoin('tunggakan', 'data_loan.no_anggota', '=', 'tunggakan.norek')
+                ->select([
+                    DB::raw('MAX(data_loan.unit) as unit'),
+                    DB::raw('MAX(data_loan.no_anggota) as no_rekenig'),
+                    DB::raw('MAX(data_loan.Cust_Short_name) as nama'),
+                    DB::raw('MAX(data_loan.code_kel) as code_kel'),
+                    DB::raw('MAX(data_loan.tgl_murab) as tgl_murab'),
+                    DB::raw('MAX(data_loan.tenor) as tenor'),
+                    DB::raw('MAX(data_loan.maturity_date) as maturity_date'),
+                    DB::raw('MAX(data_loan.plafond) as plafond'),
+                    DB::raw('MAX(data_loan.os - data_loan.saldo_margin) as saldo_pinjaman'),
+                    DB::raw('MAX(data_loan.os) as os'),
+                    DB::raw('MAX(data_loan.saldo_margin) as saldo_margin'),
+                    DB::raw('MAX(data_loan.ke) as ke'),
+                    DB::raw("MAX(CASE WHEN tunggakan.type = '01' THEN COALESCE(tunggakan.debet, 0) - COALESCE(tunggakan.kredit, 0) ELSE 0 END) as tunggakan_pokok"),
+                    DB::raw("MAX(CASE WHEN tunggakan.type = '02' THEN COALESCE(tunggakan.debet, 0) - COALESCE(tunggakan.kredit, 0) ELSE 0 END) as tunggakan_margin"),
+                    DB::raw('MAX(data_loan.gol) as gol'),
+                    DB::raw('MAX(data_loan.cao) as cao'),
+                    DB::raw('MAX(ao.nama_ao) as nama_ao'),
+                    DB::raw('MAX(kelompok.nama_kel) as nama_kelompok'),
+                    DB::raw('MAX(data_loan.cif) as cif'),
+                    DB::raw('MAX(data_loan.nama_usaha) as nama_usaha'),
+                    DB::raw('MAX(data_loan.status_app) as status'),
+                    DB::raw('MAX(ao.cao) as sumber_dana'),
+                    DB::raw('MAX(data_loan.bulat - data_loan.angsuran) as twm'),
+                    DB::raw('COALESCE(MAX(data_loan.bulat - data_loan.angsuran), 0) as twm'),
+                    DB::raw('MAX((data_loan.bulat - data_loan.angsuran) * data_loan.run_tenor) as saldo_twm'),
+                ])
+                ->where('data_loan.unit', Auth::user()->unit)
+                ->groupBy('data_loan.no_anggota');
 
-            $start = Carbon::createFromDate($this->tahun, $bulanAngka, 1)->startOfMonth();
-            $end = Carbon::createFromDate($this->tahun, $bulanAngka, 1)->endOfMonth();
-            $query->whereBetween('pembiayaan.buss_date', [$start, $end]);
+                $start = Carbon::createFromDate($this->tahun, $bulanAngka, 1)->startOfMonth();
+                $end = Carbon::createFromDate($this->tahun, $bulanAngka, 1)->endOfMonth();
+
+                $query->whereBetween('data_loan.buss_date', [$start, $end]);
         }
-
+        
         return $query->get();
     }
 
@@ -118,9 +150,7 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
             'NAMA AO',
             'NAMA KELOMPOK',
             'CIF',
-            'ALAMAT',
             'BIDANG USAHA',
-            'NO KTP',
             'STATUS',
             'SUMBER DANA',
             'TWM',
