@@ -56,7 +56,10 @@
                             <div class="col-sm-3">
                                 <select name="tahun" class="form-control" id="tahun">
                                     <option>-- Pilih Tahun --</option>
-                                    <option value="2025">2025</option>
+                                    {{-- <option value="2025">2025</option> --}}
+                                    @for ($y = date('Y'); $y >= 2012; $y--)
+                                <option value="{{ $y }}">{{ $y }}</option>
+                            @endfor
                                 </select>
                             </div>
                         </div>
@@ -94,55 +97,61 @@
 @endsection
 
 @push('scripts')
-    <script>
-    $(document).ready(function () {
-        $('#filterButton').on('click', function () {
-            let status = $('#status_nominative').val();
-            let bulan = $('#bulan').val();
-            let tahun = $('#tahun').val();
+<script>
+$(document).ready(function () {
+    $('#filterButton').on('click', function () {
+        let status = $('#status_nominative').val();
+        let bulan = $('#bulan').val();
+        let tahun = $('#tahun').val();
 
-            $.ajax({
-                url: "{{ route('nominativePembiayaan.getData') }}",
-                type: "POST",
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status_nominative: status,
-                    bulan: bulan,
-                    tahun: tahun
-                },
-                success: function (response) {
-                    let tbody = '';
-                    if (response.data.length > 0) {
-                        $.each(response.data, function (i, item) {
-                            tbody += `<tr>
-                                <td>${item.unit}</td>
-                                <td>${item.total_noa}</td>
-                                <td>${parseInt(item.total_saldo).toLocaleString('id-ID')}</td>
-                                <td>
-                                    
-                                    <form action="{{ route('nominativePembiayaan.export') }}" method="GET">
-                                        <input type="hidden" name="status_nominative" value="${status}">
-                                        <input type="hidden" name="bulan" value="${bulan}">
-                                        <input type="hidden" name="tahun" value="${tahun}">
-                                        <button type="submit" class="btn btn-sm btn-success">
-                                            <i class="fas fa-file-export"></i> 
-                                        Export</button>
-                                    </form>
+        let btn = $(this);
+        btn.prop('disabled', true);
+        let originalText = btn.html();
+        btn.html('<i class="fas fa-spinner fa-spin"></i> Memproses...');
 
-                                </td>
-
-                            </tr>`;
-                        });
-                    } else {
-                        tbody = `<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>`;
-                    }
-                    $('#data-table-body').html(tbody);
-                },
-                error: function () {
-                    alert('Terjadi kesalahan saat mengambil data!');
+        $.ajax({
+            url: "{{ route('nominativePembiayaan.getData') }}",
+            type: "POST",
+            data: {
+                _token: '{{ csrf_token() }}',
+                status_nominative: status,
+                bulan: bulan,
+                tahun: tahun
+            },
+            success: function (response) {
+                let tbody = '';
+                if (response.data.length > 0) {
+                    $.each(response.data, function (i, item) {
+                        tbody += `<tr>
+                            <td>${item.unit}</td>
+                            <td>${item.total_noa}</td>
+                            <td>${parseInt(item.total_saldo).toLocaleString('id-ID')}</td>
+                            <td>
+                                <form action="{{ route('nominativePembiayaan.export') }}" method="GET">
+                                    <input type="hidden" name="status_nominative" value="${status}">
+                                    <input type="hidden" name="bulan" value="${bulan}">
+                                    <input type="hidden" name="tahun" value="${tahun}">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="fas fa-file-export"></i> Export
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>`;
+                    });
+                } else {
+                    tbody = `<tr><td colspan="5" class="text-center">Tidak ada data</td></tr>`;
                 }
-            });
+                $('#data-table-body').html(tbody);
+            },
+            error: function () {
+                alert('Terjadi kesalahan saat mengambil data!');
+            },
+            complete: function () {
+                btn.prop('disabled', false);
+                btn.html(originalText);
+            }
         });
     });
+});
 </script>
 @endpush
