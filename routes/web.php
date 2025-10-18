@@ -55,6 +55,9 @@ use App\Http\Controllers\ReportMobcolController;
 use App\Http\Controllers\BukuBesarController;
 use App\Http\Controllers\KpController;
 use App\Http\Controllers\ReportPpapController;
+use App\Http\Controllers\BukuBesarKpController;
+use App\Http\Controllers\ListJurnalKpController;
+use App\Http\Controllers\ReportNominatifPembiayaanKpController;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -343,6 +346,22 @@ Route::group(['middleware' => ['auth', 'role:3']], function () {
 // untuk KP
 Route::group(['middleware' => ['auth', 'role:4']], function () {
     Route::get('/kp', [KpController::class, 'index']);
+
+Route::get('/buku-besar-kp', [BukuBesarKpController::class, 'index'])->name('buku-besar-kp.index');
+Route::post('/buku-besar-kp/proses', [BukuBesarKpController::class, 'proses'])->name('buku-besar-kp.proses');
+Route::get('/buku-besar-kp/suggest', [BukuBesarKpController::class, 'suggest'])->name('buku-besar-kp.suggest');
+Route::get('/buku-besar-kp/export/list', [BukuBesarKpController::class, 'list'])->name('buku-besar-kp.export.list');
+Route::get('/buku-besar-kp/download/{id}', [BukuBesarKpController::class, 'download'])->name('buku-besar-kp.download');
+
+Route::get('/list-jurnal-kp', [ListJurnalKpController::class, 'index']);
+Route::post('/list-jurnal-kp/get-transaksi', [ListJurnalKpController::class, 'getTransaksi'])->name('listJurnalKp.getTransaksi');
+Route::get('/list-jurnal-kp/export-excel', [ListJurnalKpController::class, 'export']);
+
+
+Route::get('/nominative-pembiayaan-kp', [ReportNominatifPembiayaanKpController::class, 'index']);
+Route::post('/nominative-pembiayaan-kp/get-data', [ReportNominatifPembiayaanKpController::class, 'getData'])->name('nominativePembiayaan-kp.getData');
+Route::get('/nominative-pembiayaan-kp/export', [ReportNominatifPembiayaanKpController::class, 'export'])->name('nominativePembiayaan-kp.export');
+
 
 });
 

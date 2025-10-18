@@ -11,18 +11,24 @@ class KpController extends Controller
 {
     public function index()
     {
-        $menus = Menu::where(function ($query) {
-            $query->whereNull('role_id')
-                ->orWhere('role_id', Auth::user()->role_id);
-        })
-        ->orderBy('order', 'asc')
-        ->get();
+    $roleId = auth()->user()->role_id;
+    $menus = Menu::whereNull('parent_id')
+    ->where(function ($query) use ($roleId) {
+        $query->where('role_id', $roleId)
+              ->orWhereNull('role_id');
+    })
+    ->with(['children' => function ($query) use ($roleId) {
+        $query->where('role_id', $roleId)
+              ->orWhereNull('role_id');
+    }])
+    ->orderBy('order')
+    ->get();
 
         $pembiayaan = DB::table('pembiayaan')
             ->selectRaw('SUM(os - saldo_margin) as os, COUNT(cif) as noa')
             ->first();
 
         return view('kp.index', compact('menus', 'pembiayaan'));
-    
+
     }
 }

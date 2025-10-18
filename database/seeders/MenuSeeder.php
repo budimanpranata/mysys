@@ -580,13 +580,43 @@ class MenuSeeder extends Seeder
             'role_id' => 1,
         ]);
 
+     $report_kp = Menu::create([
+           'name' => 'Report',
+           'icon' => 'nav-icon fa-file-alt', //
+           'parent_id' => null,
+           'url' => null,
+           'left' => 'right fas fa-angle-left',
+           'order' => 42,
+           'role_id' => 4,
+       ]);
+
         Menu::create([
             'name' => 'Buku Besar',
             'icon' => 'far fa-circle nav-icon',
-            'parent_id' => $new_report->id,
-            'url' => '',
+            'parent_id' => $report_kp->id,
+            'url' => '/buku-besar-kp',
             'left' => 'null',
-            'order' => 40,
+            'order' => 43,
+            'role_id' => 4,
+        ]);
+
+         Menu::create([
+            'name' => 'List Jurnal',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report_kp->id,
+            'url' => '/list-jurnal-kp',
+            'left' => 'null',
+            'order' => 44,
+            'role_id' => 4,
+        ]);
+
+         Menu::create([
+            'name' => 'Nominative Pembiayaan',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report_kp->id,
+            'url' => '/nominative-pembiayaan-kp',
+            'left' => 'null',
+            'order' => 45,
             'role_id' => 4,
         ]);
 
