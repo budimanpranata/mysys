@@ -31,8 +31,8 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
     public function collection()
     {
         if ($this->status === 'current') {
-            // Query untuk data current dari tabel pembiayaan
             $query = DB::table('pembiayaan')
+                ->leftJoin('anggota', 'data_loan.cif', '=', 'anggota.cif')
                 ->join('ao', 'pembiayaan.cao', '=', 'ao.cao')
                 ->leftJoin('kelompok', 'pembiayaan.code_kel', '=', 'kelompok.code_kel')
                 ->leftJoin('tunggakan', 'pembiayaan.no_anggota', '=', 'tunggakan.norek')
@@ -41,7 +41,7 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
                 ->where('pembiayaan.os', '>', 0)
                 ->select([
                     DB::raw('MAX(pembiayaan.unit) as unit'),
-                    'pembiayaan.no_anggota',
+                    DB::raw('MAX(data_loan.no_anggota) as no_rekening'),
                     DB::raw('MAX(pembiayaan.nama) as nama'),
                     DB::raw('MAX(pembiayaan.code_kel) as code_kel'),
                     DB::raw('MAX(pembiayaan.tgl_murab) as tgl_murab'),
@@ -59,9 +59,10 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
                     DB::raw('MAX(ao.nama_ao) as nama_ao'),
                     DB::raw('MAX(kelompok.nama_kel) as nama_kelompok'),
                     DB::raw('MAX(pembiayaan.cif) as cif'),
+                    DB::raw('MAX(anggota.haddress1) as alamat'),
                     DB::raw('MAX(pembiayaan.nama_usaha) as nama_usaha'),
+                    DB::raw('MAX(anggota.id_number) as no_ktp'),
                     DB::raw('MAX(pembiayaan.status_app) as status'),
-                    DB::raw('MAX(ao.cao) as sumber_dana'),
                     DB::raw('MAX(pembiayaan.bulat - pembiayaan.angsuran) as twm'),
                     DB::raw('MAX((pembiayaan.bulat - pembiayaan.angsuran) * pembiayaan.run_tenor) as saldo_twm'),
                 ])
@@ -83,14 +84,19 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
                 'desember' => '12',
                 default => null,
             };
-        
+
+            if (!$bulanAngka) {
+                throw new \Exception('Bulan tidak valid');
+            }
+
             $query = DB::table('data_loan')
-                ->join('ao', 'data_loan.cao', '=', 'ao.cao')
+                ->leftJoin('anggota', 'data_loan.cif', '=', 'anggota.cif')
+                ->leftJoin('ao', 'data_loan.cao', '=', 'ao.cao')
                 ->leftJoin('kelompok', 'data_loan.code_kel', '=', 'kelompok.code_kel')
                 ->leftJoin('tunggakan', 'data_loan.no_anggota', '=', 'tunggakan.norek')
                 ->select([
                     DB::raw('MAX(data_loan.unit) as unit'),
-                    DB::raw('MAX(data_loan.no_anggota) as no_rekenig'),
+                    DB::raw('MAX(data_loan.no_anggota) as no_rekening'),
                     DB::raw('MAX(data_loan.Cust_Short_name) as nama'),
                     DB::raw('MAX(data_loan.code_kel) as code_kel'),
                     DB::raw('MAX(data_loan.tgl_murab) as tgl_murab'),
@@ -108,21 +114,20 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
                     DB::raw('MAX(ao.nama_ao) as nama_ao'),
                     DB::raw('MAX(kelompok.nama_kel) as nama_kelompok'),
                     DB::raw('MAX(data_loan.cif) as cif'),
+                    DB::raw('MAX(anggota.haddress1) as alamat'),
                     DB::raw('MAX(data_loan.nama_usaha) as nama_usaha'),
+                    DB::raw("CONCAT('\'', MAX(anggota.id_number), '\'') as no_ktp"),
                     DB::raw('MAX(data_loan.status_app) as status'),
-                    DB::raw('MAX(ao.cao) as sumber_dana'),
-                    DB::raw('MAX(data_loan.bulat - data_loan.angsuran) as twm'),
                     DB::raw('COALESCE(MAX(data_loan.bulat - data_loan.angsuran), 0) as twm'),
                     DB::raw('MAX((data_loan.bulat - data_loan.angsuran) * data_loan.run_tenor) as saldo_twm'),
                 ])
                 ->where('data_loan.unit', Auth::user()->unit)
-                ->groupBy('data_loan.no_anggota');
-
-                $start = Carbon::createFromDate($this->tahun, $bulanAngka, 1)->startOfMonth();
-                $end = Carbon::createFromDate($this->tahun, $bulanAngka, 1)->endOfMonth();
-
-                $query->whereBetween('data_loan.buss_date', [$start, $end]);
+                ->whereYear('data_loan.buss_date', $this->tahun)
+                ->whereMonth('data_loan.buss_date', $bulanAngka)
+                ->groupBy('data_loan.buss_date', 'data_loan.no_anggota')
+                ->orderBy('data_loan.buss_date', 'asc');
         }
+
         
         return $query->get();
     }
@@ -150,9 +155,10 @@ class PembiayaanExport implements FromCollection, WithTitle, WithHeadings, WithS
             'NAMA AO',
             'NAMA KELOMPOK',
             'CIF',
+            'ALAMAT',
             'BIDANG USAHA',
+            'NO KTP',
             'STATUS',
-            'SUMBER DANA',
             'TWM',
             'SALDO TWM',
             'SISA TWM'

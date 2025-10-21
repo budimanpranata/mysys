@@ -24,8 +24,8 @@ class ReportNominativePembiayaanController extends Controller
     public function getData(Request $request)
     {
         $status = $request->input('status_nominative');
-        $bulan = $request->input('bulan');
-        $tahun = $request->input('tahun');
+        $get_bulan = $request->input('bulan');
+        $get_tahun = $request->input('tahun');
 
         $table = $status === 'eom' ? 'data_loan' : 'pembiayaan';
 
@@ -43,7 +43,7 @@ class ReportNominativePembiayaanController extends Controller
             $query->whereDate('buss_date', $today)
                 ->where('os', '>', 0);
         } elseif ($status === 'eom') {
-            $bulanAngka = match(strtolower($bulan)) {
+            $bulan = match(strtolower($get_bulan)) {
                 'januari' => '01',
                 'februari' => '02',
                 'maret' => '03',
@@ -59,19 +59,18 @@ class ReportNominativePembiayaanController extends Controller
                 default => null,
             };
 
-            if (!$bulanAngka) {
+            if (!$bulan) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Bulan tidak valid'
                 ], 400);
             }
 
-            $startDate = Carbon::createFromDate($tahun, $bulanAngka, 1)->startOfMonth()->format('Y-m-d');
-            $endDate = Carbon::createFromDate($tahun, $bulanAngka, 1)->endOfMonth()->format('Y-m-d');
-
-            $query->whereBetween('buss_date', [$startDate, $endDate]);
-
+            $query->whereYear('buss_date', $get_tahun)
+                ->whereMonth('buss_date', $bulan)
+                ->groupBy('buss_date', 'unit');
         }
+
 
         $data = $query->get();
         
@@ -90,10 +89,15 @@ class ReportNominativePembiayaanController extends Controller
 
     public function export(Request $request)
     {
+        $unit = Auth::user()->unit;
         $status = $request->input('status_nominative');
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
 
-        return Excel::download(new PembiayaanExport($status, $bulan, $tahun), 'pembiayaan.xlsx');
+        return Excel::download(
+            new PembiayaanExport($status, $bulan, $tahun, $unit),
+            "nominative_pembiayaan_{$unit}_{$bulan}_{$tahun}.xlsx"
+        );
+
     }
 }
