@@ -89,10 +89,15 @@ class ReportNominativePembiayaanController extends Controller
 
     public function export(Request $request)
     {
+        $unit = Auth::user()->unit;
         $status = $request->input('status_nominative');
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun');
 
-        return Excel::download(new PembiayaanExport($status, $bulan, $tahun), 'pembiayaan.xlsx');
+        return Excel::download(
+            new PembiayaanExport($status, $bulan, $tahun, $unit),
+            "nominative_pembiayaan_{$unit}_{$bulan}_{$tahun}.xlsx"
+        );
+
     }
 }
