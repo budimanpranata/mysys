@@ -620,5 +620,25 @@ class MenuSeeder extends Seeder
             'role_id' => 4,
         ]);
 
+        $approval_al = Menu::create([
+           'name' => 'Approval',
+           'icon' => 'nav-icon fa-file-alt', //
+           'parent_id' => null,
+           'url' => null,
+           'left' => 'right fas fa-angle-left',
+           'order' => 42,
+           'role_id' => 2,
+       ]);
+
+        Menu::create([
+            'name' => 'Pengajuan',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $approval_al->id,
+            'url' => '/al/approval-pengajuan',
+            'left' => 'null',
+            'order' => 45,
+            'role_id' => 2,
+        ]);
+
     }
 }

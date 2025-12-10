@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AhController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\ApprovalPengajuanController;
 use App\Http\Controllers\CetakAdendumController;
 use App\Http\Controllers\CetakKartuAngsuranController;
 use App\Http\Controllers\CetakMurabahahController;
@@ -322,18 +323,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/ppap/export/excel', [ReportPpapController::class, 'exportExcel'])->name('report.ppap.export.excel');
 
 
-
-
-
-
-
-
-
 });
 
 // untuk Al
 Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al', [AlController::class, 'index']);
+
+    Route::get('/al/approval-pengajuan', [ApprovalPengajuanController::class, 'index']);
 
 });
 

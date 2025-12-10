@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class AlController extends Controller
+class ApprovalPengajuanController extends Controller
 {
+    public function indexs()
+    {
+        $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
+        $title = 'Approval Pengajuan';
+
+        return view('al.approval_pengajuan.index', compact('menus', 'title'));
+    }
+
     public function index()
     {
     $roleId = auth()->user()->role_id;
@@ -23,11 +30,10 @@ class AlController extends Controller
     ->orderBy('order')
     ->get();
 
-        $pembiayaan = DB::table('pembiayaan')
-            ->selectRaw('SUM(os - saldo_margin) as os, COUNT(cif) as noa')
-            ->first();
+    $title = 'Approval Pengajuan';
 
-        return view('kp.index', compact('menus', 'pembiayaan'));
 
+    return view('al.approval_pengajuan.index', compact('menus', 'title'));
+    
     }
 }
