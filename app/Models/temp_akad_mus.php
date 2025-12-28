@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class temp_akad_mus extends Model
 
 {
-    protected $table = 'temp_akad_mus';
     use HasFactory;
+    protected $table = 'temp_akad_mus';
+    protected $primaryKey = 'no_anggota';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
     public function anggota()
     {
