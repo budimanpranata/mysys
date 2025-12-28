@@ -352,28 +352,58 @@ class ApprovalPengajuanController extends Controller
     public function prosesTurunPlafond(Request $request)
     {
         $request->validate([
-            'cif' => 'required',
+            'cif'        => 'required',
             'harga_baru' => 'required|numeric|min:1'
         ]);
 
-        $data = DB::table('temp_akad_mus')
+        // Ambil akad
+        $akad = DB::table('temp_akad_mus')
             ->where('cif', $request->cif)
             ->first();
 
-        if (!$data) {
+        if (!$akad) {
             return response()->json([
                 'status' => false,
-                'message' => 'Data tidak ditemukan'
+                'message' => 'Data akad tidak ditemukan'
             ], 404);
         }
 
+        $plafond = (int) $request->harga_baru;
+        $tenor   = $akad->tenor;
+
+        $param = DB::table('param_biaya')
+            ->where('pla', $plafond)
+            ->where('jw', $tenor)
+            ->first();
+
+        if (!$param) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Parameter biaya tidak ditemukan'
+            ], 404);
+        }
+
+        $nilaiMargin = $plafond * ($param->margin / 100);
+        $pokok  = round($plafond / $param->jw);
+        $os     = $plafond + $nilaiMargin;
+        $ijaroh = round($nilaiMargin / $param->jw);
+        $angsuran = $pokok + $ijaroh;
+        $bulat = $angsuran + $param->tab;
+
+        // Update akad
         DB::table('temp_akad_mus')
             ->where('cif', $request->cif)
             ->update([
-                // 'plafond_lama' => $data->plafond, // simpan histori (opsional)
-                'plafond'      => $request->harga_baru,
-                'status_app'   => 'PENDING',
-                'updated_at'   => now()
+                'bagi_hasil' => $nilaiMargin,
+                'plafond' => $plafond,
+                'saldo_margin' => $nilaiMargin,
+                'pokok' => $pokok,
+                'os' => $os,
+                'angsuran' => $angsuran,
+                'ijaroh' => $ijaroh,
+                'bulat' => $bulat,
+                'status_app' => 'PENDING',
+                'updated_at' => now()
             ]);
 
         return response()->json([
@@ -381,6 +411,7 @@ class ApprovalPengajuanController extends Controller
             'message' => 'Turun plafond berhasil diproses'
         ]);
     }
+
 
 
 }
