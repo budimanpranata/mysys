@@ -262,12 +262,22 @@
                 <div class="col-sm-7">
                   <select name="jenis_pembiayaan" id="jenis_pembiayaan" class="form-control" required>
                     <option hidden value="">-- Pilih Jenis Pembiayaan --</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
+                    <option value=1>Murabahah</option>
+                    <option value=2>Musyarakah</option>
                   </select>
                   <span class="help-block with-errors text-danger"></span>
                 </div>
               </div>
+
+              <div class="form-group row" id="form-omzet" style="display:none;">
+                  <span class="col-sm-4 col-form-label">
+                      Omzet <span class="text-danger">*</span>
+                  </span>
+                  <div class="col-sm-7">
+                      <input type="number" name="omzet" class="form-control" placeholder="Masukkan omzet">
+                  </div>
+              </div>
+
 
               <div class="form-group row">
                 <span class="col-sm-4 col-form-label">No. Rekening <span class="text-danger">*</span></span>

@@ -218,6 +218,20 @@
       }
     });
   }
+
+  $(document).ready(function () {
+      $('#jenis_pembiayaan').on('change', function () {
+          let jenis = $(this).val();
+
+          if (jenis == '2') { // Musyarakah
+              $('#form-omzet').slideDown();
+          } else {
+              $('#form-omzet').slideUp();
+              $('input[name="omzet"]').val(''); // reset nilai omzet
+          }
+      });
+  });
+
 </script>
 @endpush
 @endsection
