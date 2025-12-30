@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AhController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\ApprovalPengajuanController;
 use App\Http\Controllers\CetakAdendumController;
 use App\Http\Controllers\CetakKartuAngsuranController;
 use App\Http\Controllers\CetakMurabahahController;
@@ -58,6 +59,7 @@ use App\Http\Controllers\ReportPpapController;
 use App\Http\Controllers\BukuBesarKpController;
 use App\Http\Controllers\ListJurnalKpController;
 use App\Http\Controllers\ReportNominatifPembiayaanKpController;
+use Illuminate\Support\Facades\App;
 
 //  jika user belum login
 Route::group(['middleware' => 'guest'], function () {
@@ -257,20 +259,13 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
 
 
-
-
-
     Route::get('/report/mutasi-kas', [MutasiKasController::class, 'index']);
     Route::post('/report/mutasi-kas/get-transaksi', [MutasiKasController::class, 'getTransaksi'])->name('mutasiKas.getTransaksi');
 
 
 
 
-
-
-
-
-        Route::get('/report/nominative-pembiayaan', [ReportNominativePembiayaanController::class, 'index']);
+    Route::get('/report/nominative-pembiayaan', [ReportNominativePembiayaanController::class, 'index']);
     Route::post('/report/nominative-pembiayaan/get-data', [ReportNominativePembiayaanController::class, 'getData'])->name('nominativePembiayaan.getData');
     Route::get('/report/nominative-pembiayaan/export', [ReportNominativePembiayaanController::class, 'export'])->name('nominativePembiayaan.export');
 
@@ -278,8 +273,6 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/ekuitas', [ReportEkuitasController::class, 'index']);
     Route::get('/report/ekuitas/export', [ReportEkuitasController::class, 'exportExcel'])->name('report.ekuitas.export');
     Route::post('/report/ekuitas', [ReportEkuitasController::class, 'getData'])->name('report.ekuitas');
-
-
 
 
 
@@ -322,18 +315,34 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/ppap/export/excel', [ReportPpapController::class, 'exportExcel'])->name('report.ppap.export.excel');
 
 
-
-
-
-
-
-
-
 });
 
 // untuk Al
 Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al', [AlController::class, 'index']);
+
+    Route::get('/al/approval-pengajuan', [ApprovalPengajuanController::class, 'index']);
+    Route::get('/al/approve/get_pengajuan', [ApprovalPengajuanController::class, 'get_pengajuan'])->name('approve.get_pengajuan');
+    Route::get('/al/approval-pengajuan/detail/{no_anggota}', [ApprovalPengajuanController::class, 'get_pengajuan_detail']);
+    Route::post('/al/approval-pengajuan/cari-ktp', [ApprovalPengajuanController::class, 'getKtp']);
+
+    Route::put('/al/approval-pengajuan/update/{no_anggota}', [ApprovalPengajuanController::class, 'update_pengajuan']);
+    Route::post('/al/approval-pengajuan/approve/{no_anggota}', [ApprovalPengajuanController::class, 'approvePengajuan']);
+    Route::post('/al/approval-pengajuan/approve-checkbox', [ApprovalPengajuanController::class, 'approveCheckbox']);
+    Route::post('/al/approval-pengajuan/batal-checkbox', [ApprovalPengajuanController::class, 'batalCheckbox']);
+
+    Route::get('/al/approval-pengajuan/ajukan-kembali', [ApprovalPengajuanController::class, 'ajukanKembali']);
+
+    Route::get('/ajax/cif-batal', [ApprovalPengajuanController::class, 'getCifBatal'])->name('ajax.cif.batal');
+    Route::post('/al/approval-pengajuan/ajukan-kembali/proses', [ApprovalPengajuanController::class, 'prosesAjukanKembali'])->name('ajukan.kembali.proses');
+
+    Route::get('/al/approval-pengajuan/hapus', [ApprovalPengajuanController::class, 'hapusPengajuan']);
+    Route::get('/ajax/cif-hapus', [ApprovalPengajuanController::class, 'getCifHapus'])->name('ajax.cif.hapus');
+    Route::post('/al/approval-pengajuan/hapus/proses', [ApprovalPengajuanController::class, 'prosesHapusPengajuan'])->name('hapus.proses');
+
+    Route::get('/al/approval-pengajuan/turun-plafond', [ApprovalPengajuanController::class, 'turunPlafond']);
+    Route::get('/ajax/cif-turun-plafond', [ApprovalPengajuanController::class, 'getCifTurunPlafond'])->name('ajax.turun_plafond');
+    Route::post('/al/approval-pengajuan/turun-plafond/proses', [ApprovalPengajuanController::class, 'prosesTurunPlafond'])->name('turun.plafond.proses');
 
 });
 
