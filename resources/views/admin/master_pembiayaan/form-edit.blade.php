@@ -73,10 +73,6 @@
                 </div>
               </div>
 
-              <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT SESUAI KTP</label>
-              </div>
-
               <div class="form-group row">
                 <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                 <div class="col-sm-7">
@@ -120,18 +116,7 @@
                 </div>
               </div>
 
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="sameAddress" onclick="toggleAlamatDomisili()">
-                <label class="form-check-label" for="sameAddress">
-                  ALAMAT DOMISILI SAMA DENGAN ALAMAT SESUAI
-                </label>
-              </div>
-
               <fieldset id="alamatDomisili">
-                <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                  <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT DOMISILI</label>
-                </div>
-
                 <div class="form-group row">
                   <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                   <div class="col-sm-7">
@@ -274,9 +259,15 @@
                       Omzet <span class="text-danger">*</span>
                   </span>
                   <div class="col-sm-7">
-                      <input type="number" name="omzet" class="form-control" placeholder="Masukkan omzet">
+                      <input type="number"
+                            name="omzet"
+                            id="omzet"
+                            class="form-control"
+                            value="{{ $omzetMusyarakah ?? '' }}"
+                            placeholder="Masukkan omzet">
                   </div>
               </div>
+
 
 
               <div class="form-group row">
