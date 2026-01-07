@@ -73,10 +73,6 @@
                 </div>
               </div>
 
-              <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT SESUAI KTP</label>
-              </div>
-
               <div class="form-group row">
                 <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                 <div class="col-sm-7">
@@ -120,18 +116,7 @@
                 </div>
               </div>
 
-              <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" id="sameAddress" onclick="toggleAlamatDomisili()">
-                <label class="form-check-label" for="sameAddress">
-                  ALAMAT DOMISILI SAMA DENGAN ALAMAT SESUAI
-                </label>
-              </div>
-
               <fieldset id="alamatDomisili">
-                <div class="form-group row text-center" style="border-bottom: 2px solid black; width: 93%;">
-                  <label class="col-sm-4 col-form-label mx-auto">ISI ALAMAT DOMISILI</label>
-                </div>
-
                 <div class="form-group row">
                   <span class="col-sm-4 col-form-label">Alamat <span class="text-danger">*</span></span>
                   <div class="col-sm-7">
@@ -262,12 +247,28 @@
                 <div class="col-sm-7">
                   <select name="jenis_pembiayaan" id="jenis_pembiayaan" class="form-control" required>
                     <option hidden value="">-- Pilih Jenis Pembiayaan --</option>
-                    <option value=1>1</option>
-                    <option value=2>2</option>
+                    <option value=1>Murabahah</option>
+                    <option value=2>Musyarakah</option>
                   </select>
                   <span class="help-block with-errors text-danger"></span>
                 </div>
               </div>
+
+              <div class="form-group row" id="form-omzet" style="display:none;">
+                  <span class="col-sm-4 col-form-label">
+                      Omzet <span class="text-danger">*</span>
+                  </span>
+                  <div class="col-sm-7">
+                      <input type="number"
+                            name="omzet"
+                            id="omzet"
+                            class="form-control"
+                            value="{{ $omzetMusyarakah ?? '' }}"
+                            placeholder="Masukkan omzet">
+                  </div>
+              </div>
+
+
 
               <div class="form-group row">
                 <span class="col-sm-4 col-form-label">No. Rekening <span class="text-danger">*</span></span>
