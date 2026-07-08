@@ -27,7 +27,7 @@ class ReportNeracaController extends Controller
         return Excel::download(new NeracaExport($data), 'Neraca_' . $unit . '.xlsx');
     }
 
-    private function buildData(string $unit): array
+    protected function buildData(string $unit): array
     {
         $aktiva = DB::table('tabel_master')
             ->where('unit', $unit)
