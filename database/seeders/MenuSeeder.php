@@ -519,6 +519,16 @@ class MenuSeeder extends Seeder
             'role_id' => 1,
         ]);
 
+        Menu::create([
+            'name' => 'Neraca',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/neraca',
+            'left' => 'null',
+            'order' => 45,
+            'role_id' => 1,
+        ]);
+
 
         $mobcoll = Menu::create([
             'name' => 'Mobcoll',
