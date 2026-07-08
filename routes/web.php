@@ -45,6 +45,7 @@ use App\Http\Controllers\PemindahbukuanPerkelompokController;
 use App\Http\Controllers\ReportEkuitasController;
 use App\Http\Controllers\ReportArusKasController;
 use App\Http\Controllers\ReportNeracaController;
+use App\Http\Controllers\ReportNeracaKpController;
 use App\Http\Controllers\ReportNominativeSimpananController;
 use App\Http\Controllers\ReportNominativePembiayaanController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
@@ -380,6 +381,9 @@ Route::get('/list-jurnal-kp/export-excel', [ListJurnalKpController::class, 'expo
 Route::get('/nominative-pembiayaan-kp', [ReportNominatifPembiayaanKpController::class, 'index']);
 Route::post('/nominative-pembiayaan-kp/get-data', [ReportNominatifPembiayaanKpController::class, 'getData'])->name('nominativePembiayaan-kp.getData');
 Route::get('/nominative-pembiayaan-kp/export', [ReportNominatifPembiayaanKpController::class, 'export'])->name('nominativePembiayaan-kp.export');
+
+Route::get('/report/neraca-kp', [ReportNeracaKpController::class, 'index'])->name('report.neraca-kp.index');
+Route::get('/report/neraca-kp/export', [ReportNeracaKpController::class, 'exportExcel'])->name('report.neraca-kp.export');
 
 
 });

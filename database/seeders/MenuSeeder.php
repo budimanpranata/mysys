@@ -640,6 +640,16 @@ class MenuSeeder extends Seeder
             'role_id' => 4,
         ]);
 
+        Menu::create([
+            'name' => 'Neraca',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report_kp->id,
+            'url' => '/report/neraca-kp',
+            'left' => 'null',
+            'order' => 46,
+            'role_id' => 4,
+        ]);
+
         $approval_al = Menu::create([
            'name' => 'Approval',
            'icon' => 'nav-icon fa-file-alt', //
