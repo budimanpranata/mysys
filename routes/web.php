@@ -43,6 +43,7 @@ use App\Http\Controllers\PelunasanKelompokController;
 use App\Http\Controllers\PelunasanController;
 use App\Http\Controllers\PemindahbukuanPerkelompokController;
 use App\Http\Controllers\ReportEkuitasController;
+use App\Http\Controllers\ReportArusKasController;
 use App\Http\Controllers\ReportNominativeSimpananController;
 use App\Http\Controllers\ReportNominativePembiayaanController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
@@ -279,6 +280,10 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/report/nominative-simpanan', [ReportNominativeSimpananController::class, 'index']);
     Route::post('/report/nominative-simpanan/get-data', [ReportNominativeSimpananController::class, 'getData'])->name('nominativeSimpanan.getData');
     Route::get('/report/nominative-simpanan/export', [ReportNominativeSimpananController::class, 'export'])->name('nominativeSimpanan.export');
+
+
+    Route::get('/report/arus-kas', [ReportArusKasController::class, 'index'])->name('report.arus-kas.index');
+    Route::post('/report/arus-kas/generate', [ReportArusKasController::class, 'generate'])->name('report.arus-kas.generate');
 
 
     Route::get('/pull-data', [PullDataController::class, 'index']);

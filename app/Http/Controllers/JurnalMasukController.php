@@ -64,7 +64,6 @@ class JurnalMasukController extends Controller
                     'tanggal_posting' => $item['tanggal_transaksi'],
                     'keterangan_posting' => 'Post',
                     'id_admin' => Auth::user()->id,
-                    'arus_kas' => Auth::user()->unit,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);
@@ -81,7 +80,6 @@ class JurnalMasukController extends Controller
                     'tanggal_posting' => $item['tanggal_transaksi'],
                     'keterangan_posting' => 'Post',
                     'id_admin' => Auth::user()->id,
-                    'arus_kas' => Auth::user()->unit,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]);

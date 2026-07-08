@@ -509,6 +509,16 @@ class MenuSeeder extends Seeder
             'role_id' => 1,
         ]);
 
+        Menu::create([
+            'name' => 'Arus Kas',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $report->id,
+            'url' => '/report/arus-kas',
+            'left' => 'null',
+            'order' => 44,
+            'role_id' => 1,
+        ]);
+
 
         $mobcoll = Menu::create([
             'name' => 'Mobcoll',
