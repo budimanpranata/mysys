@@ -218,6 +218,25 @@
       }
     });
   }
+
+  $('#jenis_pembiayaan').on('change', function () {
+      let jenis = $(this).val();
+
+      if (jenis == 2) {
+          $('#form-omzet').show();
+      } else {
+          $('#form-omzet').hide();
+          $('#omzet').val('');
+      }
+  });
+
+  // trigger saat halaman edit dibuka
+  $(document).ready(function () {
+      if ($('#jenis_pembiayaan').val() == 2) {
+          $('#form-omzet').show();
+      }
+  });
+
 </script>
 @endpush
 @endsection

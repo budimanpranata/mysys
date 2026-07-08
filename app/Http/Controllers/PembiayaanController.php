@@ -63,7 +63,7 @@ class PembiayaanController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Data Error: ' . $e->getMessage());
+            Log::error('Data Error: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong!'
@@ -74,7 +74,10 @@ class PembiayaanController extends Controller
     public function edit($cif)
     {
         $title = 'Edit Pembiayaan';
-        $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
+        $menus = Menu::whereNull('parent_id')
+            ->with('children')
+            ->orderBy('order')
+            ->get();
 
         $pembiayaan = DB::table('anggota')
             ->leftJoin('kelompok', 'anggota.kode_kel', '=', 'kelompok.code_kel')
@@ -83,7 +86,7 @@ class PembiayaanController extends Controller
             ->where('anggota.cif', $cif)
             ->select(
                 'kelompok.nama_kel as nama_kelompok',
-                'anggota.kode_kel as kode_kel',
+                'anggota.kode_kel',
                 'anggota.no as no_anggota',
                 'anggota.unit as unit_anggota',
                 'anggota.cif as anggota_cif',
@@ -113,201 +116,254 @@ class PembiayaanController extends Controller
                 'anggota_details.kecamatan_domisili as kecamatan_domisili',
                 'anggota_details.kota_domisili as kota_domisili',
                 'anggota_details.kode_pos_domisili as kode_pos_domisili',
-                'pembiayaan.suffix as suffix',
                 'pembiayaan.plafond',
                 'pembiayaan.os',
                 'pembiayaan.tenor',
-                'pembiayaan.no_anggota',
-                'pembiayaan.suffix'
+                'pembiayaan.suffix',
+                'pembiayaan.deal_produk'
             )
             ->first();
 
         if (!$pembiayaan) {
-            return redirect()->route('pembiayaan.index')
+            return redirect()
+                ->route('pembiayaan.index')
                 ->with('error', 'Data pembiayaan tidak ditemukan');
         }
 
-        return view('admin.master_pembiayaan.edit', compact('title', 'menus', 'pembiayaan'));
+        // ============================
+        // LOGIC PEMBIAYAAN LANJUTAN
+        // ============================
+        $omzetMusyarakah = null;
+
+        if ($pembiayaan->os > 0) {
+            // ambil omzet TERKECIL berdasarkan CIF
+            $omzetMusyarakah = DB::table('omzet')
+                ->where('cif', $cif)
+                ->min('nominal');
+        }
+
+        return view('admin.master_pembiayaan.edit', compact('title', 'menus', 'pembiayaan', 'omzetMusyarakah'));
     }
+
 
     public function addPembiayaan(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'unit' => 'required|string',
-                'jenis_pembiayaan' => 'required|integer', // tipe produk
-                'no_rek' => 'required|string',
-                'cif' => 'required|string',
-                'pengajuan' => 'required|integer',
-                'tenor' => 'required|integer',
-                'disetujui' => 'required|integer',
-                'tgl_wakalah' => 'required|date',
-                'tgl_akad' => 'required|date',
-                'bidang_usaha' => 'required|string',
-                'keterangan_usaha' => 'required|string',
-                'id' => 'required|string',
-                'param_tanggal' => 'required|date',
-                'cao' => 'required|string',
-                'kode_kel' => 'required|string',
-                'nama' => 'required|string',
-                'tgl_lahir' => 'required|date',
-                'suffix' => 'required|string'
-            ]);
+        $validated = $request->validate([
+            'unit' => 'required|string',
+            'jenis_pembiayaan' => 'required|integer',
+            'no_rek' => 'required|string',
+            'cif' => 'required|string',
+            'pengajuan' => 'required|integer',
+            'tenor' => 'required|integer',
+            'disetujui' => 'required|integer',
+            'tgl_wakalah' => 'required|date',
+            'tgl_akad' => 'required|date',
+            'bidang_usaha' => 'required|string',
+            'keterangan_usaha' => 'required|string',
+            'id' => 'required|integer',
+            'param_tanggal' => 'required|date',
+            'cao' => 'required|string',
+            'kode_kel' => 'required|string',
+            'nama' => 'required|string',
+            'tgl_lahir' => 'required|date',
+            'omzet' => 'nullable|numeric|min:1'
+        ]);
 
-            $validated['suffix'] = (int) $validated['suffix'] + 1;
-            $validated['suffix'] = (string) $validated['suffix'];
+        try {
+
+            // hitung suffix
+            $lastSuffix = DB::table('temp_akad_mus')
+                ->where('cif', $validated['cif'])
+                ->max('suffix');
+
+            $suffix = $lastSuffix ? ((int)$lastSuffix + 1) : 1;
 
             $existingRecord = DB::table('temp_akad_mus')
-                ->where(function ($query) use ($validated) {
-                    $query->where('cif', $validated['cif'])
-                        ->orWhere('no_anggota', $validated['no_rek']);
+                ->where(function ($q) use ($validated) {
+                    $q->where('cif', $validated['cif'])
+                    ->orWhere('no_anggota', $validated['no_rek']);
                 })
                 ->select('unit')
                 ->first();
 
             if ($existingRecord) {
-                // Check if the existing record has a different unit
-                if ($existingRecord->unit !== $validated['unit']) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'NIK / CIF already used in another unit'
-                    ], 400);
-                } else {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Record already exist'
-                    ], 400);
-                }
-            }
-
-            $paramRecord = DB::table('param_biaya')
-                ->where('pla', $validated['disetujui'])
-                ->where('jw', $validated['tenor'])
-                ->select('pla', 'margin', 'tab')
-                ->first();
-
-            if (!$paramRecord) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'The approved amount does not match any allowed values in our system.'
+                    'message' => $existingRecord->unit !== $validated['unit']
+                        ? 'NIK / CIF already used in another unit'
+                        : 'Record already exist'
                 ], 400);
             }
 
-            $persenMargin = $paramRecord->margin / 100;
-            $saldoMargin = $paramRecord->pla * $persenMargin;
-            $outStanding = $paramRecord->pla + $saldoMargin;
-            $pokokAmount = $paramRecord->pla / $validated['tenor'];
+            $param = DB::table('param_biaya')
+                ->where('pla', (int) $validated['disetujui'])
+                ->where('jw', (int) $validated['tenor'])
+                ->first();
+
+            if (!$param) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Approved amount & tenor not found in param biaya'
+                ], 400);
+            }
+
+            $persenMargin = $param->margin / 100;
+            $saldoMargin = $param->pla * $persenMargin;
+            $outStanding = $param->pla + $saldoMargin;
+            $pokok = $param->pla / $validated['tenor'];
             $ijaroh = $saldoMargin / $validated['tenor'];
-            $angsuran = $ijaroh + $pokokAmount;
-            $bulatAmount = $paramRecord->tab + $angsuran;
+            $angsuran = $pokok + $ijaroh;
+            $bulat = $param->tab + $angsuran;
+
+            // ================================
+            // JIKA AKAD MUSYARAKAH
+            // ================================
+            if ((int) $validated['jenis_pembiayaan'] === 2) {
+
+                if (empty($validated['omzet'])) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Omzet wajib diisi untuk pembiayaan Musyarakah'
+                    ], 400);
+                }
+
+                $omzet = (float) $validated['omzet'];
+
+                if ($omzet <= 0) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Omzet tidak valid'
+                    ], 400);
+                }
+
+                // cek pembiayaan lanjutan
+                $isPembiayaanLanjutan = DB::table('pembiayaan')
+                    ->where('cif', $validated['cif'])
+                    ->where('os', '>', 0)
+                    ->exists();
+
+                $basisOmzet = $isPembiayaanLanjutan ? $omzet : ($omzet / 2);
+
+                if ($basisOmzet <= 0) {
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'Basis omzet tidak valid'
+                    ], 400);
+                }
+
+                // hitung persen margin musyarokah
+                $persenMarginMusyarokah = round(($ijaroh / $basisOmzet) * 100, 2);
+
+                // simpan data omzet
+                if (!$isPembiayaanLanjutan) {
+                    DB::table('omzet')->insert([
+                        'tanggal' => now()->toDateString(),
+                        'cif' => $validated['cif'],
+                        'nominal' => $omzet,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+
 
             $wakalahDate = Carbon::parse($validated['tgl_wakalah']);
-            if ($wakalahDate->format('N') == 5) { // hari ke-5
+            if ($wakalahDate->isFriday()) {
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Jumat bukan hari pengumpulan'
                 ], 400);
             }
+
             $dayOfWeek = $wakalahDate->locale('id')->isoFormat('dddd');
 
-            $birthDate = new \DateTime($validated['tgl_lahir']);
-            $today = new \DateTime();
-            $age = $today->diff($birthDate)->y;
+            // validasi usia
+            $age = Carbon::parse($validated['tgl_lahir'])->age;
+            $statusUsia = $age > 50 ? 'DEVIASI' : 'NO';
 
-            $statusUsia = ($age > 50) ? 'DEVIASI' : 'NO';
-            $warningMessage = ($age > 50) ? 'Customer age is over 50 years' : null;
+            // ambil tanggal libur
+            $tanggalLibur = DB::table('param_tgl')->pluck('param_tgl')->toArray();
 
-            // Get all holidays from database
-            $tanggalLibur = DB::table('param_tgl')
-                ->pluck('param_tgl')
-                ->toArray();
+            $tglMurab = $wakalahDate->copy()->addDays(7);
+            $current  = $tglMurab->copy()->addDays(7);
 
-            $tglMurab = Carbon::parse($validated['tgl_wakalah'])->addDays(7);
-            $currentDate = (clone $tglMurab)->addDays(7);
+            // jadwal angsuran
+            $jadwal = [];
 
-            // Generate initial payment dates
-            $tglJatuhTempo = [];
             for ($i = 0; $i < $validated['tenor']; $i++) {
-                $tglJatuhTempo[] = $currentDate->format('Y-m-d H:i:s');
-                $currentDate->addDays(7);
-            }
 
-            $adjustedTglJatuhTempo = [];
-            foreach ($tglJatuhTempo as $date) {
-                $formattedDate = Carbon::parse($date)->format('Y-m-d'); // Convert to YYYY-MM-DD
+                $date = $current->copy();
 
-                while (in_array($formattedDate, $tanggalLibur)) {
-                    $date = Carbon::parse(end($adjustedTglJatuhTempo))->addDays(7)->format('Y-m-d H:i:s');
-                    $formattedDate = Carbon::parse($date)->format('Y-m-d'); // Reformat to compare again
+                while (in_array($date->format('Y-m-d'), $tanggalLibur)) {
+                    $date->addDays(7);
                 }
 
-                $adjustedTglJatuhTempo[] = $date;
+                $jadwal[] = $date->format('Y-m-d H:i:s');
+                $current->addDays(7);
             }
 
-            $nextPayment = reset($adjustedTglJatuhTempo);
-            $maturityPayment = end($adjustedTglJatuhTempo);
+            $nextPayment     = $jadwal[0];
+            $maturityPayment = end($jadwal);
 
-            // Use one database operation for insert
             DB::table('temp_akad_mus')->insert([
-                'buss_date' => date('Y-m-d H:i:s', strtotime($validated['param_tanggal'])),
+                'buss_date' => Carbon::parse($validated['param_tanggal']),
                 'code_kel' => $validated['kode_kel'],
                 'no_anggota' => $validated['no_rek'],
                 'cif' => $validated['cif'],
                 'nama' => $validated['nama'],
                 'deal_type' => '1',
-                'suffix' => $validated['suffix'],
-                'bagi_hasil' => $saldoMargin,
+                'suffix' => (string) $suffix,
+                'bagi_hasil'     => $saldoMargin,
                 'tenor' => $validated['tenor'],
                 'plafond' => $validated['disetujui'],
                 'os' => $outStanding,
-                'saldo_margin' => $saldoMargin,
+                'saldo_margin' => $validated['jenis_pembiayaan'] == 2 ? '0' : $saldoMargin,
                 'angsuran' => $angsuran,
-                'pokok' => $pokokAmount,
+                'pokok' => $pokok,
                 'ijaroh' => $ijaroh,
-                'bulat' => $bulatAmount,
-                'run_tenor' => '0',
-                'ke' => '1',
+                'bulat' => $bulat,
+                'run_tenor' => 0,
+                'ke' => 1,
                 'usaha' => $validated['bidang_usaha'],
                 'nama_usaha' => $validated['keterangan_usaha'],
                 'unit' => $validated['unit'],
-                'tgl_wakalah' => date('Y-m-d H:i:s', strtotime($validated['tgl_wakalah'])),
-                'tgl_akad' => $validated['tgl_akad'],
+                'tgl_wakalah' => $wakalahDate,
+                'tgl_akad' => Carbon::parse($validated['tgl_akad']),
                 'tgl_murab' => $tglMurab,
                 'next_schedule' => $nextPayment,
                 'maturity_date' => $maturityPayment,
                 'last_payment' => null,
                 'hari' => $dayOfWeek,
                 'cao' => $validated['cao'],
-                'userid' => $validated['id'],
+                'userid' => (int) $validated['id'],
                 'status' => 'ANGGOTA',
                 'status_usia' => $statusUsia,
                 'status_app' => 'APPROVE',
-                'gol' => '1',
-                'deal_produk' => $validated['jenis_pembiayaan'],
-                'persen_margin' => $persenMargin,
+                'gol' => 1,
+                'deal_produk' => $validated['jenis_pembiayaan'] == 2 ? '3' : $validated['jenis_pembiayaan'],
+                'persen_margin' => $validated['jenis_pembiayaan'] == 2 ? $persenMarginMusyarokah : $persenMargin,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
-
-            // Return appropriate response based on warnings
-            if ($warningMessage) {
-                return response()->json([
-                    'status' => 'warning',
-                    'message' => $warningMessage,
-                    'data' => 'Pembiayaan successfully added.'
-                ], 207);
-            }
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Pembiayaan successfully added.'
             ]);
 
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            
+            Log::error('Add Pembiayaan Error', [
+                'message' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile()
+            ]);
+
             return response()->json([
                 'status' => 'error',
-                'message' => 'Something went wrong.'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
+
 }
