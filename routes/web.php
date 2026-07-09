@@ -47,6 +47,7 @@ use App\Http\Controllers\ReportEkuitasController;
 use App\Http\Controllers\ReportArusKasController;
 use App\Http\Controllers\ReportNeracaController;
 use App\Http\Controllers\ReportNeracaKpController;
+use App\Http\Controllers\PostingJurnalKpController;
 use App\Http\Controllers\ReportNominativeSimpananController;
 use App\Http\Controllers\ReportNominativePembiayaanController;
 use App\Http\Controllers\RestrukturisasiJatuhTempoController;
@@ -389,6 +390,8 @@ Route::get('/nominative-pembiayaan-kp/export', [ReportNominatifPembiayaanKpContr
 Route::get('/report/neraca-kp', [ReportNeracaKpController::class, 'index'])->name('report.neraca-kp.index');
 Route::get('/report/neraca-kp/export', [ReportNeracaKpController::class, 'exportExcel'])->name('report.neraca-kp.export');
 
+Route::get('/transaksi/posting-jurnal-kp', [PostingJurnalKpController::class, 'index'])->name('posting-jurnal-kp.index');
+Route::post('/transaksi/posting-jurnal-kp', [PostingJurnalKpController::class, 'posting'])->name('posting-jurnal-kp.posting');
 
 });
 
