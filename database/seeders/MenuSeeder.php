@@ -601,6 +601,16 @@ class MenuSeeder extends Seeder
         ]);
 
         Menu::create([
+            'name' => 'Hitung SHU',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/laporan/hitung-shu',
+            'left' => 'null',
+            'order' => 48,
+            'role_id' => 1,
+        ]);
+
+        Menu::create([
             'name' => 'PPAP',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $report->id,
