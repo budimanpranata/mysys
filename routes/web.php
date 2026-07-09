@@ -35,6 +35,7 @@ use App\Http\Controllers\HapusBukuController;
 use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
+use App\Http\Controllers\PostingJurnalController;
 use App\Http\Controllers\MutasiKasController;
 use App\Http\Controllers\ListJurnalController;
 use App\Http\Controllers\ReportMutasiController;
@@ -253,6 +254,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
     Route::get('/transaksi/jurnal-umum/get-coa', [JurnalUmumController::class, 'getCoa'])->name('jurnalUmum.getCoa');
     Route::post('/transaksi/jurnal-umum/', [JurnalUmumController::class, 'simpan'])->name('jurnalUmum.simpan');
     Route::post('/transaksi/jurnal-umum/cetak', [JurnalUmumController::class, 'cetak'])->name('jurnalUmum.cetak');
+
+    Route::get('/transaksi/posting-jurnal', [PostingJurnalController::class, 'index'])->name('posting-jurnal.index');
+    Route::post('/transaksi/posting-jurnal', [PostingJurnalController::class, 'posting'])->name('posting-jurnal.posting');
 
 
     // list jurnal

@@ -591,6 +591,16 @@ class MenuSeeder extends Seeder
         ]);
 
         Menu::create([
+            'name' => 'Posting Jurnal',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $Transaksi->id,
+            'url' => '/transaksi/posting-jurnal',
+            'left' => 'null',
+            'order' => 47,
+            'role_id' => 1,
+        ]);
+
+        Menu::create([
             'name' => 'PPAP',
             'icon' => 'far fa-circle nav-icon',
             'parent_id' => $report->id,
