@@ -36,6 +36,7 @@ use App\Http\Controllers\JurnalMasukController;
 use App\Http\Controllers\JurnalKeluarController;
 use App\Http\Controllers\JurnalUmumController;
 use App\Http\Controllers\PostingJurnalController;
+use App\Http\Controllers\HitungShuController;
 use App\Http\Controllers\MutasiKasController;
 use App\Http\Controllers\ListJurnalController;
 use App\Http\Controllers\ReportMutasiController;
@@ -258,6 +259,9 @@ Route::group(['middleware' => ['auth', 'role:1']], function () {
 
     Route::get('/transaksi/posting-jurnal', [PostingJurnalController::class, 'index'])->name('posting-jurnal.index');
     Route::post('/transaksi/posting-jurnal', [PostingJurnalController::class, 'posting'])->name('posting-jurnal.posting');
+
+    Route::get('/laporan/hitung-shu', [HitungShuController::class, 'index'])->name('hitung-shu.index');
+    Route::post('/laporan/hitung-shu', [HitungShuController::class, 'proses'])->name('hitung-shu.proses');
 
 
     // list jurnal
