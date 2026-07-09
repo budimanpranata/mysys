@@ -660,6 +660,26 @@ class MenuSeeder extends Seeder
             'role_id' => 4,
         ]);
 
+        $transaksi_kp = Menu::create([
+            'name' => 'Transaksi',
+            'icon' => 'nav-icon fas fa-exchange-alt',
+            'parent_id' => null,
+            'url' => null,
+            'left' => 'right fas fa-angle-left',
+            'order' => 41,
+            'role_id' => 4,
+        ]);
+
+        Menu::create([
+            'name' => 'Posting Jurnal',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $transaksi_kp->id,
+            'url' => '/transaksi/posting-jurnal-kp',
+            'left' => 'null',
+            'order' => 1,
+            'role_id' => 4,
+        ]);
+
         $approval_al = Menu::create([
            'name' => 'Approval',
            'icon' => 'nav-icon fa-file-alt', //

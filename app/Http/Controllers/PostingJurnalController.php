@@ -12,9 +12,13 @@ class PostingJurnalController extends Controller
     {
         $title = 'Posting Jurnal';
         $menus = Menu::whereNull('parent_id')->with('children')->orderBy('order')->get();
-        $unit = Auth::user()->unit;
-        $tglSystem = Auth::user()->param_tanggal;
+        $data = $this->buildData(Auth::user()->unit, Auth::user()->param_tanggal);
 
+        return view('admin.posting_jurnal.index', array_merge(compact('title', 'menus'), $data));
+    }
+
+    protected function buildData(string $unit, string $tglSystem): array
+    {
         $rows = DB::table('tabel_transaksi')
             ->leftJoin('coa', 'coa.kode_rek', '=', 'tabel_transaksi.kode_rekening')
             ->where('tabel_transaksi.unit', $unit)
@@ -37,20 +41,18 @@ class PostingJurnalController extends Controller
             ->selectRaw('SUM(debet) as tot_debet, SUM(kredit) as tot_kredit')
             ->first();
 
-        return view('admin.posting_jurnal.index', [
-            'title' => $title,
-            'menus' => $menus,
-            'rows' => $rows,
-            'total' => $total,
-            'tglSystem' => $tglSystem,
-        ]);
+        return compact('rows', 'total', 'tglSystem');
     }
 
     public function posting()
     {
-        $unit = Auth::user()->unit;
-        $tglSystem = Auth::user()->param_tanggal;
+        $this->jalankanPosting(Auth::user()->unit, Auth::user()->param_tanggal);
 
+        return redirect()->route('posting-jurnal.index')->with('success', 'Proses Posting Selesai');
+    }
+
+    protected function jalankanPosting(string $unit, string $tglSystem): void
+    {
         DB::transaction(function () use ($unit, $tglSystem) {
             $mutasi = DB::table('tabel_transaksi')
                 ->where('unit', $unit)
@@ -106,7 +108,5 @@ class PostingJurnalController extends Controller
                 ->where('keterangan_posting', '')
                 ->update(['tanggal_posting' => now()->format('y-m-d'), 'keterangan_posting' => 'Post']);
         });
-
-        return redirect()->route('posting-jurnal.index')->with('success', 'Proses Posting Selesai');
     }
 }
