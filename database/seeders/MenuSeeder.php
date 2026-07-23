@@ -710,5 +710,15 @@ class MenuSeeder extends Seeder
             'role_id' => 2,
         ]);
 
+        Menu::create([
+            'name' => 'Buka Blokir',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $approval_al->id,
+            'url' => '/al/buka-blokir',
+            'left' => 'null',
+            'order' => 3,
+            'role_id' => 2,
+        ]);
+
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\AhController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\ApprovalPengajuanController;
+use App\Http\Controllers\BukaBlokirController;
 use App\Http\Controllers\CetakAdendumController;
 use App\Http\Controllers\CetakKartuAngsuranController;
 use App\Http\Controllers\CetakMurabahahController;
@@ -363,6 +364,12 @@ Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al/approval-pengajuan/turun-plafond', [ApprovalPengajuanController::class, 'turunPlafond']);
     Route::get('/ajax/cif-turun-plafond', [ApprovalPengajuanController::class, 'getCifTurunPlafond'])->name('ajax.turun_plafond');
     Route::post('/al/approval-pengajuan/turun-plafond/proses', [ApprovalPengajuanController::class, 'prosesTurunPlafond'])->name('turun.plafond.proses');
+
+    // menu buka blokir
+    Route::get('/al/buka-blokir', [BukaBlokirController::class, 'index']);
+    Route::get('/al/get-kelompok', [BukaBlokirController::class, 'getKelompok'])->name('al.get.kelompok');
+    Route::get('/al/get-cif', [BukaBlokirController::class, 'getCif'])->name('al.get.cif');
+    Route::post('/update-blokir-simpanan', [BukaBlokirController::class, 'updateBlokirSimpanan'])->name('update.blokir.simpanan');
 
 });
 
