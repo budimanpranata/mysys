@@ -219,6 +219,16 @@
             let cif         = $('#cif').val();
             let jenisBlokir = $('#jenis_blokir').val();
 
+            // Validasi sederhana sebelum kirim (opsional)
+            if (!grupBlokir || !jenisBlokir) {
+            Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan',
+                    text: 'Grup Blokir dan Jenis Blokir wajib diisi!'
+                });
+                return;
+            }
+
             $.ajax({
                 url: "{{ route('update.blokir.simpanan') }}",
                 type: "POST",
@@ -255,9 +265,25 @@
                     }
                     
                     $('tbody').html(tbody);
+
+                    // MUNCULKAN SWEETALERT SAAT BERHASIL
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.message || 'Status blokir simpanan berhasil diperbarui!',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: 'Terjadi kesalahan pada server.'
+                    });
                 }
             });
-        });            
+        });       
     });
 </script>
 @endpush
