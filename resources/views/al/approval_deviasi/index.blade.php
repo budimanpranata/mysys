@@ -204,7 +204,7 @@
                 });
             });
 
-            // Fungsi Tombol Approve dan Reject (Batal) dengan SweetAlert2
+            // Fungsi Tombol Approve dan Reject (Batal)
             $('#btnApproveCheckbox, #btnBatalCheckbox').on('click', function (e) {
                 e.preventDefault();
                 
@@ -227,7 +227,6 @@
                     return;
                 }
 
-                // Konfirmasi menggunakan SweetAlert2
                 Swal.fire({
                     title: 'Apakah Anda yakin?',
                     text: "Anda akan melakukan " + actionLabel + " pada data yang dipilih!",
@@ -239,7 +238,6 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        // Kirim request AJAX untuk proses update
                         $.ajax({
                             url: "{{ route('al.approval.process') }}",
                             type: "POST",

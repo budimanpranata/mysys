@@ -33,10 +33,7 @@ class ApprovalDeviasiController extends Controller
     {
         $tanggalPencairan = $request->tanggal;
 
-        // Ambil data dari tabel pembiayaan berdasarkan tgl_wakalah
-        $data = Pembiayaan::whereDate('tgl_wakalah', $tanggalPencairan)
-                    // ->where('status', 'pending') // Tambahkan kondisi jika perlu
-                    ->get();
+        $data = Pembiayaan::whereDate('tgl_wakalah', $tanggalPencairan)->get();
 
         $html = '';
         foreach ($data as $item) {
@@ -62,10 +59,7 @@ class ApprovalDeviasiController extends Controller
     {
         $tanggalPenarikan = $request->tanggal;
 
-        // Ambil data dari tabel simpanan berdasarkan tgl_input
-        $data = Simpanan::whereDate('tgl_input', $tanggalPenarikan)
-                    // ->where('jenis_transaksi', 'penarikan') // Tambahkan filter jika diperlukan
-                    ->get();
+        $data = Simpanan::whereDate('tgl_input', $tanggalPenarikan)->get();
 
         $html = '';
         foreach ($data as $item) {
