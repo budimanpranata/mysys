@@ -710,5 +710,27 @@ class MenuSeeder extends Seeder
             'role_id' => 2,
         ]);
 
+
+
+
+
+
+
+
+
+
+
+
+
+        Menu::create([
+            'name' => 'View Data Deviasi',
+            'icon' => 'far fa-circle nav-icon',
+            'parent_id' => $approval_al->id,
+            'url' => '/al/view-data-deviasi',
+            'left' => 'null',
+            'order' => 1,
+            'role_id' => 2,
+        ]);
+
     }
 }

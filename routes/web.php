@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AhController;
 use App\Http\Controllers\AlController;
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\ApprovalDeviasiController;
 use App\Http\Controllers\ApprovalPengajuanController;
 use App\Http\Controllers\CetakAdendumController;
 use App\Http\Controllers\CetakKartuAngsuranController;
@@ -363,6 +364,21 @@ Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al/approval-pengajuan/turun-plafond', [ApprovalPengajuanController::class, 'turunPlafond']);
     Route::get('/ajax/cif-turun-plafond', [ApprovalPengajuanController::class, 'getCifTurunPlafond'])->name('ajax.turun_plafond');
     Route::post('/al/approval-pengajuan/turun-plafond/proses', [ApprovalPengajuanController::class, 'prosesTurunPlafond'])->name('turun.plafond.proses');
+
+
+
+
+
+
+
+
+
+    // menu approval view data deviasi
+    Route::get('/al/view-data-deviasi', [ApprovalDeviasiController::class, 'index']);
+    Route::get('/al/get-deviasi-umur-data', [ApprovalDeviasiController::class, 'getDeviasiUmurData'])->name('al.deviasi.data');
+    Route::get('/al/get-penarikan-tabungan-data', [ApprovalDeviasiController::class, 'getPenarikanTabunganData'])->name('al.penarikan.data');
+    Route::post('/al/process-approval', [ApprovalDeviasiController::class, 'processApproval'])->name('al.approval.process');
+
 
 });
 
