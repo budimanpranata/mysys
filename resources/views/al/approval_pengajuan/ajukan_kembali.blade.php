@@ -43,7 +43,6 @@
                         <div class="col-sm-6">
                             <select class="form-control" id="jenis_pengajuan">
                                 <option value="" hidden>-- pilih jenis Pengajuan --</option>
-                                <option value="pembiayaan">Pembiayaan</option>
                                 <option value="turun_plafond">Turun Plafond</option>
                                 <option value="ajukan_kembali" selected>Ajukan Kembali</option>
                                 <option value="hapus_pengajuan">Hapus Pengajuan</option>
@@ -119,7 +118,7 @@
 
                 // 👉 redirect khusus turun plafond
             if (jenis === 'turun_plafond') {
-                window.location.href = "{{ url('/al/pengajuan/turun-plafond') }}";
+                window.location.href = "{{ url('/al/approval-pengajuan/turun-plafond') }}";
                 return;
             }
 
@@ -129,7 +128,7 @@
             }
 
             if (jenis === 'hapus_pengajuan') {
-                window.location.href = "{{ url('/al/pengajuan/hapus') }}";
+                window.location.href = "{{ url('/al/approval-pengajuan/hapus') }}";
                 return;
             }
 
