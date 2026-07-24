@@ -24,7 +24,6 @@
                         <div class="col-sm-6">
                             <select class="form-control" id="jenis_pengajuan">
                                 <option value="" hidden>-- pilih jenis Pengajuan --</option>
-                                <option value="pembiayaan">Pembiayaan</option>
                                 <option value="turun_plafond">Turun Plafond</option>
                                 <option value="ajukan_kembali">Ajukan Kembali</option>
                                 <option value="hapus_pengajuan">Hapus Pengajuan</option>
