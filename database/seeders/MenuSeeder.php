@@ -710,5 +710,43 @@ class MenuSeeder extends Seeder
             'role_id' => 2,
         ]);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        Menu::create([
+            'name' => 'Koreksi',
+            'icon' => 'nav-icon fa-file-alt',
+            'parent_id' => null,
+            'url' => '/al/koreksi',
+            'left' => 'right fas fa-angle-left',
+            'order' => 4,
+            'role_id' => 2,
+        ]);
+
     }
 }

@@ -63,6 +63,7 @@ use App\Http\Controllers\BukuBesarController;
 use App\Http\Controllers\KpController;
 use App\Http\Controllers\ReportPpapController;
 use App\Http\Controllers\BukuBesarKpController;
+use App\Http\Controllers\KoreksiController;
 use App\Http\Controllers\ListJurnalKpController;
 use App\Http\Controllers\ReportNominatifPembiayaanKpController;
 use Illuminate\Support\Facades\App;
@@ -363,6 +364,29 @@ Route::group(['middleware' => ['auth', 'role:2']], function () {
     Route::get('/al/approval-pengajuan/turun-plafond', [ApprovalPengajuanController::class, 'turunPlafond']);
     Route::get('/ajax/cif-turun-plafond', [ApprovalPengajuanController::class, 'getCifTurunPlafond'])->name('ajax.turun_plafond');
     Route::post('/al/approval-pengajuan/turun-plafond/proses', [ApprovalPengajuanController::class, 'prosesTurunPlafond'])->name('turun.plafond.proses');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // menu koreksi
+    Route::get('/al/koreksi', [KoreksiController::class, 'index']);
+    Route::get('/al/koreksi/data', [KoreksiController::class, 'anyData'])->name('transaksi.data');
+    Route::delete('/al/koreksi/{id_transaksi}', [KoreksiController::class, 'destroy'])->name('transaksi.destroy');
 
 });
 
